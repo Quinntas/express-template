@@ -11,3 +11,10 @@ export function textResponse(res: Response, code: number, data: string) {
     res.status(code);
     res.send(data);
 }
+
+export function htmlResponse(res: Response, code: number, data: string) {
+    res.setHeader("Content-Type", "text/html");
+    res.status(code);
+    res.send(data);
+}
+

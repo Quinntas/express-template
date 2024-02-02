@@ -1,6 +1,6 @@
 export class Node {
     private value: number;
-    private payload?: any;
+    private readonly payload?: any;
     private left: Node;
     private right: Node;
 
