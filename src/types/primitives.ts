@@ -1,0 +1,1 @@
+export type Primitive<T = any> = string | number | boolean | undefined | null | object | T
