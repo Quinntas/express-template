@@ -3,6 +3,7 @@ import {Request, Response, Router} from "express";
 import {parse} from "querystring";
 import {HttpError} from "./errors";
 import {jsonResponse} from "./responses";
+import {Result, SpectreError} from "spectre-orm";
 
 export async function handleRequest<iBody, iQuery>(
     req: DecodedExpressRequest<iBody, iQuery>,
@@ -10,6 +11,7 @@ export async function handleRequest<iBody, iQuery>(
     handler: Function
 ) {
     switch (req.headers["content-type"]) {
+        case "application/json;charset=utf-8":
         case "application/json":
             req.bodyObject = req.body;
             break;
@@ -26,9 +28,20 @@ export async function handleRequest<iBody, iQuery>(
                 error.code,
                 error.body || {message: error.message}
             );
+        } else if (error instanceof Result) {
+            switch (error.errorType) {
+                case SpectreError.DATABASE_DUPLICATE_ENTRY:
+                    return jsonResponse(res, 400, {message: "Duplicate entry"});
+                case SpectreError.DATABASE_WRONG_VALUE:
+                case SpectreError.DATABASE_BAD_REQUEST:
+                case SpectreError.DATABASE_INTERNAL_ERROR:
+                    return jsonResponse(res, 500, {message: "Database internal error"});
+            }
         }
 
-        return jsonResponse(res, 500, {message: "Internal Server Error"});
+        console.log(error)
+
+        return jsonResponse(res, 500, {message: "Internal server error"});
     }
 }
 
