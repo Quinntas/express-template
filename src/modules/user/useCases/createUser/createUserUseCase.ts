@@ -7,6 +7,7 @@ import {jsonResponse} from "../../../../core/responses";
 import {DecodedExpressRequest} from "../../../../types/decodedExpressRequest";
 import {Response} from "express";
 import {HttpError} from "../../../../core/errors";
+import {encrypt} from "../../../../utils/encryption";
 
 export async function CreateUserUseCase(request: DecodedExpressRequest<CreateUserDTO, null>, response: Response) {
     const name = validateUserName(request.bodyObject.name)
@@ -16,7 +17,7 @@ export async function CreateUserUseCase(request: DecodedExpressRequest<CreateUse
     const result = await createUser({
         name,
         email,
-        password
+        password: encrypt(password)
     })
 
     if (!result.isSuccessful)

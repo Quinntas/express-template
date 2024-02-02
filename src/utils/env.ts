@@ -3,6 +3,7 @@ require("dotenv").config();
 interface EnvVariables {
     PORT: number
     DATABASE_URL: string
+    PEPPER: string
 }
 
 function getEnv(envName: string): string {
@@ -14,7 +15,8 @@ function getEnv(envName: string): string {
 
 export const env: EnvVariables = {
     PORT: parseInt(getEnv("PORT")),
-    DATABASE_URL: getEnv("DATABASE_URL")
+    DATABASE_URL: getEnv("DATABASE_URL"),
+    PEPPER: getEnv("PEPPER")
 }
 
 
