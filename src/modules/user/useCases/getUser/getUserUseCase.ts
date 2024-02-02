@@ -6,7 +6,7 @@ import {DecodedExpressRequest} from "../../../../types/decodedExpressRequest";
 import {Response} from "express";
 import {HttpError} from "../../../../core/errors";
 
-export async function CreateUserUseCase(request: DecodedExpressRequest<GetUserDTO, null>, response: Response) {
+export async function GetUserUseCase(request: DecodedExpressRequest<GetUserDTO, null>, response: Response) {
     const name = validateUserName(request.bodyObject.name)
 
     const result = await getByName(name)
