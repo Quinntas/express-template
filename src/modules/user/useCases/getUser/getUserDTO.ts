@@ -1,9 +1,10 @@
+import {User} from "../../domain/user";
+
 export interface GetUserDTO {
-    name: string;
+    name: string | null;
+    email: string | null;
 }
 
 export interface GetUserResponseDTO {
-    name: string;
-    email: string;
-    password: string;
+    user: Omit<User, "password">
 }

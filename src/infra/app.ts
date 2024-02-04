@@ -47,12 +47,12 @@ export const mainRouter = Router();
 app.use(mainRouter);
 app.use('/api/v1', v1Router)
 
-app.listen(env.PORT, () => {
-    console.log("[Server] Running at http://localhost:" + env.PORT);
-});
-
-async function healthCheck(req: DecodedExpressRequest<any, any>, res: Response) {
+async function healthCheck(req: DecodedExpressRequest<null, null>, res: Response) {
     return jsonResponse(res, 200, {message: "ok"});
 }
 
 get(mainRouter, "/", healthCheck);
+
+app.listen(env.PORT, () => {
+    console.log("[Server] Running at http://localhost:" + env.PORT);
+});

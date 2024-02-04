@@ -1,6 +1,6 @@
 import {Response} from "express";
 
-export function jsonResponse(res: Response, code: number, data: object) {
+export function jsonResponse<T = object>(res: Response, code: number, data: T) {
     res.setHeader("Content-Type", "application/json");
     res.status(code);
     res.json(data);
