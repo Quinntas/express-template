@@ -26,7 +26,7 @@ export async function handleRequest<iBody, iQuery>(
             return jsonResponse(
                 res,
                 error.code,
-                error.body || {message: error.message}
+                {message: error.message, ...error.body}
             );
         } else if (error instanceof Result) {
             switch (error.errorType) {
