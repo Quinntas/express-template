@@ -1,5 +1,6 @@
 import {Spectre} from "spectre-orm";
 import {Primitive} from "../../types/primitives";
+import {RedisClient} from "../../utils/redisClient";
 
 interface QueryExecutor {
     query: string;
@@ -9,7 +10,7 @@ interface QueryExecutor {
 
     cache?: {
         key?: string;
-        redisInstance: any;
+        redisInstance: RedisClient;
     }
 }
 

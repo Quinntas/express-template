@@ -14,13 +14,6 @@ export interface FetcherDTO<BodyType> {
     body?: BodyType;
 }
 
-interface InternalFetcherDTO {
-    url: string;
-    action: Method;
-    headers?: any;
-    body?: any;
-}
-
 export interface FetcherResponseDTO<ResponseType> {
     status: number;
     ok: boolean;
@@ -32,17 +25,10 @@ const defaultHeaders = {
     Accept: "application/json",
     "cache-control": "no-cache",
     "Access-Control-Allow-Origin": "*",
-    "User-Agent": "",
+    "User-Agent": "ExpressTemplate/1.0.0",
     "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
 };
 
-async function makeRequest(fetcherDTO: InternalFetcherDTO): Promise<Response> {
-    return await fetch(fetcherDTO.url, {
-        method: fetcherDTO.action,
-        headers: fetcherDTO.headers,
-        body: fetcherDTO.body,
-    });
-}
 
 export async function request<BodyType = any, ResponseType = any>(fetcherDTO: FetcherDTO<BodyType>): Promise<FetcherResponseDTO<ResponseType>> {
     let headers = Object.assign(
@@ -69,18 +55,15 @@ export async function request<BodyType = any, ResponseType = any>(fetcherDTO: Fe
         }
     }
 
-    const internalFetcherDTO: InternalFetcherDTO = {
-        url: fetcherDTO.url,
-        action: fetcherDTO.action,
-        headers,
-        body,
-    };
-
     let response: Response;
 
     for (let i = 0; i < retryDTO.count; i++) {
         try {
-            response = await makeRequest(internalFetcherDTO);
+            response = await fetch(fetcherDTO.url, {
+                method: fetcherDTO.action,
+                headers,
+                body,
+            });
 
             if (response.ok) break;
         } catch (err) {

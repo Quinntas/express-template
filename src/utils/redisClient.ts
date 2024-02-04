@@ -11,7 +11,7 @@ export class RedisClient {
         return this.client.del(key)
     }
 
-    public async set(key: string, value: any, tokenExpiryTime?: number): Promise<string> {
+    public async set(key: string, value: string | number | Buffer, tokenExpiryTime?: number): Promise<string> {
         const reply = await this.client.set(key, value)
         if (tokenExpiryTime)
             await this.client.expire(key, tokenExpiryTime)

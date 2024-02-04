@@ -6,11 +6,11 @@ interface EnvVariables {
     PEPPER: string
 }
 
-function getEnv(envName: string): string {
+function getEnv(envName: string, required: boolean = true): string {
     const result = process.env[envName] as string;
-    if (!result)
+    if (!result && required)
         throw new Error(`Environment variable ${envName} not found`);
-    return result;
+    return result ?? undefined;
 }
 
 export const env: EnvVariables = {
