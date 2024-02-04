@@ -1,2 +1,11 @@
-# express-template
- 
+# Install
+
+```
+pnpm install
+```
+
+# Run
+
+```
+pnpm dev
+```
