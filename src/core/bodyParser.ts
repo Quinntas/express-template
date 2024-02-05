@@ -30,8 +30,7 @@ export function bodyParse(bodyObject: object, bodyParseObject: BodyParseObject) 
         if (!bodyObject[keys[i]])
             if (bodyParseObject[keys[i]].required)
                 throw new HttpError(400, `Missing required field`, {field: keys[i]})
-        // TODO: if type is object and user pass array, it will not enter here
-        if (typeof bodyObject[keys[i]] !== bodyParseObject[keys[i]].type) {
+        if (typeof bodyObject[keys[i]] !== bodyParseObject[keys[i]].type || bodyParseObject[keys[i]].type === "array") {
             if (bodyParseObject[keys[i]].type === "array" && Array.isArray(bodyObject[keys[i]]))
                 continue
             throw new HttpError(400, `Invalid type for field`, {
