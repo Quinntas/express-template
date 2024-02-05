@@ -23,7 +23,7 @@ export function Conditionator(baseQuery?: string) {
     };
 
     this.result = function (tokenStartIndex: number = 1): [string, Primitive[]] {
-        if (this.conditions.length === 0) return this.q;
+        if (this.conditions.length === 0) return [this.q, []];
         let isFirstAdded = false;
         let params: Primitive[] = [];
         for (let i = 0; i < this.conditions.length; i++) {

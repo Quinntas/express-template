@@ -1,5 +1,5 @@
 {
-  "name": "asd",
+  "name": "express-template",
   "version": "1.0.0",
   "description": "",
   "main": "src/infra/app.ts",
@@ -7,7 +7,7 @@
     "dev": "cross-env NODE_ENV=development nodemon ",
     "build": "rimraf dist && tsc"
   },
-  "author": "",
+  "author": "caioquintassantiago@gmail.com",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.20.2",

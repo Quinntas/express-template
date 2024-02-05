@@ -44,6 +44,7 @@ export function createRandomString(length: number): string {
 }
 
 function compare(data: string, password: string): boolean {
+    // TODO: constant time comparison
     return data === password;
 }
 
