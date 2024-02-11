@@ -1,7 +1,7 @@
 import {GetUserDTO} from "./getUserDTO";
-import {validateUserEmail} from "../../user/domain/valueObjects/userEmail";
-import {getUser} from "../../user/repo/userRepo";
-import {toPublicDomain} from "../../user/mapper/userMapper";
+import {validateUserEmail} from "../../domain/valueObjects/userEmail";
+import {getUser} from "../../repo/userRepo";
+import {toPublicDomain} from "../../mapper/userMapper";
 
 export async function getUserResolver(parent, args: GetUserDTO, context) {
     let email = null

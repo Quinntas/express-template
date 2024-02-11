@@ -1,6 +1,6 @@
 import {handleResolver} from "../../../../core/resolverHandler";
-import {createUserResolver} from "../../../resolvers/createUser/createUserResolver";
-import {getUserResolver} from "../../../resolvers/getUser/getUserResolver";
+import {createUserResolver} from "../../resolvers/createUser/createUserResolver";
+import {getUserResolver} from "../../resolvers/getUser/getUserResolver";
 
 export const userResolvers = {
     Mutation: {

@@ -1,8 +1,8 @@
 import {CreateUserDTO} from "./createUserDTO";
-import {validateUserEmail} from "../../user/domain/valueObjects/userEmail";
-import {validateUserPassword} from "../../user/domain/valueObjects/userPassword";
-import {createUser} from "../../user/repo/userRepo";
 import {v4} from 'uuid'
+import {validateUserEmail} from "../../domain/valueObjects/userEmail";
+import {validateUserPassword} from "../../domain/valueObjects/userPassword";
+import {createUser} from "../../repo/userRepo";
 
 export async function createUserResolver(parent, args: CreateUserDTO, context) {
     const email = validateUserEmail(args.email)
