@@ -1,17 +1,20 @@
 import {User} from "../domain/user";
 
-export function toPublicDomain(raw: any) {
+export function toPublicDomain(raw: User) {
     return {
-        name: raw.name,
+        pid: raw.pid,
         email: raw.email
     };
 }
 
 export function toDomain(raw: any): User {
     return {
-        name: raw.name,
+        id: raw.id,
+        pid: raw.pid,
         email: raw.email,
-        password: raw.password
+        password: raw.password,
+        updated_at: raw.updated_at,
+        created_at: raw.created_at
     };
 }
 

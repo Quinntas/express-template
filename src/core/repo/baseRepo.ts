@@ -1,4 +1,4 @@
-import {Spectre} from "spectre-orm";
+import {Result, Spectre} from "spectre-orm";
 import {Primitive} from "../../types/primitives";
 import {RedisClient} from "../../utils/redisClient";
 import {hashString} from "../../utils/encryption";
@@ -34,7 +34,7 @@ async function handleCache(queryExecutor: QueryExecutor) {
     return result;
 }
 
-export async function executeQuery(queryExecutor: QueryExecutor) {
+export async function executeQuery<iResult>(queryExecutor: QueryExecutor): Promise<Result<iResult>> {
     if (queryExecutor.cache)
         return await handleCache(queryExecutor);
 

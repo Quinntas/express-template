@@ -1,0 +1,20 @@
+type User {
+    id: Int!
+    pid: String!
+    email: String!
+    password: String!
+    updatedAt: DateTime!
+    createdAt: DateTime!
+}
+
+type DateTime {
+    value: String!
+}
+
+type Mutation {
+    createUser(email: String!, password: String!): String!
+}
+
+type Query {
+    getUser(pid:String, email:String): User
+}
