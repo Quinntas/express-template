@@ -1,4 +1,5 @@
 import winston from 'winston'
+import {env} from "./env";
 
 const levels = {
     error: 0,
@@ -6,12 +7,6 @@ const levels = {
     info: 2,
     http: 3,
     debug: 4,
-}
-
-const level = () => {
-    const env = process.env.NODE_ENV || 'development'
-    const isDevelopment = env === 'development'
-    return isDevelopment ? 'debug' : 'warn'
 }
 
 const colors = {
@@ -37,7 +32,7 @@ const transports = [
 ]
 
 const Logger = winston.createLogger({
-    level: level(),
+    level: env.NODE_ENV === 'development' ? 'debug' : 'warn',
     levels,
     format,
     transports,
