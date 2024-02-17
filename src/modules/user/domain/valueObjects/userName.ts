@@ -4,5 +4,5 @@ export function validateUserName(name: string) {
     againstNullOrUndefined("name", name)
     againstAtLeast("name", name.length, 3)
     againstAtMost("name", name.length, 50)
-    return name;
+    return name.toUpperCase();
 }

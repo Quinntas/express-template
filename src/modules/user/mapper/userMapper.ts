@@ -1,17 +1,24 @@
 import {User} from "../domain/user";
 
-export function toPublicDomain(raw: any) {
+export function toPublicDomain(user: User): Partial<User> {
     return {
-        name: raw.name,
-        email: raw.email
+        pid: user.pid,
+        name: user.name,
+        email: user.email,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt
     };
 }
 
 export function toDomain(raw: any): User {
     return {
+        id: raw.id,
+        pid: raw.pid,
         name: raw.name,
         email: raw.email,
-        password: raw.password
+        password: raw.password,
+        createdAt: raw.createdAt,
+        updatedAt: raw.updatedAt
     };
 }
 

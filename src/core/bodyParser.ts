@@ -24,23 +24,56 @@ export type BodyParseObject = {
     };
 }
 
+function hasSchema(type: string) {
+    return type === "object" || type === "array"
+}
+
 export function bodyParse(bodyObject: object, bodyParseObject: BodyParseObject) {
     const keys = Object.keys(bodyParseObject);
     for (let i = 0; i < keys.length; i++) {
-        if (!bodyObject[keys[i]])
+        if (!bodyObject.hasOwnProperty(keys[i]))
             if (bodyParseObject[keys[i]].required)
                 throw new HttpError(400, `Missing required field`, {field: keys[i]})
-        if (typeof bodyObject[keys[i]] !== bodyParseObject[keys[i]].type || bodyParseObject[keys[i]].type === "array") {
-            if (bodyParseObject[keys[i]].type === "array" && Array.isArray(bodyObject[keys[i]]))
-                continue
-            throw new HttpError(400, `Invalid type for field`, {
-                field: keys[i],
-                expected: bodyParseObject[keys[i]].type
-            })
+        switch (typeof bodyObject[keys[i]]) {
+            case "object":
+                if (bodyParseObject[keys[i]].type === "array" && Array.isArray(bodyObject[keys[i]])) {
+                    if (bodyParseObject[keys[i]].type !== "array")
+                        throw new HttpError(400, `Invalid type for field`, {
+                            field: keys[i],
+                            expected: bodyParseObject[keys[i]].type
+                        })
+
+                    for (let j = 0; j < bodyObject[keys[i]].length; j++) {
+                        if (typeof bodyObject[keys[i]][j] === 'object')
+                            // @ts-ignore
+                            bodyParse(bodyObject[keys[i]][j], bodyParseObject[keys[i]].schema.schema)
+                        // @ts-ignore
+                        else if (typeof bodyObject[keys[i]][j] !== bodyParseObject[keys[i]].schema.type)
+                            throw new HttpError(400, `Invalid type for field`, {
+                                field: keys[i],
+                                // @ts-ignore
+                                expected: bodyParseObject[keys[i]].schema.type
+                            })
+                    }
+                } else {
+                    if (bodyParseObject[keys[i]].type !== "object")
+                        throw new HttpError(400, `Invalid type for field`, {
+                            field: keys[i],
+                            // @ts-ignore
+                            expected: bodyParseObject[keys[i]].schema.type
+                        })
+
+                    // @ts-ignore
+                    bodyParse(bodyObject[keys[i]], bodyParseObject[keys[i]].schema)
+                }
+                break
+            default:
+                if (typeof bodyObject[keys[i]] !== bodyParseObject[keys[i]].type)
+                    throw new HttpError(400, `Invalid type for field`, {
+                        field: keys[i],
+                        expected: bodyParseObject[keys[i]].type
+                    })
+                break
         }
-        if (bodyParseObject[keys[i]].type === "object")
-            // @ts-ignore
-            // TODO: Fix this
-            bodyParse(bodyObject[keys[i]], bodyParseObject[keys[i]].schema)
     }
 }

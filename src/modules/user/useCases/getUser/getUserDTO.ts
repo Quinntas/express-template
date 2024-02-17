@@ -6,5 +6,5 @@ export interface GetUserDTO {
 }
 
 export interface GetUserResponseDTO {
-    user: Omit<User, "password">
+    user: Partial<User>
 }

@@ -1,5 +1,5 @@
 import {User} from "../domain/user";
-import {sql} from "../../../core/repo/parses/sql";
+import {sql} from "../../../core/repo/parsers/sql";
 import {executeQuery} from "../../../core/repo/baseRepo";
 import {spectreMain} from "../../../infra/database/spectreMain";
 import {toDomain} from "../mapper/userMapper";

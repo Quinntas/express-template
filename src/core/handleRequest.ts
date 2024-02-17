@@ -15,7 +15,7 @@ export function handleError(res: Response, error: Error) {
     } else if (error instanceof Result) {
         switch (error.errorType) {
             case SpectreError.DATABASE_DUPLICATE_ENTRY:
-                return jsonResponse(res, 400, {message: "Duplicate entry"});
+                return jsonResponse(res, 409, {message: "Duplicate entry"});
             case SpectreError.DATABASE_WRONG_VALUE:
             case SpectreError.DATABASE_BAD_REQUEST:
             case SpectreError.DATABASE_INTERNAL_ERROR:

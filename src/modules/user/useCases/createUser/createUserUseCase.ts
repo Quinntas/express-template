@@ -8,6 +8,7 @@ import {DecodedExpressRequest} from "../../../../types/decodedExpressRequest";
 import {Response} from "express";
 import {HttpError} from "../../../../core/errors";
 import {encrypt} from "../../../../utils/encryption";
+import {v4} from "uuid";
 
 export async function CreateUserUseCase(request: DecodedExpressRequest<CreateUserDTO, null>, response: Response) {
     const name = validateUserName(request.bodyObject.name)
@@ -15,6 +16,7 @@ export async function CreateUserUseCase(request: DecodedExpressRequest<CreateUse
     const password = validateUserPassword(request.bodyObject.password)
 
     const result = await createUser({
+        pid: v4(),
         name,
         email,
         password: encrypt(password)
