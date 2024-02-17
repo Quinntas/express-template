@@ -11,6 +11,7 @@ interface QueryExecutor {
 
     cache?: {
         key?: string;
+        expireTime?: number;
         redisInstance: RedisClient;
     }
 }
@@ -29,7 +30,7 @@ async function handleCache(queryExecutor: QueryExecutor) {
         spectreInstance: queryExecutor.spectreInstance
     });
 
-    await queryExecutor.cache.redisInstance.set(key, JSON.stringify(result));
+    await queryExecutor.cache.redisInstance.set(key, JSON.stringify(result), queryExecutor.cache.expireTime);
 
     return result;
 }
