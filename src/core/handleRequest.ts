@@ -1,9 +1,10 @@
 import {DecodedExpressRequest} from "../types/decodedExpressRequest";
-import {Request, Response, Router} from "express";
+import {ErrorRequestHandler, Request, RequestHandler, Response, Router} from "express";
 import {parse} from "querystring";
 import {HttpError} from "./errors";
 import {jsonResponse} from "./responses";
 import {Result, SpectreError} from "spectre-orm";
+import {wrapMiddlewares} from "./middleware";
 
 export function handleError(res: Response, error: Error) {
     if (error instanceof HttpError) {
@@ -28,10 +29,10 @@ export function handleError(res: Response, error: Error) {
     return jsonResponse(res, 500, {message: "Internal server error"});
 }
 
-export async function handleRequest<iBody, iQuery>(
+export async function handleRequest<iBody extends object, iQuery extends object>(
     req: DecodedExpressRequest<iBody, iQuery>,
     res: Response,
-    handler: Function
+    handler: Function,
 ) {
     switch (req.headers["content-type"]) {
         case "application/json;charset=utf-8":
@@ -49,12 +50,15 @@ export async function handleRequest<iBody, iQuery>(
     }
 }
 
-export function get<iBody = any, iQuery = any>(
+export function get<iBody extends object, iQuery extends object>(
     router: Router,
     path: string,
     handler: Function,
+    middlewares: (RequestHandler | ErrorRequestHandler)[] = []
 ) {
-    router.get(path, (req: Request, res: Response) => {
+    const wrappedMiddlewares = wrapMiddlewares<iBody, iQuery>(middlewares);
+
+    router.get(path, wrappedMiddlewares, (req: Request, res: Response) => {
         handleRequest<iBody, iQuery>(
             req as DecodedExpressRequest<iBody, iQuery>,
             res,
@@ -63,11 +67,14 @@ export function get<iBody = any, iQuery = any>(
     });
 }
 
-export function post<iBody = any, iQuery = any>(
+export function post<iBody extends object, iQuery extends object>(
     router: Router,
     path: string,
     handler: Function,
+    middlewares: (RequestHandler | ErrorRequestHandler)[] = []
 ) {
+    const wrappedMiddlewares = wrapMiddlewares<iBody, iQuery>(middlewares);
+
     router.post(path, (req: Request, res: Response) => {
         handleRequest<iBody, iQuery>(
             req as DecodedExpressRequest<iBody, iQuery>,

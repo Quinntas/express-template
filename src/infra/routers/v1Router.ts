@@ -1,5 +1,5 @@
 import {Router} from "express";
-import {userRouter} from "../../modules/user/infra/router/userRouter";
+import {userRouter} from "../../modules/user/infra/http/userRouter";
 
 export const v1Router: Router = Router();
 

@@ -6,6 +6,7 @@ interface EnvVariables {
     DATABASE_URL: string
     PEPPER: string
     REDIS_URL: string
+    JWT_SECRET: string
 }
 
 function getEnv(envName: string, required: boolean = true, defaultValue: string | undefined = undefined): string {
@@ -20,7 +21,8 @@ export const env: EnvVariables = {
     PORT: parseInt(getEnv("PORT")),
     DATABASE_URL: getEnv("DATABASE_URL"),
     PEPPER: getEnv("PEPPER"),
-    REDIS_URL: getEnv("REDIS_URL")
+    REDIS_URL: getEnv("REDIS_URL"),
+    JWT_SECRET: getEnv("JWT_SECRET")
 }
 
 

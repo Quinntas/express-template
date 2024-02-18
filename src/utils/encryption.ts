@@ -5,7 +5,7 @@ function generateSalt(): string {
     return randomBytes(16).toString("hex");
 }
 
-export function parsePassword(password: string) {
+export function parseEncryptedString(password: string) {
     const splitPass = password.split("$");
     return {
         salt: splitPass[1],
@@ -43,7 +43,7 @@ export function createRandomString(length: number): string {
     return randomString(length, "ABCDEFGHIJKLMNOPQTUVWXYZ0123456789");
 }
 
-function compare(data: string, password: string): boolean {
+export function compare(data: string, password: string): boolean {
     // TODO: constant time comparison
     return data === password;
 }
