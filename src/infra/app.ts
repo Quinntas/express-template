@@ -9,6 +9,7 @@ import {DecodedExpressRequest} from "../types/decodedExpressRequest";
 import {jsonResponse} from "../core/responses";
 import {get} from "../core/handleRequest";
 import {v1Router} from "./routers/v1Router";
+import "@total-typescript/ts-reset";
 
 const corsOptions = {
     origin: '*',
@@ -33,7 +34,7 @@ const options = {
     }
 }
 
-const app = express();
+export const app = express();
 
 app.use(cors(corsOptions))
 app.use(morganMiddleware)
