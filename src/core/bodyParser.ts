@@ -24,10 +24,6 @@ export type BodyParseObject = {
     };
 }
 
-function hasSchema(type: string) {
-    return type === "object" || type === "array"
-}
-
 export function bodyParse(bodyObject: object, bodyParseObject: BodyParseObject) {
     const keys = Object.keys(bodyParseObject);
     for (let i = 0; i < keys.length; i++) {
