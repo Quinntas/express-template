@@ -1,4 +1,4 @@
-import {Primitive} from "../../../types/primitives";
+import {Primitive} from "../../../../types/primitives";
 
 export function sql(strings: TemplateStringsArray, ...values: Primitive[]): [string, Primitive[]] {
     let result = strings[0] ?? '';

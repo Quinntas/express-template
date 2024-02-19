@@ -1,4 +1,4 @@
-import express, {Response, Router} from "express";
+import express, {Request, Response, Router} from "express";
 import helmet from 'helmet'
 import compression from 'compression'
 import bodyParser from 'body-parser'
@@ -33,6 +33,7 @@ const options = {
         return compression.filter(req, res)
     }
 }
+
 
 export const app = express();
 

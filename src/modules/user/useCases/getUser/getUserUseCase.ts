@@ -8,15 +8,15 @@ import {toPublicDomain} from "../../mapper/userMapper";
 import {validateUserName} from "../../domain/valueObjects/userName";
 import {validateUserEmail} from "../../domain/valueObjects/userEmail";
 
-export async function GetUserUseCase(request: DecodedExpressRequest<GetUserDTO, null>, response: Response) {
+export async function GetUserUseCase(request: DecodedExpressRequest<null, GetUserDTO>, response: Response) {
     let name: string | null = null
     let email: string | null = null
 
-    if (request.bodyObject.name)
-        name = validateUserName(request.bodyObject.name)
+    if (request.queryObject.name)
+        name = validateUserName(request.queryObject.name)
 
-    if (request.bodyObject.email)
-        email = validateUserEmail(request.bodyObject.email)
+    if (request.queryObject.email)
+        email = validateUserEmail(request.queryObject.email)
 
     const result = await getUser(name, email)
 

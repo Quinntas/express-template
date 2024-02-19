@@ -3,12 +3,12 @@ import {CreateUserUseCase} from "../../useCases/createUser/createUserUseCase";
 import {Router} from "express";
 import {GetUserUseCase} from "../../useCases/getUser/getUserUseCase";
 import {LoginUseCase} from "../../useCases/login/loginUseCase";
-import {ensureUserAuthenticated} from "../middleware/userMiddleware";
+import {userRateLimitMiddleware} from "../middleware/rateLimit/userRateLimitMiddleware";
 
 export const userRouter: Router = Router();
 
-post(userRouter, '/', CreateUserUseCase)
+post(userRouter, '/', CreateUserUseCase, [userRateLimitMiddleware])
 
-post(userRouter, '/login', LoginUseCase)
+post(userRouter, '/login', LoginUseCase, [userRateLimitMiddleware])
 
-get(userRouter, '/', GetUserUseCase, [ensureUserAuthenticated])
+get(userRouter, '/', GetUserUseCase, [userRateLimitMiddleware])

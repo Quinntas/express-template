@@ -21,7 +21,7 @@ async function handleCache(queryExecutor: QueryExecutor) {
 
     const cachedResult = await queryExecutor.cache.redisInstance.get(key);
 
-    if (cachedResult)
+    if (cachedResult && typeof cachedResult === 'string')
         return JSON.parse(cachedResult);
 
     const result = await executeQuery({

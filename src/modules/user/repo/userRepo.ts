@@ -1,5 +1,5 @@
 import {User} from "../domain/user";
-import {sql} from "../../../core/repo/parsers/sql";
+import {sql} from "../../../core/repo/parsers/sql/sql";
 import {executeQuery} from "../../../core/repo/baseRepo";
 import {spectreMain} from "../../../infra/database/spectreMain";
 import {toDomain} from "../mapper/userMapper";
@@ -7,7 +7,7 @@ import {Conditionator} from "../../../core/conditionator";
 import {redisClient} from "../../../infra/database/redis";
 
 export async function createUser(user: User) {
-    const params = sql`INSERT INTO users (name, email, password) VALUES (${user.name}, ${user.email}, ${user.password})`;
+    const params = sql`INSERT INTO users (pid, name, email, password) VALUES (${user.pid}, ${user.name}, ${user.email}, ${user.password})`;
     return await executeQuery({
         query: params[0],
         params: params[1],
@@ -26,6 +26,7 @@ export async function getUser(name?: string, email?: string) {
         params: conditionedQuery[1],
         spectreInstance: spectreMain,
         cache: {
+            key: `getUser-${conditionedQuery[1].join('-')}`,
             redisInstance: redisClient
         }
     })
