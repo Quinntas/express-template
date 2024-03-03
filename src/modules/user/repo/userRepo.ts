@@ -7,7 +7,8 @@ import {Conditionator} from "../../../core/conditionator";
 import {redisClient} from "../../../infra/database/redis";
 
 export async function createUser(user: User) {
-    const params = sql`INSERT INTO users (pid, name, email, password) VALUES (${user.pid}, ${user.name}, ${user.email}, ${user.password})`;
+    const params = sql`INSERT INTO users (pid, name, email, password)
+                       VALUES (${user.pid}, ${user.name}, ${user.email}, ${user.password})`;
     return await executeQuery({
         query: params[0],
         params: params[1],
@@ -21,6 +22,8 @@ export async function getUser(name?: string, email?: string) {
         .add({key: 'name', value: name})
         .add({key: 'email', value: email, connector: 'AND'})
         .result();
+    if (typeof conditionedQuery === 'string')
+        return null
     const result = await executeQuery({
         query: conditionedQuery[0],
         params: conditionedQuery[1],

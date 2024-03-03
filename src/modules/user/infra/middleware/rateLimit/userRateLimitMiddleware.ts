@@ -16,8 +16,10 @@ export async function userRateLimitMiddleware(req: UserDecodedExpressRequest<nul
 
     const result = parseInt(await redisClient.get(key))
 
-    if (!result)
-        return await redisClient.set(key, 1, 60)
+    if (!result) {
+        await redisClient.set(key, 1, 60)
+        return next()
+    }
 
     if (result >= maxRequestsPerMinute)
         throw new HttpError(429, "Rate limit exceeded")

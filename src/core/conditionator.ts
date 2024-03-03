@@ -1,4 +1,4 @@
-import {Primitive} from "spectre-orm";
+import {Primitive} from "../types/primitives";
 
 export interface Condition {
     key: string;
@@ -6,26 +6,31 @@ export interface Condition {
     connector?: 'AND' | 'OR'
 }
 
-export function Conditionator(baseQuery?: string) {
-    this.q = baseQuery ?? '';
-    this.conditions = [];
+export class Conditionator {
+    private q: string;
+    private conditions: Condition[];
 
-    this.where = function where() {
+    constructor(baseQuery?: string) {
+        this.q = baseQuery ?? '';
+        this.conditions = [];
+    }
+
+    public where(): this {
         let space = ""
         if (this.q !== "") space = " "
         this.q += `${space}WHERE`
         return this
     }
 
-    this.add = function add(condition: Condition) {
+    public add(condition: Condition): this {
         if (condition.value === null || condition.value === undefined)
             return this;
         this.conditions.push(condition);
         return this;
-    };
+    }
 
-    this.result = function (tokenStartIndex: number = 1, returnAsStringOnly: boolean = false, forceFirstConnector: boolean = false): [string, Primitive[]] | string {
-        if (this.conditions.length === 0) return [this.q, []];
+    public result(tokenStartIndex: number = 1, returnAsStringOnly: boolean = false, forceFirstConnector: boolean = false): [string, Primitive[]] | string {
+        if (this.conditions.length === 0) return returnAsStringOnly ? this.q : [this.q, []];
         let isFirstAdded = forceFirstConnector;
         let params: Primitive[] = [];
         for (let i = 0; i < this.conditions.length; i++) {
@@ -41,8 +46,5 @@ export function Conditionator(baseQuery?: string) {
             isFirstAdded = true;
         }
         return [this.q, params]
-    };
+    }
 }
-
-
-

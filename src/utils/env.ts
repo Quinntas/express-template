@@ -18,7 +18,7 @@ function getEnv(envName: string, required: boolean = true, defaultValue: string 
 
 export const env: EnvVariables = {
     NODE_ENV: getEnv("NODE_ENV", false, "development"),
-    PORT: parseInt(getEnv("PORT")),
+    PORT: parseInt(getEnv("PORT", false, "3000")),
     DATABASE_URL: getEnv("DATABASE_URL"),
     PEPPER: getEnv("PEPPER"),
     REDIS_URL: getEnv("REDIS_URL"),

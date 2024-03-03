@@ -32,11 +32,12 @@ export function bodyParse(bodyObject: object, bodyParseObject: BodyParseObject) 
                 throw new HttpError(400, `Missing required field`, {field: keys[i]})
         switch (typeof bodyObject[keys[i]]) {
             case "object":
-                if (bodyParseObject[keys[i]].type === "array" && Array.isArray(bodyObject[keys[i]])) {
-                    if (bodyParseObject[keys[i]].type !== "array")
+                if (bodyParseObject[keys[i]].type === "array") {
+                    if (!Array.isArray(bodyObject[keys[i]]))
                         throw new HttpError(400, `Invalid type for field`, {
                             field: keys[i],
-                            expected: bodyParseObject[keys[i]].type
+                            // @ts-ignore
+                            expected: bodyParseObject[keys[i]].schema.type
                         })
 
                     for (let j = 0; j < bodyObject[keys[i]].length; j++) {

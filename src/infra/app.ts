@@ -54,5 +54,5 @@ get(mainRouter, "/", async function healthCheck(req: DecodedExpressRequest<null,
 });
 
 app.listen(env.PORT, () => {
-    console.log("[Server] Running at http://localhost:" + env.PORT);
+    env.NODE_ENV === "development" && console.log(`Server is running on port ${env.PORT}`);
 });
