@@ -16,7 +16,7 @@ export async function LoginUseCase(request: DecodedExpressRequest<LoginDTO, null
     const email = validateUserEmail(request.bodyObject.email)
     const password = validateUserPassword(request.bodyObject.password)
 
-    const result = await getUser(null, email)
+    const result = await getUser(undefined, email)
 
     if (!result)
         throw new HttpError(404, "User not found")
@@ -29,14 +29,14 @@ export async function LoginUseCase(request: DecodedExpressRequest<LoginDTO, null
     const expireDate = Math.floor(Date.now() / 1000) + loginTokenExpiration
 
     const publicTokenObject: PublicLoginToken = {
-        userPid: result.pid,
+        userPid: result.pid!,
         exp: expireDate
     }
     const publicToken: string = jwt.sign(publicTokenObject, env.JWT_SECRET)
 
     const privateTokenObject: PrivateLoginToken = {
-        userPid: result.pid,
-        userId: result.id,
+        userPid: result.pid!,
+        userId: result.id!,
         exp: expireDate
     }
     const privateToken: string = jwt.sign(privateTokenObject, env.JWT_SECRET)

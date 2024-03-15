@@ -21,7 +21,7 @@ export class RedisClient {
         return reply
     }
 
-    public async get(key: string): Promise<string> {
+    public async get(key: string): Promise<string | null> {
         return this.client.get(key);
     }
 }

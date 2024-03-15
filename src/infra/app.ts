@@ -49,10 +49,10 @@ export const mainRouter = Router();
 app.use(mainRouter);
 app.use('/api/v1', v1Router)
 
-get(mainRouter, "/", async function healthCheck(req: DecodedExpressRequest<null, null>, res: Response) {
+get(mainRouter, "/", async function healthCheck(_req: DecodedExpressRequest<null, null>, res: Response) {
     return jsonResponse(res, 200, {message: "ok"});
 });
 
 app.listen(env.PORT, () => {
-    env.NODE_ENV === "development" && console.log(`Server is running on port ${env.PORT}`);
+    env.NODE_ENV === "development" && console.log(`[Server] is running on port ${env.PORT}`);
 });

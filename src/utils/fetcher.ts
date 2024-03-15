@@ -30,7 +30,11 @@ const defaultHeaders = {
 };
 
 
-export async function request<BodyType = any, ResponseType = any>(fetcherDTO: FetcherDTO<BodyType>): Promise<FetcherResponseDTO<ResponseType>> {
+export async function request<BodyType = any, ResponseType = any>(fetcherDTO: FetcherDTO<BodyType>): Promise<{
+    response: ResponseType | undefined;
+    ok: boolean;
+    status: number
+}> {
     let headers = Object.assign(
         {},
         defaultHeaders,
@@ -55,7 +59,7 @@ export async function request<BodyType = any, ResponseType = any>(fetcherDTO: Fe
         }
     }
 
-    let response: Response;
+    let response: Response | null = null;
 
     for (let i = 0; i < retryDTO.count; i++) {
         try {
@@ -79,6 +83,9 @@ export async function request<BodyType = any, ResponseType = any>(fetcherDTO: Fe
             );
         }
     }
+
+    if (response === null)
+        throw new Error("All fetch attempts failed");
 
     let responseBody = null;
 

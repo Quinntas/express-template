@@ -6,7 +6,7 @@ import {redisClient} from "../../../../infra/database/redis";
 import {loginRedisKeyPrefix} from "../../useCases/login/loginConstants";
 import {UserDecodedExpressRequest} from "../http/userDecodedExpressRequest";
 
-export async function ensureUserAuthenticated(req: UserDecodedExpressRequest<null, null>, res: Response, next: NextFunction) {
+export async function ensureUserAuthenticated(req: UserDecodedExpressRequest<null, null>, _res: Response, next: NextFunction) {
     const token = req.headers.authorization
 
     if (!token)

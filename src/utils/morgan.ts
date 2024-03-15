@@ -2,7 +2,7 @@ import morgan, {StreamOptions} from "morgan";
 import Logger from "./logger";
 
 const stream: StreamOptions = {
-    write: (message) => Logger.http(message),
+    write: (message: any) => Logger.http(message),
 };
 
 const morganMiddleware = morgan(

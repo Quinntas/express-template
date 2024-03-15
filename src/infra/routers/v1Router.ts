@@ -3,4 +3,4 @@ import {userRouter} from "../../modules/user/infra/http/userRouter";
 
 export const v1Router: Router = Router();
 
-v1Router.use('/user', userRouter)
+v1Router.use('/users', userRouter)

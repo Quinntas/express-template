@@ -10,7 +10,7 @@ export class WebSocketService {
             console.log('[WS] Connected');
         })
 
-        this.socket.on('error', (err) => {
+        this.socket.on('error', (err: any) => {
             console.log('[WS] Error', err);
         })
     }
@@ -19,7 +19,7 @@ export class WebSocketService {
         if (this.socket.readyState !== WebSocket.OPEN)
             throw new Error('WebSocket is not open');
 
-        this.socket.send(JSON.stringify(message), (err) => {
+        this.socket.send(JSON.stringify(message), (err: any) => {
             if (err) console.log('[WS] Error sending message', err);
         })
     }

@@ -1,12 +1,12 @@
 import {NextFunction, Response} from "express";
-import {UserDecodedExpressRequest} from "../../http/userDecodedExpressRequest";
 import {getClientIp} from "request-ip";
 import {HttpError} from "../../../../../core/errors";
 import {redisClient} from "../../../../../infra/database/redis";
 import {maxRequestsPerMinute, redisRateLimitKeyPrefix} from "./constants";
+import {DecodedExpressRequest} from "../../../../../types/decodedExpressRequest";
 
 
-export async function userRateLimitMiddleware(req: UserDecodedExpressRequest<null, null>, res: Response, next: NextFunction) {
+export async function userRateLimitMiddleware(req: DecodedExpressRequest<null, null>, _res: Response, next: NextFunction) {
     const ip: string | null = getClientIp(req)
 
     if (!ip)
@@ -14,7 +14,14 @@ export async function userRateLimitMiddleware(req: UserDecodedExpressRequest<nul
 
     const key = `${redisRateLimitKeyPrefix}:${ip}`
 
-    const result = parseInt(await redisClient.get(key))
+    const redisResult = await redisClient.get(key)
+
+    if (!redisResult) {
+        await redisClient.set(key, 1, 60)
+        return next()
+    }
+
+    const result = parseInt(redisResult)
 
     if (!result) {
         await redisClient.set(key, 1, 60)

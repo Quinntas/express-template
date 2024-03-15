@@ -22,7 +22,7 @@ export async function CreateUserUseCase(request: DecodedExpressRequest<CreateUse
         password: encrypt(password)
     })
 
-    if (!result.isSuccessful)
+    if (!result)
         throw new HttpError(500, "Error creating user")
 
     return jsonResponse(response, 201, {message: "User created successfully"})
