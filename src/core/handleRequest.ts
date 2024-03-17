@@ -8,17 +8,17 @@ import {wrapMiddlewares} from "./middleware";
 export type MiddlewareFunction = (req: DecodedExpressRequest<any, any>, res: Response, next: NextFunction) => Promise<void>;
 
 export function handleError(res: Response, error: Error) {
-    if (error instanceof HttpError) {
-        return jsonResponse(
-            res,
-            error.code,
-            {message: error.message, ...error.body}
-        );
+    switch (true) {
+        case error instanceof HttpError:
+            return jsonResponse(
+                res,
+                error.code,
+                {message: error.message, ...error.body}
+            );
+        default:
+            console.log(error)
+            return jsonResponse(res, 500, {message: "Internal server error"});
     }
-
-    console.log(error)
-
-    return jsonResponse(res, 500, {message: "Internal server error"});
 }
 
 export async function handleRequest<iBody extends object, iQuery extends object>(
