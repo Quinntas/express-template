@@ -7,6 +7,7 @@ import {wrapMiddlewares} from "./middleware";
 
 export type MiddlewareFunction = (req: DecodedExpressRequest<any, any>, res: Response, next: NextFunction) => Promise<void>;
 
+// TODO: mysql2 error handling
 export function handleError(res: Response, error: Error) {
     switch (true) {
         case error instanceof HttpError:
@@ -16,7 +17,7 @@ export function handleError(res: Response, error: Error) {
                 {message: error.message, ...error.body}
             );
         default:
-            console.log(error)
+            console.error(error)
             return jsonResponse(res, 500, {message: "Internal server error"});
     }
 }

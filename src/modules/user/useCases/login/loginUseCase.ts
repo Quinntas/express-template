@@ -1,7 +1,6 @@
 import {DecodedExpressRequest} from "../../../../types/decodedExpressRequest";
 import {Response} from "express";
 import {validateUserEmail} from "../../domain/valueObjects/userEmail";
-import {getUser} from "../../repo/userRepo";
 import {HttpError} from "../../../../core/errors";
 import {jsonResponse} from "../../../../core/responses";
 import {LoginDTO, LoginResponseDTO, PrivateLoginToken, PublicLoginToken} from "./loginDTO";
@@ -11,12 +10,13 @@ import {loginRedisKeyPrefix, loginTokenExpiration} from "./loginConstants";
 import jwt from 'jsonwebtoken'
 import {env} from "../../../../utils/env";
 import {redisClient} from "../../../../infra/database/redis";
+import {userRepo} from "../../repo/userRepo";
 
 export async function LoginUseCase(request: DecodedExpressRequest<LoginDTO, null>, response: Response) {
     const email = validateUserEmail(request.bodyObject.email)
     const password = validateUserPassword(request.bodyObject.password)
 
-    const result = await getUser(undefined, email)
+    const result = await userRepo.findByEmail(email)
 
     if (!result)
         throw new HttpError(404, "User not found")

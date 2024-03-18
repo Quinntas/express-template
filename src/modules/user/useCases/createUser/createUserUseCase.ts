@@ -2,7 +2,7 @@ import {CreateUserDTO} from "./createUserDTO";
 import {validateUserName} from "../../domain/valueObjects/userName";
 import {validateUserEmail} from "../../domain/valueObjects/userEmail";
 import {validateUserPassword} from "../../domain/valueObjects/userPassword";
-import {createUser} from "../../repo/userRepo";
+import {userRepo} from "../../repo/userRepo";
 import {jsonResponse} from "../../../../core/responses";
 import {DecodedExpressRequest} from "../../../../types/decodedExpressRequest";
 import {Response} from "express";
@@ -15,7 +15,7 @@ export async function CreateUserUseCase(request: DecodedExpressRequest<CreateUse
     const email = validateUserEmail(request.bodyObject.email)
     const password = validateUserPassword(request.bodyObject.password)
 
-    const result = await createUser({
+    const result = await userRepo.insert({
         pid: v4(),
         name,
         email,

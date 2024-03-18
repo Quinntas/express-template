@@ -1,32 +1,22 @@
 import {User} from "../domain/user";
-import {db,} from "../../../infra/database/mysql";
-import {toDomain} from "../mapper/userMapper";
+import {db} from "../../../infra/database/mysql";
 import {userTable} from "../infra/database/userTable";
-import {and, eq} from "drizzle-orm";
+import {eq} from "drizzle-orm";
+import {BaseRepo} from "../../../core/baseRepo";
+import {userMapper} from "../mapper/userMapper";
 
-export async function createUser(user: User) {
-    return db
-        .insert(userTable)
-        .values({
-            pid: user.pid!,
-            name: user.name,
-            email: user.email,
-            password: user.password
-        });
+export class UserRepo extends BaseRepo<User> {
+    constructor() {
+        super(userTable, db)
+    }
+
+    async findByEmail(email: string) {
+        const res = await this.select<User>(eq(userTable.email, email))
+        if (!res) return null
+        return userMapper.toDomain(res[0])
+    }
 }
 
-export async function getUser(name?: string, email?: string) {
+export const userRepo = new UserRepo()
 
-    const res = await db
-        .select()
-        .from(userTable)
-        .where(and(
-            email === undefined ? undefined : eq(userTable.email, email),
-            name === undefined ? undefined : eq(userTable.name, name)
-        ))
 
-    if (res.length === 0)
-        return null
-
-    return toDomain(res[0])
-}
