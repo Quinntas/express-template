@@ -22,7 +22,7 @@ export abstract class BaseRepo<Domain extends BaseDomain> implements IRepo {
         return paginate<T>({
             db,
             table: userTable,
-            limit: paginateDTO.limit + 1,
+            limit: paginateDTO.limit,
             offset: paginateDTO.offset,
             where: where
         })
