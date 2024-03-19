@@ -28,7 +28,8 @@ export async function ensureUserAuthenticated(req: UserDecodedExpressRequest<nul
 
     req.user = {
         pid: privateDecoded.userPid,
-        id: privateDecoded.userId
+        id: privateDecoded.userId,
+        email: privateDecoded.userEmail
     }
 
     next()

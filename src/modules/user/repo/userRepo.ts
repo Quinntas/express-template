@@ -11,8 +11,8 @@ export class UserRepo extends BaseRepo<User> {
     }
 
     async findByEmail(email: string) {
-        const res = await this.select<User>(eq(userTable.email, email))
-        if (!res) return null
+        const res = await this.select(eq(userTable.email, email))
+        if (!res || res.length == 0) return null
         return userMapper.toDomain(res[0])
     }
 }

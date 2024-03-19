@@ -16,6 +16,7 @@ export interface PublicLoginToken {
 
 export interface PrivateLoginToken {
     userPid: string
+    userEmail: string
     userId: number
     exp: number
 }

@@ -1,5 +1,12 @@
 require("dotenv").config();
 
+function getEnv(envName: string, required: boolean = true, defaultValue: string | undefined = undefined): string {
+    const result = process.env[envName] as string;
+    if (!result && required)
+        throw new Error(`Environment variable ${envName} not found`);
+    return result ?? defaultValue;
+}
+
 interface EnvVariables {
     NODE_ENV: string
     PORT: number
@@ -7,13 +14,6 @@ interface EnvVariables {
     PEPPER: string
     REDIS_URL: string
     JWT_SECRET: string
-}
-
-function getEnv(envName: string, required: boolean = true, defaultValue: string | undefined = undefined): string {
-    const result = process.env[envName] as string;
-    if (!result && required)
-        throw new Error(`Environment variable ${envName} not found`);
-    return result ?? defaultValue;
 }
 
 export const env: EnvVariables = {
@@ -24,5 +24,3 @@ export const env: EnvVariables = {
     REDIS_URL: getEnv("REDIS_URL"),
     JWT_SECRET: getEnv("JWT_SECRET")
 }
-
-
