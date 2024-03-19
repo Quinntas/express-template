@@ -43,6 +43,36 @@ export async function handleRequest<iBody extends object, iQuery extends object>
     }
 }
 
+export function put<iBody extends object, iQuery extends object>(
+    router: Router,
+    path: string,
+    handler: Function,
+    middlewares: MiddlewareFunction[] = []
+) {
+    const wrappedMiddlewares = wrapMiddlewares<iBody, iQuery>(middlewares);
+    router.put(path, wrappedMiddlewares, (req: Request, res: Response) =>
+        handleRequest<iBody, iQuery>(
+            req as DecodedExpressRequest<iBody, iQuery>,
+            res,
+            handler
+        ))
+}
+
+export function patch<iBody extends object, iQuery extends object>(
+    router: Router,
+    path: string,
+    handler: Function,
+    middlewares: MiddlewareFunction[] = []
+) {
+    const wrappedMiddlewares = wrapMiddlewares<iBody, iQuery>(middlewares);
+    router.patch(path, wrappedMiddlewares, (req: Request, res: Response) =>
+        handleRequest<iBody, iQuery>(
+            req as DecodedExpressRequest<iBody, iQuery>,
+            res,
+            handler
+        ))
+}
+
 export function get<iBody extends object, iQuery extends object>(
     router: Router,
     path: string,
@@ -50,16 +80,13 @@ export function get<iBody extends object, iQuery extends object>(
     middlewares: MiddlewareFunction[] = []
 ) {
     const wrappedMiddlewares = wrapMiddlewares<iBody, iQuery>(middlewares);
-
-    router.get(path, wrappedMiddlewares, (req: Request, res: Response) => {
+    router.get(path, wrappedMiddlewares, (req: Request, res: Response) =>
         handleRequest<iBody, iQuery>(
             req as DecodedExpressRequest<iBody, iQuery>,
             res,
             handler
-        );
-    });
+        ))
 }
-
 
 export function post<iBody extends object, iQuery extends object>(
     router: Router,
@@ -68,12 +95,10 @@ export function post<iBody extends object, iQuery extends object>(
     middlewares: MiddlewareFunction[] = []
 ) {
     const wrappedMiddlewares = wrapMiddlewares<iBody, iQuery>(middlewares);
-
-    router.post(path, wrappedMiddlewares, (req: Request, res: Response) => {
+    router.post(path, wrappedMiddlewares, (req: Request, res: Response) =>
         handleRequest<iBody, iQuery>(
             req as DecodedExpressRequest<iBody, iQuery>,
             res,
             handler
-        );
-    });
+        ))
 }

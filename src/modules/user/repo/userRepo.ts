@@ -10,7 +10,7 @@ export class UserRepo extends BaseRepo<User> {
         super(userTable, db)
     }
 
-    async findByEmail(email: string) {
+    async selectByEmail(email: string) {
         const res = await this.select(eq(userTable.email, email))
         if (!res || res.length == 0) return null
         return userMapper.toDomain(res[0])

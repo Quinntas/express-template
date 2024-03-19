@@ -12,16 +12,15 @@ export class UserMapper extends BaseMapper<User> {
         };
     }
 
-    toDomain(raw: any): User {
-        return {
-            id: raw.id,
-            pid: raw.pid,
-            name: raw.name,
-            email: raw.email,
-            password: raw.password,
-            createdAt: raw.createdAt,
-            updatedAt: raw.updatedAt
-        };
+    toDomain(raw: any): Required<User> {
+        if (!raw) throw new Error("Invalid input");
+        if (raw.pid === undefined) throw new Error("Invalid input")
+        if (raw.name === undefined) throw new Error("Invalid input")
+        if (raw.email === undefined) throw new Error("Invalid input")
+        if (raw.password === undefined) throw new Error("Invalid input")
+        if (raw.createdAt === undefined) throw new Error("Invalid input")
+        if (raw.updatedAt === undefined) throw new Error("Invalid input")
+        return raw as Required<User>;
     }
 }
 

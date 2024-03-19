@@ -13,10 +13,10 @@ import {redisClient} from "../../../../infra/database/redis";
 import {userRepo} from "../../repo/userRepo";
 
 export async function LoginUseCase(request: DecodedExpressRequest<LoginDTO, null>, response: Response) {
-    const email = validateUserEmail(request.bodyObject.email)
-    const password = validateUserPassword(request.bodyObject.password)
+    const email = validateUserEmail(request.bodyObject.email!)
+    const password = validateUserPassword(request.bodyObject.password!)
 
-    const result = await userRepo.findByEmail(email)
+    const result = await userRepo.selectByEmail(email)
 
     if (!result)
         throw new HttpError(404, "User not found")
@@ -29,15 +29,15 @@ export async function LoginUseCase(request: DecodedExpressRequest<LoginDTO, null
     const expireDate = Math.floor(Date.now() / 1000) + loginTokenExpiration
 
     const publicTokenObject: PublicLoginToken = {
-        userPid: result.pid!,
+        userPid: result.pid,
         exp: expireDate
     }
     const publicToken: string = jwt.sign(publicTokenObject, env.JWT_SECRET)
 
     const privateTokenObject: PrivateLoginToken = {
-        userPid: result.pid!,
+        userPid: result.pid,
         userEmail: result.email,
-        userId: result.id!,
+        userId: result.id,
         exp: expireDate
     }
     const privateToken: string = jwt.sign(privateTokenObject, env.JWT_SECRET)

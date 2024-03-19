@@ -3,6 +3,6 @@ import {Method} from "./methods";
 
 export interface DecodedExpressRequest<iBody extends object | null, iQuery extends object | null> extends Request {
     method: Method;
-    bodyObject: iBody;
-    queryObject: iQuery;
+    bodyObject: Partial<iBody>;
+    queryObject: Partial<iQuery>;
 }

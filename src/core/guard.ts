@@ -1,5 +1,35 @@
 import {GuardError} from "./errors";
 
+export function againstNullOrUndefinedBulk(args: [string, any][]) {
+    args.forEach(arg => againstNullOrUndefined(arg[0], arg[1]));
+}
+
+export function againstNotString(key: string, argument: any) {
+    if (typeof argument !== "string")
+        throw new GuardError("The argument is not a string", key);
+}
+
+export function againstNotNumber(key: string, argument: any) {
+    if (typeof argument !== "number")
+        throw new GuardError("The argument is not a number", key);
+}
+
+export function againstNotBoolean(key: string, argument: any) {
+    if (typeof argument !== "boolean")
+        throw new GuardError("The argument is not a boolean", key);
+}
+
+export function againstNotArray(key: string, argument: any) {
+    if (!Array.isArray(argument))
+        throw new GuardError("The argument is not an array", key);
+}
+
+export function againstNotObject(key: string, argument: any) {
+    // null and array are considered objects
+    if (argument == null || Array.isArray(argument) || typeof argument !== "object")
+        throw new GuardError("The argument is not an object", key);
+}
+
 export function againstNullOrUndefined(key: string, argument: any) {
     if (argument === null || argument === undefined)
         throw new GuardError("The argument is null or undefined", key);

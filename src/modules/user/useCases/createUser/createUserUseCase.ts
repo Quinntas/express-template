@@ -11,9 +11,9 @@ import {encrypt} from "../../../../utils/encryption";
 import {v4} from "uuid";
 
 export async function CreateUserUseCase(request: DecodedExpressRequest<CreateUserDTO, null>, response: Response) {
-    const name = validateUserName(request.bodyObject.name)
-    const email = validateUserEmail(request.bodyObject.email)
-    const password = validateUserPassword(request.bodyObject.password)
+    const name = validateUserName(request.bodyObject.name!)
+    const email = validateUserEmail(request.bodyObject.email!)
+    const password = validateUserPassword(request.bodyObject.password!)
 
     const result = await userRepo.insert({
         pid: v4(),

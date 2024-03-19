@@ -2,7 +2,7 @@
   "name": "express-template",
   "version": "1.0.0",
   "description": "",
-  "main": "src/infra/app.ts",
+  "main": "src/infra/index.ts",
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon ",
     "build": "rimraf dist && tsc",

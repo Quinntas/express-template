@@ -5,7 +5,13 @@ import {
     againstAtMost,
     againstBadEnumValue,
     againstBadFormat,
-    againstNullOrUndefined
+    againstNotArray,
+    againstNotBoolean,
+    againstNotNumber,
+    againstNotObject,
+    againstNotString,
+    againstNullOrUndefined,
+    againstNullOrUndefinedBulk
 } from "./guard";
 
 test("Guard - Null or Undefined - Valid with null", () => {
@@ -128,3 +134,101 @@ test("Guard - Bad enum - Valid", () => {
         againstBadEnumValue("key", TestEnum, "C")
     }).toThrowError()
 })
+
+// **********************
+
+test("Guard - Not String - Valid", () => {
+    expect(() => {
+        againstNotString("key", "123")
+    })
+})
+
+test("Guard - Not String - Invalid", () => {
+    expect(() => {
+        againstNotString("key", 123)
+    }).toThrowError()
+})
+
+// **********************
+
+test("Guard - Not Number - Valid", () => {
+    expect(() => {
+        againstNotNumber("key", 123)
+    })
+})
+
+test("Guard - Not Number - Invalid", () => {
+    expect(() => {
+        againstNotNumber("key", "123")
+    }).toThrowError()
+})
+
+// **********************
+
+test("Guard - Not Boolean - Valid", () => {
+    expect(() => {
+        againstNotBoolean("key", false)
+    })
+})
+
+test("Guard - Not Boolean - Invalid", () => {
+    expect(() => {
+        againstNotBoolean("key", "false")
+    }).toThrowError()
+})
+
+// **********************
+
+test("Guard - Not Array - Valid", () => {
+    expect(() => {
+        againstNotArray("key", [1, 2, 3])
+    })
+})
+
+test("Guard - Not Array - Invalid", () => {
+    expect(() => {
+        againstNotArray("key", {})
+    }).toThrowError()
+})
+
+// **********************
+
+test("Guard - Not Object - Valid", () => {
+    expect(() => {
+        againstNotObject("key", {foo: "bar"})
+    })
+})
+
+test("Guard - Not Object - Invalid", () => {
+    expect(() => {
+        againstNotObject("key", 123)
+    }).toThrowError()
+})
+
+test("Guard - Not Object - Invalid with array", () => {
+    expect(() => {
+        againstNotObject("key", [])
+    }).toThrowError()
+})
+
+test("Guard - Not Object - Invalid with null value", () => {
+    expect(() => {
+        againstNotObject("key", null)
+    }).toThrowError()
+})
+
+// **********************
+
+test("Guard - Null or Undefined Bulk - Valid", () => {
+    expect(() => {
+        againstNullOrUndefinedBulk([["key", 123], ["key", "123"]])
+    })
+})
+
+test("Guard - Null or Undefined Bulk - Invalid", () => {
+    expect(() => {
+        againstNullOrUndefinedBulk([["key", 123], ["key", undefined]])
+    }).toThrowError()
+})
+
+
