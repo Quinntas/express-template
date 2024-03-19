@@ -8,7 +8,7 @@ interface FetcherRetryDTO {
 
 export interface FetcherDTO<BodyType> {
     url: string;
-    action: Method;
+    method: Method;
     retryDTO?: FetcherRetryDTO;
     headers?: any;
     body?: BodyType;
@@ -64,14 +64,14 @@ export async function request<BodyType = any, ResponseType = any>(fetcherDTO: Fe
     for (let i = 0; i < retryDTO.count; i++) {
         try {
             response = await fetch(fetcherDTO.url, {
-                method: fetcherDTO.action,
+                method: fetcherDTO.method,
                 headers,
                 body,
             });
 
             if (response.ok) break;
         } catch (err) {
-            console.log(`Attempt ${i + 1} failed:`, err);
+            response = null;
         }
 
         if (
