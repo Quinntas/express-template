@@ -6,8 +6,6 @@ pnpm install
 
 # Docker
 
-### MYSQL, Redis and Adminer
-
 ```
 docker-compose up -d
 ```
@@ -17,3 +15,4 @@ docker-compose up -d
 ```
 pnpm dev
 ```
+
