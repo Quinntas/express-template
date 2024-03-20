@@ -14,19 +14,19 @@ import {
     againstNullOrUndefinedBulk
 } from "./guard";
 
-test("Guard - Null or Undefined - Valid with null", () => {
+test("Guard - Null or Undefined - Invalid with null", () => {
     expect(() => {
         againstNullOrUndefined("key", null)
     }).toThrowError()
 })
 
-test("Guard - Null or Undefined - Valid with undefined", () => {
+test("Guard - Null or Undefined - Invalid with undefined", () => {
     expect(() => {
         againstNullOrUndefined("key", undefined)
     }).toThrowError()
 })
 
-test("Guard - Null or Undefined - Invalid", () => {
+test("Guard - Null or Undefined - Valid", () => {
     expect(() => {
         againstNullOrUndefined("key", 1)
     })

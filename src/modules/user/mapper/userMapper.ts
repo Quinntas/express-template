@@ -14,6 +14,7 @@ export class UserMapper extends BaseMapper<User> {
 
     toDomain(raw: any): Required<User> {
         if (!raw) throw new Error("Invalid input");
+        if (raw.id === undefined) throw new Error("Invalid input")
         if (raw.pid === undefined) throw new Error("Invalid input")
         if (raw.name === undefined) throw new Error("Invalid input")
         if (raw.email === undefined) throw new Error("Invalid input")
