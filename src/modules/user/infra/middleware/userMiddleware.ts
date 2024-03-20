@@ -1,10 +1,10 @@
 import {NextFunction, Response} from "express";
-import jwt from "jsonwebtoken";
 import {HttpError} from "../../../../core/errors";
 import {PrivateLoginToken, PublicLoginToken} from "../../useCases/login/loginDTO";
 import {redisClient} from "../../../../infra/database/redis";
 import {loginRedisKeyPrefix} from "../../useCases/login/loginConstants";
 import {UserDecodedExpressRequest} from "../http/userDecodedExpressRequest";
+import {jwtDecode} from "../../../../utils/jsonWebToken";
 
 export async function ensureUserAuthenticated(req: UserDecodedExpressRequest<null, null>, _res: Response, next: NextFunction) {
     const token = req.headers.authorization
@@ -12,9 +12,12 @@ export async function ensureUserAuthenticated(req: UserDecodedExpressRequest<nul
     if (!token)
         throw new HttpError(401, 'No token provided')
 
-    const tokenValue = token.split(' ')[1]
+    const tokenValue = token.split(' ')
 
-    const publicDecoded: PublicLoginToken = jwt.decode(tokenValue, {json: true}) as PublicLoginToken
+    if (tokenValue.length !== 2 || tokenValue[0] !== 'Bearer')
+        throw new HttpError(401, 'Invalid token format')
+
+    const publicDecoded: PublicLoginToken = jwtDecode<PublicLoginToken>(tokenValue[1])
 
     if (!publicDecoded)
         throw new HttpError(401, 'Invalid token')
@@ -24,7 +27,7 @@ export async function ensureUserAuthenticated(req: UserDecodedExpressRequest<nul
     if (!privateToken)
         throw new HttpError(401, 'Token not found')
 
-    const privateDecoded: PrivateLoginToken = jwt.decode(privateToken, {json: true}) as PrivateLoginToken
+    const privateDecoded: PrivateLoginToken = jwtDecode<PrivateLoginToken>(privateToken)
 
     req.user = {
         pid: privateDecoded.userPid,

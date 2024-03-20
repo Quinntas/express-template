@@ -1,5 +1,4 @@
 import {createHash, pbkdf2Sync, randomBytes} from "crypto";
-import {env} from "./env";
 
 function generateSalt(): string {
     return randomBytes(16).toString("hex");
@@ -15,22 +14,20 @@ export function parseEncryptedString(password: string) {
 }
 
 export function randomString(length: number, chars: string) {
-    if (!chars) {
+    if (!chars)
         throw new Error("Argument 'chars' is undefined");
-    }
 
     const charsLength = chars.length;
-    if (charsLength > 256) {
+    if (charsLength > 256)
         throw new Error(
             "Argument 'chars' should not have more than 256 characters" +
             ", otherwise unpredictability will be broken"
         );
-    }
 
     const bytes = randomBytes(length);
     let result = new Array(length);
-
     let cursor = 0;
+
     for (let i = 0; i < length; i++) {
         cursor += bytes[i];
         result[i] = chars[cursor % charsLength];
@@ -49,17 +46,24 @@ export function compare(data: string, password: string): boolean {
 }
 
 export function hashString(data: string): string {
+    if (!data) throw new Error("Data must be defined");
+    if (typeof data !== "string") throw new Error("Data must be a string");
     return createHash("sha256").update(data).digest("hex");
 }
 
 export function encrypt(
     data: string,
+    pepper: string,
     iterations: number = 10000,
-    salt?: string
+    salt?: string,
 ): string {
+    if (!data) throw new Error("Data must be defined");
+    if (typeof data !== "string") throw new Error("Data must be a string");
+    if (!pepper) throw new Error("Pepper must be defined");
+    if (typeof pepper !== "string") throw new Error("Pepper must be a string");
     if (!salt) salt = generateSalt();
     const result = pbkdf2Sync(
-        env.PEPPER + data,
+        pepper + data,
         salt,
         iterations,
         64,

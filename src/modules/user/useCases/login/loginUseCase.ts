@@ -7,10 +7,10 @@ import {LoginDTO, LoginResponseDTO, PrivateLoginToken, PublicLoginToken} from ".
 import {validateUserPassword} from "../../domain/valueObjects/userPassword";
 import {compare, encrypt, parseEncryptedString} from "../../../../utils/encryption";
 import {loginRedisKeyPrefix, loginTokenExpiration} from "./loginConstants";
-import jwt from 'jsonwebtoken'
 import {env} from "../../../../utils/env";
 import {redisClient} from "../../../../infra/database/redis";
 import {userRepo} from "../../repo/userRepo";
+import {jwtSign} from "../../../../utils/jsonWebToken";
 
 export async function LoginUseCase(request: DecodedExpressRequest<LoginDTO, null>, response: Response) {
     const email = validateUserEmail(request.bodyObject.email!)
@@ -23,7 +23,7 @@ export async function LoginUseCase(request: DecodedExpressRequest<LoginDTO, null
 
     const parsedPassword = parseEncryptedString(result.password)
 
-    if (!compare(encrypt(password, parsedPassword.iterations, parsedPassword.salt), result.password))
+    if (!compare(encrypt(password, env.PEPPER, parsedPassword.iterations, parsedPassword.salt), result.password))
         throw new HttpError(401, "Invalid password")
 
     const expireDate = Math.floor(Date.now() / 1000) + loginTokenExpiration
@@ -32,7 +32,7 @@ export async function LoginUseCase(request: DecodedExpressRequest<LoginDTO, null
         userPid: result.pid,
         exp: expireDate
     }
-    const publicToken: string = jwt.sign(publicTokenObject, env.JWT_SECRET)
+    const publicToken: string = jwtSign(publicTokenObject, env.JWT_SECRET)
 
     const privateTokenObject: PrivateLoginToken = {
         userPid: result.pid,
@@ -40,7 +40,7 @@ export async function LoginUseCase(request: DecodedExpressRequest<LoginDTO, null
         userId: result.id,
         exp: expireDate
     }
-    const privateToken: string = jwt.sign(privateTokenObject, env.JWT_SECRET)
+    const privateToken: string = jwtSign(privateTokenObject, env.JWT_SECRET)
 
     await redisClient.set(loginRedisKeyPrefix + result.pid, privateToken, loginTokenExpiration)
 
