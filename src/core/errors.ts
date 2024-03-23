@@ -1,7 +1,10 @@
 export class InternalError extends Error {
-    constructor(message: string) {
+    public body?: object;
+
+    constructor(message: string, body?: object) {
         super(message);
         this.name = "InternalError";
+        this.body = body;
     }
 }
 

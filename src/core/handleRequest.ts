@@ -19,7 +19,7 @@ export function handleError(res: Response, error: Error) {
         case error instanceof InternalError:
             if (process.env.NODE_ENV === "development") {
                 console.error(error)
-                return jsonResponse(res, 500, {message: error.message});
+                return jsonResponse(res, 500, {message: error.message, ...error.body});
             }
             break
     }
