@@ -1,7 +1,7 @@
 import {DecodedExpressRequest} from "../types/decodedExpressRequest";
 import {NextFunction, Request, Response, Router} from "express";
 import {parse} from "querystring";
-import {HttpError} from "./errors";
+import {HttpError, InternalError} from "./errors";
 import {jsonResponse} from "./responses";
 import {wrapMiddlewares} from "./middleware";
 
@@ -16,10 +16,12 @@ export function handleError(res: Response, error: Error) {
                 error.code,
                 {message: error.message, ...error.body}
             );
-        default:
-            console.error(error)
-            return jsonResponse(res, 500, {message: "Internal server error"});
+        case error instanceof InternalError:
+            if (process.env.NODE_ENV === "development")
+                return jsonResponse(res, 500, {message: error.message});
+            break
     }
+    return jsonResponse(res, 500, {message: "Internal server error"});
 }
 
 export async function handleRequest<iBody extends object, iQuery extends object>(

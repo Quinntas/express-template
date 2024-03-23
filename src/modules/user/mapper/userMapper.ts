@@ -1,5 +1,6 @@
 import {User} from "../domain/user";
 import {BaseMapper} from "../../../core/baseMapper";
+import {InternalError} from "../../../core/errors";
 
 export class UserMapper extends BaseMapper<User> {
     toPublicDomain(user: User): Partial<User> {
@@ -13,14 +14,14 @@ export class UserMapper extends BaseMapper<User> {
     }
 
     toDomain(raw: any): Required<User> {
-        if (!raw) throw new Error("Invalid input");
-        if (raw.id === undefined) throw new Error("Invalid input")
-        if (raw.pid === undefined) throw new Error("Invalid input")
-        if (raw.name === undefined) throw new Error("Invalid input")
-        if (raw.email === undefined) throw new Error("Invalid input")
-        if (raw.password === undefined) throw new Error("Invalid input")
-        if (raw.createdAt === undefined) throw new Error("Invalid input")
-        if (raw.updatedAt === undefined) throw new Error("Invalid input")
+        if (!raw) throw new InternalError("Invalid input");
+        if (raw.id === undefined) throw new InternalError("Invalid input")
+        if (raw.pid === undefined) throw new InternalError("Invalid input")
+        if (raw.name === undefined) throw new InternalError("Invalid input")
+        if (raw.email === undefined) throw new InternalError("Invalid input")
+        if (raw.password === undefined) throw new InternalError("Invalid input")
+        if (raw.createdAt === undefined) throw new InternalError("Invalid input")
+        if (raw.updatedAt === undefined) throw new InternalError("Invalid input")
         return raw as Required<User>;
     }
 }

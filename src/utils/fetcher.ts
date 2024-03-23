@@ -1,5 +1,6 @@
 import fetch, {Response} from "node-fetch";
 import {Method} from "../types/methods";
+import {InternalError} from "../core/errors";
 
 interface FetcherRetryDTO {
     count: number;
@@ -84,7 +85,7 @@ export async function request<BodyType = any, ResponseType = any>(fetcherDTO: Fe
     }
 
     if (response === null)
-        throw new Error("All fetch attempts failed");
+        throw new InternalError("All fetch attempts failed");
 
     let responseBody = null;
 
