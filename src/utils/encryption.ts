@@ -1,4 +1,4 @@
-import {createHash, pbkdf2Sync, randomBytes} from "crypto";
+import {createHash, pbkdf2Sync, randomBytes, timingSafeEqual} from "crypto";
 
 function generateSalt(): string {
     return randomBytes(16).toString("hex");
@@ -41,8 +41,11 @@ export function createRandomString(length: number): string {
 }
 
 export function compare(data: string, password: string): boolean {
-    // TODO: constant time comparison
-    return data === password;
+    if (!data || !password)
+        throw new Error('Both data and password must be defined');
+    if (typeof data !== 'string' || typeof password !== 'string')
+        throw new Error('Both data and password must be strings');
+    return timingSafeEqual(Buffer.from(data), Buffer.from(password));
 }
 
 export function hashString(data: string): string {
