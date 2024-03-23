@@ -17,10 +17,13 @@ export function handleError(res: Response, error: Error) {
                 {message: error.message, ...error.body}
             );
         case error instanceof InternalError:
-            if (process.env.NODE_ENV === "development")
+            if (process.env.NODE_ENV === "development") {
+                console.error(error)
                 return jsonResponse(res, 500, {message: error.message});
+            }
             break
     }
+    console.error(error)
     return jsonResponse(res, 500, {message: "Internal server error"});
 }
 
