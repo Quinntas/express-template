@@ -5,6 +5,7 @@ import {MySql2Database} from "drizzle-orm/mysql2";
 import {paginate, PaginateDTO} from "../utils/paginate";
 import {db} from "../infra/database/mysql";
 import {userTable} from "../modules/user/infra/database/userTable";
+import {BaseMapper} from "./baseMapper";
 
 export interface IRepo {
 }
@@ -12,13 +13,15 @@ export interface IRepo {
 export abstract class BaseRepo<Domain extends BaseDomain> implements IRepo {
     private readonly table: MySqlTable
     private readonly db: MySql2Database
+    private readonly mapper: BaseMapper<Domain>
 
-    protected constructor(table: MySqlTable, db: MySql2Database) {
+    protected constructor(table: MySqlTable, db: MySql2Database, mapper: BaseMapper<Domain>) {
         this.table = table
         this.db = db
+        this.mapper = mapper
     }
 
-    list<T extends BaseDomain = Domain>(where: SQL, paginateDTO: PaginateDTO) {
+    paginate<T extends BaseDomain = Domain>(where: SQL, paginateDTO: PaginateDTO) {
         return paginate<T>({
             db,
             table: userTable,
@@ -26,6 +29,18 @@ export abstract class BaseRepo<Domain extends BaseDomain> implements IRepo {
             offset: paginateDTO.offset,
             where: where
         })
+    }
+
+    async selectOne(where: SQL): Promise<Required<Domain> | null> {
+        const res = await this.select(where)
+        if (!res || res.length == 0) return null
+        return this.mapper.toDomain(res[0])
+    }
+
+    async selectMany(where: SQL): Promise<Domain[] | null> {
+        const res = await this.select(where)
+        if (!res || res.length == 0) return null
+        return this.mapper.rawToDomainList(res)
     }
 
     select(where: SQL | undefined) {

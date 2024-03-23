@@ -25,6 +25,13 @@ test("BaseMapper - To Domain list - Valid", () => {
     }])).toEqual([{id: 1}])
 })
 
+test("BaseMapper - Raw To Domain list - Valid", () => {
+    const mapper = new MockMapper()
+    expect(mapper.rawToDomainList([{
+        id: 1
+    }])).toEqual([{id: 1}])
+})
+
 test("BaseMapper - To Public Domain list - Valid", () => {
     const mapper = new MockMapper()
     expect(mapper.toPublicDomainList([{

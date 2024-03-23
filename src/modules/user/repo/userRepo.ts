@@ -7,13 +7,11 @@ import {userMapper} from "../mapper/userMapper";
 
 export class UserRepo extends BaseRepo<User> {
     constructor() {
-        super(userTable, db)
+        super(userTable, db, userMapper)
     }
 
-    async selectByEmail(email: string) {
-        const res = await this.select(eq(userTable.email, email))
-        if (!res || res.length == 0) return null
-        return userMapper.toDomain(res[0])
+    selectByEmail(email: string) {
+        return this.selectOne(eq(userTable.email, email))
     }
 }
 

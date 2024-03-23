@@ -10,6 +10,10 @@ export abstract class BaseMapper<Domain extends BaseDomain> implements IMapper<D
 
     abstract toPublicDomain(data: Domain): Partial<Domain>
 
+    rawToDomainList(data: any[]): Domain[] {
+        return data.map(raw => this.toDomain(raw));
+    }
+
     toDomainList(data: Domain[]): Domain[] {
         return data.map(raw => this.toDomain(raw));
     }
