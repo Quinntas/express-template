@@ -1,4 +1,4 @@
-import {expect, test} from "vitest";
+import {expect, test} from 'vitest';
 import {
     againstAtLeast,
     againstAtLeastOneElement,
@@ -11,224 +11,228 @@ import {
     againstNotObject,
     againstNotString,
     againstNullOrUndefined,
-    againstNullOrUndefinedBulk
-} from "./guard";
+    againstNullOrUndefinedBulk,
+} from './guard';
 
-test("Guard - Null or Undefined - Invalid with null", () => {
+test('Guard - Null or Undefined - Invalid with null', () => {
     expect(() => {
-        againstNullOrUndefined("key", null)
-    }).toThrowError()
-})
+        againstNullOrUndefined('key', null);
+    }).toThrowError();
+});
 
-test("Guard - Null or Undefined - Invalid with undefined", () => {
+test('Guard - Null or Undefined - Invalid with undefined', () => {
     expect(() => {
-        againstNullOrUndefined("key", undefined)
-    }).toThrowError()
-})
+        againstNullOrUndefined('key', undefined);
+    }).toThrowError();
+});
 
-test("Guard - Null or Undefined - Valid", () => {
+test('Guard - Null or Undefined - Valid', () => {
     expect(() => {
-        againstNullOrUndefined("key", 1)
-    })
-})
+        againstNullOrUndefined('key', 1);
+    });
+});
 
 // **********************
 
-test("Guard - At most - Valid", () => {
+test('Guard - At most - Valid', () => {
     expect(() => {
-        againstAtMost("key", 1, 2)
-    })
-})
+        againstAtMost('key', 1, 2);
+    });
+});
 
-test("Guard - At most - Valid equal", () => {
+test('Guard - At most - Valid equal', () => {
     expect(() => {
-        againstAtMost("key", 2, 2)
-    })
-})
+        againstAtMost('key', 2, 2);
+    });
+});
 
-test("Guard - At most - Invalid", () => {
+test('Guard - At most - Invalid', () => {
     expect(() => {
-        againstAtMost("key", 3, 2)
-    }).toThrowError()
-})
+        againstAtMost('key', 3, 2);
+    }).toThrowError();
+});
 
 // **********************
 
-test("Guard - At least - Valid", () => {
+test('Guard - At least - Valid', () => {
     expect(() => {
-        againstAtLeast("key", 2, 1)
-    })
-})
+        againstAtLeast('key', 2, 1);
+    });
+});
 
-test("Guard - At least - Valid equal", () => {
+test('Guard - At least - Valid equal', () => {
     expect(() => {
-        againstAtLeast("key", 1, 1)
-    })
-})
+        againstAtLeast('key', 1, 1);
+    });
+});
 
-test("Guard - At least - Invalid", () => {
+test('Guard - At least - Invalid', () => {
     expect(() => {
-        againstAtLeast("key", 0, 1)
-    }).toThrowError()
-})
+        againstAtLeast('key', 0, 1);
+    }).toThrowError();
+});
 
 // **********************
 
-test("Guard - At least one element - Valid", () => {
+test('Guard - At least one element - Valid', () => {
     expect(() => {
-        againstAtLeastOneElement("key", [1])
-    })
-})
+        againstAtLeastOneElement('key', [1]);
+    });
+});
 
-test("Guard - At least one element - Invalid", () => {
+test('Guard - At least one element - Invalid', () => {
     expect(() => {
-        againstAtLeastOneElement("key", [])
-    }).toThrowError()
-})
+        againstAtLeastOneElement('key', []);
+    }).toThrowError();
+});
 
 // **********************
 
-test("Guard - Bad format - Valid", () => {
+test('Guard - Bad format - Valid', () => {
     expect(() => {
-        againstBadFormat("key", "test@gmail.com", /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/)
-    })
-})
+        againstBadFormat('key', 'test@gmail.com', /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/);
+    });
+});
 
-test("Guard - Bad format - Invalid", () => {
+test('Guard - Bad format - Invalid', () => {
     expect(() => {
-        againstBadFormat("key", "test", /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/)
-    }).toThrowError()
-})
+        againstBadFormat('key', 'test', /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/);
+    }).toThrowError();
+});
 
 // **********************
 
-test("Guard - Bad enum - Valid", () => {
+test('Guard - Bad enum - Valid', () => {
     enum TestEnum {
-        A = "A",
-        B = "B"
+        A = 'A',
+        B = 'B',
     }
 
     expect(() => {
-        againstBadEnumValue("key", TestEnum, TestEnum.A)
-    })
-})
+        againstBadEnumValue('key', TestEnum, TestEnum.A);
+    });
+});
 
-test("Guard - Bad enum - Valid String", () => {
+test('Guard - Bad enum - Valid String', () => {
     enum TestEnum {
-        A = "A",
-        B = "B"
+        A = 'A',
+        B = 'B',
     }
 
     expect(() => {
-        againstBadEnumValue("key", TestEnum, "A")
-    })
-})
+        againstBadEnumValue('key', TestEnum, 'A');
+    });
+});
 
-test("Guard - Bad enum - Valid", () => {
+test('Guard - Bad enum - Valid', () => {
     enum TestEnum {
-        A = "A",
-        B = "B"
+        A = 'A',
+        B = 'B',
     }
 
     expect(() => {
-        againstBadEnumValue("key", TestEnum, "C")
-    }).toThrowError()
-})
+        againstBadEnumValue('key', TestEnum, 'C');
+    }).toThrowError();
+});
 
 // **********************
 
-test("Guard - Not String - Valid", () => {
+test('Guard - Not String - Valid', () => {
     expect(() => {
-        againstNotString("key", "123")
-    })
-})
+        againstNotString('key', '123');
+    });
+});
 
-test("Guard - Not String - Invalid", () => {
+test('Guard - Not String - Invalid', () => {
     expect(() => {
-        againstNotString("key", 123)
-    }).toThrowError()
-})
+        againstNotString('key', 123);
+    }).toThrowError();
+});
 
 // **********************
 
-test("Guard - Not Number - Valid", () => {
+test('Guard - Not Number - Valid', () => {
     expect(() => {
-        againstNotNumber("key", 123)
-    })
-})
+        againstNotNumber('key', 123);
+    });
+});
 
-test("Guard - Not Number - Invalid", () => {
+test('Guard - Not Number - Invalid', () => {
     expect(() => {
-        againstNotNumber("key", "123")
-    }).toThrowError()
-})
+        againstNotNumber('key', '123');
+    }).toThrowError();
+});
 
 // **********************
 
-test("Guard - Not Boolean - Valid", () => {
+test('Guard - Not Boolean - Valid', () => {
     expect(() => {
-        againstNotBoolean("key", false)
-    })
-})
+        againstNotBoolean('key', false);
+    });
+});
 
-test("Guard - Not Boolean - Invalid", () => {
+test('Guard - Not Boolean - Invalid', () => {
     expect(() => {
-        againstNotBoolean("key", "false")
-    }).toThrowError()
-})
+        againstNotBoolean('key', 'false');
+    }).toThrowError();
+});
 
 // **********************
 
-test("Guard - Not Array - Valid", () => {
+test('Guard - Not Array - Valid', () => {
     expect(() => {
-        againstNotArray("key", [1, 2, 3])
-    })
-})
+        againstNotArray('key', [1, 2, 3]);
+    });
+});
 
-test("Guard - Not Array - Invalid", () => {
+test('Guard - Not Array - Invalid', () => {
     expect(() => {
-        againstNotArray("key", {})
-    }).toThrowError()
-})
+        againstNotArray('key', {});
+    }).toThrowError();
+});
 
 // **********************
 
-test("Guard - Not Object - Valid", () => {
+test('Guard - Not Object - Valid', () => {
     expect(() => {
-        againstNotObject("key", {foo: "bar"})
-    })
-})
+        againstNotObject('key', {foo: 'bar'});
+    });
+});
 
-test("Guard - Not Object - Invalid", () => {
+test('Guard - Not Object - Invalid', () => {
     expect(() => {
-        againstNotObject("key", 123)
-    }).toThrowError()
-})
+        againstNotObject('key', 123);
+    }).toThrowError();
+});
 
-test("Guard - Not Object - Invalid with array", () => {
+test('Guard - Not Object - Invalid with array', () => {
     expect(() => {
-        againstNotObject("key", [])
-    }).toThrowError()
-})
+        againstNotObject('key', []);
+    }).toThrowError();
+});
 
-test("Guard - Not Object - Invalid with null value", () => {
+test('Guard - Not Object - Invalid with null value', () => {
     expect(() => {
-        againstNotObject("key", null)
-    }).toThrowError()
-})
+        againstNotObject('key', null);
+    }).toThrowError();
+});
 
 // **********************
 
-test("Guard - Null or Undefined Bulk - Valid", () => {
+test('Guard - Null or Undefined Bulk - Valid', () => {
     expect(() => {
-        againstNullOrUndefinedBulk([["key", 123], ["key", "123"]])
-    })
-})
+        againstNullOrUndefinedBulk([
+            ['key', 123],
+            ['key', '123'],
+        ]);
+    });
+});
 
-test("Guard - Null or Undefined Bulk - Invalid", () => {
+test('Guard - Null or Undefined Bulk - Invalid', () => {
     expect(() => {
-        againstNullOrUndefinedBulk([["key", 123], ["key", undefined]])
-    }).toThrowError()
-})
-
-
+        againstNullOrUndefinedBulk([
+            ['key', 123],
+            ['key', undefined],
+        ]);
+    }).toThrowError();
+});

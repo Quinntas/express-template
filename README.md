@@ -4,10 +4,10 @@
 
 ### Features
 
-- [x] Latest packages
-- [x] Fully tested, documented and typesafe
-- [x] Plug and play
-- [X] Drizzle-orm
+-   [x] Latest packages
+-   [x] Fully tested, documented and typesafe
+-   [x] Plug and play
+-   [x] Drizzle-orm
 
 ### Docs
 
@@ -15,8 +15,8 @@
 
 ### Prerequisites
 
-- [Node.js >= 20](https://nodejs.org/en/download)
-- [pnpm](https://pnpm.io/installation)
+-   [Node.js >= 20](https://nodejs.org/en/download)
+-   [pnpm](https://pnpm.io/installation)
 
 ### Docker (MYSQL, REDIS, ADMINER)
 
@@ -32,7 +32,6 @@ pnpm install
 
 ### Running
 
-```bash 
+```bash
 pnpm dev
 ```
-

@@ -6,5 +6,5 @@ import {baseColumns} from "../../../shared/infra/database/baseColumns";
 
 export const ${exportName}Table = dbSchema.table("", {
     ...baseColumns,
-})`
+})`;
 }

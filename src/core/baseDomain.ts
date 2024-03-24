@@ -1,6 +1,6 @@
 export interface BaseDomain {
     id?: number;
-    pid?: string
+    pid?: string;
     createdAt?: Date;
     updatedAt?: Date;
 }

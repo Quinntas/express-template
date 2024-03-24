@@ -4,5 +4,5 @@ export function routerTemplate(name: string): string {
     return `import {Router} from "express";
 
 export const ${exportName}Router: Router = Router();
-    `
+    `;
 }

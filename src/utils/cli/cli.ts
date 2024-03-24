@@ -1,14 +1,13 @@
-import * as fs from "fs";
-import {domainTemplate} from "./domainTemplate";
-import {mapperTemplate} from "./mapperTemplate";
-import {repoTemplate} from "./repoTemplate";
-import {databaseTableTemplate} from "./databaseTableTemplate";
-import {routerTemplate} from "./routerTemplate";
-
+import * as fs from 'fs';
+import {databaseTableTemplate} from './databaseTableTemplate';
+import {domainTemplate} from './domainTemplate';
+import {mapperTemplate} from './mapperTemplate';
+import {repoTemplate} from './repoTemplate';
+import {routerTemplate} from './routerTemplate';
 
 function createModule(name: string | null) {
-    if (!name) throw new Error("No module name provided");
-    if (/\d/.test(name)) throw new Error("Module name cannot contain numbers");
+    if (!name) throw new Error('No module name provided');
+    if (/\d/.test(name)) throw new Error('Module name cannot contain numbers');
 
     console.log(`Creating module: ${name}`);
 
@@ -18,7 +17,7 @@ function createModule(name: string | null) {
 
     fs.mkdirSync(`src/modules/${moduleName}`);
 
-    console.log(`Creating module structure for ${moduleName}`)
+    console.log(`Creating module structure for ${moduleName}`);
 
     fs.mkdirSync(`src/modules/${moduleName}/domain`);
     const domainF = fs.createWriteStream(`src/modules/${moduleName}/domain/${moduleName}.ts`);
@@ -29,7 +28,7 @@ function createModule(name: string | null) {
 
     fs.mkdirSync(`src/modules/${moduleName}/mapper`);
     const mapperF = fs.createWriteStream(`src/modules/${moduleName}/mapper/${moduleName}Mapper.ts`);
-    mapperF.write(mapperTemplate(name))
+    mapperF.write(mapperTemplate(name));
 
     fs.mkdirSync(`src/modules/${moduleName}/repo`);
     const repoF = fs.createWriteStream(`src/modules/${moduleName}/repo/${moduleName}Repo.ts`);
@@ -54,10 +53,10 @@ function createModule(name: string | null) {
 }
 
 function main(args: string[]) {
-    if (args.length === 0) throw new Error("No arguments provided");
+    if (args.length === 0) throw new Error('No arguments provided');
 
     switch (args[0]) {
-        case "cm":
+        case 'cm':
             return createModule(args[1]);
         default:
             throw new Error(`Unknown command: ${args[0]}`);

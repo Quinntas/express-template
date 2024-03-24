@@ -1,2 +1,2 @@
-import "@total-typescript/ts-reset";
-import "./http/server";
+import '@total-typescript/ts-reset';
+import './http/server';

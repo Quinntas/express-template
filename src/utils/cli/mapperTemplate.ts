@@ -27,5 +27,5 @@ export class ${domainName}Mapper extends BaseMapper<${domainName}> {
 }
 
 export const ${exportName}Mapper = new ${domainName}Mapper();
-    `
+    `;
 }

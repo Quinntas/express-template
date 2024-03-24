@@ -3,7 +3,7 @@ export class InternalError extends Error {
 
     constructor(message: string, body?: object) {
         super(message);
-        this.name = "InternalError";
+        this.name = 'InternalError';
         this.body = body;
     }
 }
@@ -14,7 +14,7 @@ export class HttpError extends Error {
 
     constructor(code: number, message?: string, body?: object) {
         super(message);
-        this.name = "HttpError";
+        this.name = 'HttpError';
         this.code = code;
         this.body = body;
     }
@@ -28,10 +28,10 @@ export class GuardError extends HttpError {
         super(422, message, {
             key,
             message,
-            ...body
+            ...body,
         });
         this.key = key;
         this.message = message;
-        this.name = "GuardError";
+        this.name = 'GuardError';
     }
 }

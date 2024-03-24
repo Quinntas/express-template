@@ -15,5 +15,5 @@ export class ${domainName}Repo extends BaseRepo<${domainName}> {
 }
 
 export const ${exportName}Repo = new ${domainName}Repo()
-    `
+    `;
 }

@@ -1,6 +1,6 @@
-import fetch, {Response} from "node-fetch";
-import {Method} from "../types/methods";
-import {InternalError} from "../core/errors";
+import fetch, {Response} from 'node-fetch';
+import {InternalError} from '../core/errors';
+import {Method} from '../types/methods';
 
 interface FetcherRetryDTO {
     count: number;
@@ -22,36 +22,34 @@ export interface FetcherResponseDTO<ResponseType> {
 }
 
 const defaultHeaders = {
-    "Content-Type": "application/json",
-    Accept: "application/json",
-    "cache-control": "no-cache",
-    "Access-Control-Allow-Origin": "*",
-    "User-Agent": "ExpressTemplate/1.0.0",
-    "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+    'cache-control': 'no-cache',
+    'Access-Control-Allow-Origin': '*',
+    'User-Agent': 'ExpressTemplate/1.0.0',
+    'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
 };
 
-export async function request<BodyType = any, ResponseType = any>(fetcherDTO: FetcherDTO<BodyType>): Promise<{
+export async function request<BodyType = any, ResponseType = any>(
+    fetcherDTO: FetcherDTO<BodyType>,
+): Promise<{
     response: ResponseType | undefined;
     ok: boolean;
-    status: number
+    status: number;
 }> {
-    let headers = Object.assign(
-        {},
-        defaultHeaders,
-        fetcherDTO.headers
-    );
+    let headers = Object.assign({}, defaultHeaders, fetcherDTO.headers);
     let body: any = undefined;
     let retryDTO: FetcherRetryDTO = fetcherDTO.retryDTO || {
         count: 1,
         secondsDelay: 0,
-    }
+    };
 
     if (fetcherDTO.body) {
-        switch (headers["Content-Type"]) {
-            case "application/json":
+        switch (headers['Content-Type']) {
+            case 'application/json':
                 body = JSON.stringify(fetcherDTO.body);
                 break;
-            case "multipart/form-data":
+            case 'multipart/form-data':
                 body = fetcherDTO.body;
                 break;
             default:
@@ -74,33 +72,27 @@ export async function request<BodyType = any, ResponseType = any>(fetcherDTO: Fe
             response = null;
         }
 
-        if (
-            i < retryDTO.count - 1 &&
-            retryDTO.secondsDelay > 0
-        ) {
-            await new Promise((resolve) =>
-                setTimeout(resolve, retryDTO.secondsDelay)
-            );
+        if (i < retryDTO.count - 1 && retryDTO.secondsDelay > 0) {
+            await new Promise((resolve) => setTimeout(resolve, retryDTO.secondsDelay));
         }
     }
 
-    if (response === null)
-        throw new InternalError("All fetch attempts failed");
+    if (response === null) throw new InternalError('All fetch attempts failed');
 
     let responseBody = null;
 
-    switch (response.headers.get("Content-Type")) {
-        case "application/json; charset=utf-8":
-        case "application/json;charset=UTF-8":
-        case "application/json":
+    switch (response.headers.get('Content-Type')) {
+        case 'application/json; charset=utf-8':
+        case 'application/json;charset=UTF-8':
+        case 'application/json':
             responseBody = await response.json();
             break;
-        case "application/ssml+xml":
+        case 'application/ssml+xml':
             responseBody = await response.text();
             break;
-        case "audio/webm; codec=opus":
-        case "audio/wav":
-        case "audio/x-wav":
+        case 'audio/webm; codec=opus':
+        case 'audio/wav':
+        case 'audio/x-wav':
             responseBody = await response.blob();
             break;
         default:

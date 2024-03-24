@@ -1,13 +1,19 @@
 /** @type {import("prettier").Config} */
 const config = {
-    trailingComma: "es5",
+    trailingComma: 'all',
     tabWidth: 4,
     semi: true,
     singleQuote: true,
     bracketSpacing: false,
     bracketSameLine: true,
-    arrowParens: "always",
-    endOfLine: "lf",
+    arrowParens: 'always',
+    plugins: ['@trivago/prettier-plugin-sort-imports'],
+    endOfLine: 'lf',
+    importOrder: ['^[./]'],
+    importOrderSeparation: false,
+    importOrderSortSpecifiers: true,
+    proseWrap: 'preserve',
+    printWidth: 160,
 };
 
-export default config;
+module.exports = config;

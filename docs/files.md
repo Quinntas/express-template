@@ -21,15 +21,15 @@
 
 **This rule applies to all typescript files if it needs more files outsite of its responsibility.**
 
-*create a folder with the file name and the original file then place the constants in the folder.
+\*create a folder with the file name and the original file then place the constants in the folder.
 
-- If a file needs new constants *
-- If a file needs new DTO's *
-- If a file needs new interfaces *
-- If a file needs new types *
-- If a file needs new enums *
-- If a file needs new classes *
-- If a file needs new mocks *
+- If a file needs new constants \*
+- If a file needs new DTO's \*
+- If a file needs new interfaces \*
+- If a file needs new types \*
+- If a file needs new enums \*
+- If a file needs new classes \*
+- If a file needs new mocks \*
 
 ---
 
@@ -66,5 +66,3 @@ The shared code should be placed in the `./src/modules/shared` directory.
 - `./src/modules/*/repo` Module repository files.
 - `./src/modules/*/useCases` Module useCases.
 - `./src/modules/*/utils` Module utilities.
-
-

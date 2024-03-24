@@ -1,0 +1,6 @@
+*.json
+*.md
+*.yml
+Dockerfile
+LICENSE
+pnpm-lock.yaml
