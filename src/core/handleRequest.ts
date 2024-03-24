@@ -1,11 +1,9 @@
 import {DecodedExpressRequest} from "../types/decodedExpressRequest";
-import {NextFunction, Request, Response, Router} from "express";
+import {Request, Response, Router} from "express";
 import {parse} from "querystring";
 import {HttpError, InternalError} from "./errors";
 import {jsonResponse} from "./responses";
-import {wrapMiddlewares} from "./middleware";
-
-export type MiddlewareFunction = (req: DecodedExpressRequest<any, any>, res: Response, next: NextFunction) => Promise<void>;
+import {MiddlewareFunction, wrapMiddlewares} from "./middleware";
 
 // TODO: mysql2 error handling
 export function handleError(res: Response, error: Error) {

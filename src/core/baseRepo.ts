@@ -7,10 +7,7 @@ import {db} from "../infra/database/mysql";
 import {userTable} from "../modules/user/infra/database/userTable";
 import {BaseMapper} from "./baseMapper";
 
-export interface IRepo {
-}
-
-export abstract class BaseRepo<Domain extends BaseDomain> implements IRepo {
+export abstract class BaseRepo<Domain extends BaseDomain> {
     private readonly table: MySqlTable
     private readonly db: MySql2Database
     private readonly mapper: BaseMapper<Domain>

@@ -1,6 +1,8 @@
 import {DecodedExpressRequest} from "../types/decodedExpressRequest";
-import {handleError, MiddlewareFunction} from "./handleRequest";
-import {ErrorRequestHandler, RequestHandler, Response} from "express";
+import {handleError,} from "./handleRequest";
+import {ErrorRequestHandler, NextFunction, RequestHandler, Response} from "express";
+
+export type MiddlewareFunction = (req: DecodedExpressRequest<any, any>, res: Response, next: NextFunction) => Promise<void>;
 
 export async function handleMiddleware<iBody extends object, iQuery extends object>(req: DecodedExpressRequest<iBody, iQuery>, res: Response, next: Function, middleware: Function) {
     try {
