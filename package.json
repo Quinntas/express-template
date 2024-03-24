@@ -9,6 +9,7 @@
     "test": "vitest run",
     "db:push": "drizzle-kit push:pg",
     "db:studio": "drizzle-kit studio",
+    "cli": "ts-node src/utils/cli/cli.ts",
     "prepare": "husky"
   },
   "lint-staged": {

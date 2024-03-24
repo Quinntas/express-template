@@ -4,6 +4,12 @@
 
 ## Creating a New Module
 
+### You can also create a module using the CLI
+
+```bash
+pnpm cli cm [moduleName in camelCase]
+```
+
 **This rule applies to all modules.**
 
 - Create a folder with the module name in the `./src/modules` directory.
