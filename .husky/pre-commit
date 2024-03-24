@@ -1,1 +1,2 @@
+pnpm prettier . --write --ignore-unknown
 pnpm test
