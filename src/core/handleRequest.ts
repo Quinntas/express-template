@@ -4,6 +4,7 @@ import {DecodedExpressRequest} from '../types/decodedExpressRequest';
 import {HttpError, InternalError} from './errors';
 import {MiddlewareFunction, wrapMiddlewares} from './middleware';
 import {jsonResponse} from './responses';
+import {env} from "../utils/env";
 
 // TODO: mysql2 error handling
 export function handleError(res: Response, error: Error) {
@@ -14,7 +15,7 @@ export function handleError(res: Response, error: Error) {
                 ...error.body,
             });
         case error instanceof InternalError:
-            if (process.env.NODE_ENV === 'development') {
+            if (env.NODE_ENV === 'development') {
                 console.error(error);
                 return jsonResponse(res, 500, {
                     message: error.message,
