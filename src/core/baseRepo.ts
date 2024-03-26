@@ -2,8 +2,7 @@ import {SQL, sql} from 'drizzle-orm';
 import {MySql2Database} from 'drizzle-orm/mysql2';
 import {MySqlTable} from 'drizzle-orm/mysql-core';
 import {db} from '../infra/database/mysql';
-import {userTable} from '../modules/user/infra/database/userTable';
-import {PaginateDTO, paginate} from '../utils/paginate';
+import {paginate, PaginateDTO, PaginateInternalDTO} from '../utils/paginate';
 import {BaseDomain} from './baseDomain';
 import {BaseMapper} from './baseMapper';
 
@@ -18,13 +17,15 @@ export abstract class BaseRepo<Domain extends BaseDomain> {
         this.mapper = mapper;
     }
 
-    paginate<T extends BaseDomain = Domain>(where: SQL, paginateDTO: PaginateDTO) {
-        return paginate<T>({
+    paginate(where: SQL, paginateDTO: PaginateDTO, select?: PaginateInternalDTO<typeof this.table, Domain>['select']) {
+        return paginate<typeof this.table, Domain>({
             db,
-            table: userTable,
+            table: this.table,
             limit: paginateDTO.limit,
             offset: paginateDTO.offset,
-            where: where,
+            mapper: this.mapper,
+            select,
+            where,
         });
     }
 
@@ -50,7 +51,7 @@ export abstract class BaseRepo<Domain extends BaseDomain> {
 
     update(id: number, values: Partial<Domain>) {
         return this.db.update(this.table).set(values).where(sql`id
-            =
-            ${id}`);
+        =
+        ${id}`);
     }
 }

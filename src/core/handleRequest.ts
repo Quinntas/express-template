@@ -1,11 +1,11 @@
 import {Request, Response, Router} from 'express';
 import {parse} from 'querystring';
 import {DecodedExpressRequest} from '../types/decodedExpressRequest';
+import {Method} from '../types/methods';
 import {env} from '../utils/env';
 import {HttpError, InternalError} from './errors';
 import {MiddlewareFunction, wrapMiddlewares} from './middleware';
 import {jsonResponse} from './responses';
-import {Method} from "../types/methods";
 
 // TODO: mysql2 error handling
 export function handleError(res: Response, error: Error) {
@@ -46,7 +46,13 @@ export async function handleRequest<iBody extends object, iQuery extends object>
     }
 }
 
-export function route<iBody extends object, iQuery extends object>(router: Router, method: Method, path: string, handler: Function, middlewares: MiddlewareFunction[] = []) {
+export function route<iBody extends object, iQuery extends object>(
+    router: Router,
+    method: Method,
+    path: string,
+    handler: Function,
+    middlewares: MiddlewareFunction[] = [],
+) {
     const wrappedMiddlewares = wrapMiddlewares<iBody, iQuery>(middlewares);
     router[method](path, wrappedMiddlewares, (req: Request, res: Response) =>
         handleRequest<iBody, iQuery>(req as DecodedExpressRequest<iBody, iQuery>, res, handler),

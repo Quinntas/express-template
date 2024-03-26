@@ -5,6 +5,6 @@ import {LoginUseCase} from '../../useCases/login/loginUseCase';
 
 export const userRouter: Router = Router();
 
-route(userRouter, "post", '/create', CreateUserUseCase);
+route(userRouter, 'post', '/create', CreateUserUseCase);
 
-route(userRouter, "post", '/login', LoginUseCase);
+route(userRouter, 'post', '/login', LoginUseCase);

@@ -37,22 +37,16 @@ export function createRandomString(length: number): string {
 }
 
 export function compare(data: string, password: string): boolean {
-    if (!data || !password) throw new InternalError('Both data and password must be defined');
-    if (typeof data !== 'string' || typeof password !== 'string') throw new InternalError('Both data and password must be strings');
     return timingSafeEqual(Buffer.from(data), Buffer.from(password));
 }
 
 export function hashString(data: string): string {
-    if (!data) throw new InternalError('Data must be defined');
-    if (typeof data !== 'string') throw new InternalError('Data must be a string');
     return createHash('sha256').update(data).digest('hex');
 }
 
 export function encrypt(data: string, pepper: string, iterations: number = 10000, salt?: string): string {
     if (!data) throw new InternalError('Data must be defined');
     if (typeof data !== 'string') throw new InternalError('Data must be a string');
-    if (!pepper) throw new InternalError('Pepper must be defined');
-    if (typeof pepper !== 'string') throw new InternalError('Pepper must be a string');
     if (!salt) salt = generateSalt();
     const result = pbkdf2Sync(pepper + data, salt, iterations, 64, 'sha512').toString('hex');
     return `${iterations}$${salt}$${result}`;
