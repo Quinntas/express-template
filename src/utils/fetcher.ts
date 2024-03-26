@@ -62,7 +62,7 @@ export async function request<BodyType = any, ResponseType = any>(
     for (let i = 0; i < retryDTO.count; i++) {
         try {
             response = await fetch(fetcherDTO.url, {
-                method: fetcherDTO.method,
+                method: fetcherDTO.method.toUpperCase(),
                 headers,
                 body,
             });

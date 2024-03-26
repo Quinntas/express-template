@@ -2,7 +2,7 @@ import {expect, test} from 'vitest';
 import {dateToDDMMYYYY, dateToYYYYMMDD} from './timeHandler';
 
 test('Time handler - Date to dd mm yyyy - Valid', () => {
-    const d = new Date()
+    const d = new Date();
     const day = d.getDate();
     const month = d.getMonth() + 1;
     const year = d.getFullYear();
@@ -10,7 +10,7 @@ test('Time handler - Date to dd mm yyyy - Valid', () => {
 });
 
 test('Time handler - Date to yyyy mm dd - Valid', () => {
-    const d = new Date()
+    const d = new Date();
     const day = d.getDate();
     const month = d.getMonth() + 1;
     const year = d.getFullYear();
