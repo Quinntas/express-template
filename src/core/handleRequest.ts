@@ -29,7 +29,7 @@ export function handleError(res: Response, error: Error) {
     return jsonResponse(res, 500, {message: 'Internal server error'});
 }
 
-export async function handleRequest<iBody extends object, iQuery extends object>(req: DecodedExpressRequest<iBody, iQuery>, res: Response, handler: Function) {
+export async function handleRequest<iBody extends object | null, iQuery extends object | null>(req: DecodedExpressRequest<iBody, iQuery>, res: Response, handler: Function) {
     switch (req.headers['content-type']) {
         case 'application/json;charset=utf-8':
         case 'application/json':

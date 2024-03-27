@@ -30,7 +30,9 @@ const defaultHeaders = {
     'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
 };
 
-export async function request<BodyType = any, ResponseType = any>(fetcherDTO: FetcherDTO<BodyType>): Promise<{
+export async function request<BodyType = any, ResponseType = any>(
+    fetcherDTO: FetcherDTO<BodyType>,
+): Promise<{
     response: ResponseType | undefined;
     ok: boolean;
     status: number;

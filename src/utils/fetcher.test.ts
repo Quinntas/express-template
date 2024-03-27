@@ -45,9 +45,11 @@ test('Fetcher - Sending body and headers', async () => {
 
         expect(parsedRequestBody).toEqual(body);
 
-        expect(options?.headers).toEqual(expect.objectContaining({
-            'Content-Type': 'application/json',
-        }));
+        expect(options?.headers).toEqual(
+            expect.objectContaining({
+                'Content-Type': 'application/json',
+            }),
+        );
 
         return new nodeFetch.Response(JSON.stringify(body), {
             status: 200,
@@ -61,7 +63,7 @@ test('Fetcher - Sending body and headers', async () => {
         body,
         headers: {
             'Content-Type': 'application/json',
-        }
+        },
     });
 
     expect(res.ok).toEqual(true);
@@ -93,25 +95,28 @@ test('Fetcher - Error', async () => {
 test('Fetcher - Retries', async () => {
     const body = {data: 'ok'};
 
-    fetch.mockImplementationOnce(
-        async () =>
-            new nodeFetch.Response(JSON.stringify(body), {
-                status: 500,
-                headers: {'Content-Type': 'application/json'},
-            }),
-    ).mockImplementationOnce(
-        async () =>
-            new nodeFetch.Response(JSON.stringify(body), {
-                status: 500,
-                headers: {'Content-Type': 'application/json'},
-            }),
-    ).mockImplementationOnce(
-        async () =>
-            new nodeFetch.Response(JSON.stringify(body), {
-                status: 200,
-                headers: {'Content-Type': 'application/json'},
-            }),
-    );
+    fetch
+        .mockImplementationOnce(
+            async () =>
+                new nodeFetch.Response(JSON.stringify(body), {
+                    status: 500,
+                    headers: {'Content-Type': 'application/json'},
+                }),
+        )
+        .mockImplementationOnce(
+            async () =>
+                new nodeFetch.Response(JSON.stringify(body), {
+                    status: 500,
+                    headers: {'Content-Type': 'application/json'},
+                }),
+        )
+        .mockImplementationOnce(
+            async () =>
+                new nodeFetch.Response(JSON.stringify(body), {
+                    status: 200,
+                    headers: {'Content-Type': 'application/json'},
+                }),
+        );
 
     const res = await request({
         url: 'http://test.com',
@@ -119,7 +124,7 @@ test('Fetcher - Retries', async () => {
         retryDTO: {
             count: 3,
             secondsDelay: 0,
-        }
+        },
     });
 
     expect(res.ok).toEqual(true);

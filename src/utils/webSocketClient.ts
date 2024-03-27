@@ -1,4 +1,5 @@
 import {WebSocket} from 'ws';
+import {InternalError} from "../core/errors";
 
 export class WebSocketService {
     private socket: WebSocket;
@@ -16,8 +17,7 @@ export class WebSocketService {
     }
 
     public sendMessage<T>(message: T) {
-        if (this.socket.readyState !== WebSocket.OPEN) throw new Error('WebSocket is not open');
-
+        if (this.socket.readyState !== WebSocket.OPEN) throw new InternalError('WebSocket is not open');
         this.socket.send(JSON.stringify(message), (err: any) => {
             if (err) console.log('[WS] Error sending message', err);
         });
