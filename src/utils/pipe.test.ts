@@ -1,5 +1,5 @@
 import {expect, test} from 'vitest';
-import {pipe} from "./pipe";
+import {pipe} from './pipe';
 
 const add2 = (x: number) => x + 2;
 const multiply3 = (x: number) => x * 3;
@@ -11,6 +11,10 @@ test('should correctly pipe functions in order', () => {
 });
 
 test('should handle functions with different argument and return types', () => {
-    const result = pipe('hello', str => str.length, length => length * 2);
-    expect(result).toBe(10); // 'hello'.length * 2 === 10
+    const result = pipe(
+        'hello',
+        (str) => str.length,
+        (length) => length * 2,
+    );
+    expect(result).toBe(10);
 });

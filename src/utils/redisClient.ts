@@ -18,8 +18,7 @@ export class RedisClient {
         if (!value) throw new Error('Value cannot be null or undefined');
         const reply = await this.client.set(key, value);
         const ok = reply === 'OK';
-        if (!ok)
-            return false;
+        if (!ok) return false;
         await this.client.expire(key, tokenExpiryTime);
         return ok;
     }
