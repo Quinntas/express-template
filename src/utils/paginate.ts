@@ -1,4 +1,4 @@
-import {Column, sql, SQL} from 'drizzle-orm';
+import {sql, SQL} from 'drizzle-orm';
 import {MySql2Database} from 'drizzle-orm/mysql2';
 import {MySqlTable} from 'drizzle-orm/mysql-core';
 import {BaseDomain} from '../core/baseDomain';
@@ -17,21 +17,16 @@ export type PaginateResponseDTO<D extends BaseDomain> = {
     data: D[];
 }
 
-type SelectDTO<D extends BaseDomain> = {
-    [K in keyof D]: Column;
-}
-
 export interface PaginateInternalDTO<T extends MySqlTable, D extends BaseDomain> extends PaginateDTO {
     db: MySql2Database;
     table: T;
     where: SQL;
     mapper: BaseMapper<D>
-    select?: SelectDTO<D>;
 }
 
 export async function paginate<T extends MySqlTable, D extends BaseDomain>(dto: PaginateInternalDTO<T, D>): Promise<PaginateResponseDTO<D>> {
     const q = sql<T>`
-        SELECT ${dto.select || '*'}
+        SELECT *
         FROM ${dto.table}
         WHERE ${dto.where} LIMIT ${dto.limit + 1}
         OFFSET ${dto.offset}
