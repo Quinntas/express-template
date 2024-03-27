@@ -14,11 +14,14 @@ export class RedisClient {
         return this.client.del(key);
     }
 
-    public async set(key: string, value: RedisTypes, tokenExpiryTime: number = this.defaultTokenExpiryTime): Promise<string> {
+    public async set(key: string, value: RedisTypes, tokenExpiryTime: number = this.defaultTokenExpiryTime): Promise<boolean> {
         if (!value) throw new Error('Value cannot be null or undefined');
         const reply = await this.client.set(key, value);
+        const ok = reply === 'OK';
+        if (!ok)
+            return false;
         await this.client.expire(key, tokenExpiryTime);
-        return reply;
+        return ok;
     }
 
     public async get(key: string): Promise<string | null> {
