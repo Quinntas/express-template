@@ -29,17 +29,19 @@ export async function loginUseCase(request: DecodedExpressRequest<LoginDTO, null
 
     const publicTokenObject: PublicLoginToken = {
         userPid: result.pid,
-        exp: expireDate,
     };
-    const publicToken: string = jwtSign(publicTokenObject);
+    const publicToken: string = jwtSign(publicTokenObject, {
+        expiresIn: expireDate,
+    });
 
     const privateTokenObject: PrivateLoginToken = {
         userPid: result.pid,
         userEmail: result.email,
         userId: result.id,
-        exp: expireDate,
     };
-    const privateToken: string = jwtSign(privateTokenObject);
+    const privateToken: string = jwtSign(privateTokenObject, {
+        expiresIn: expireDate,
+    });
 
     await redisClient.set(loginRedisKeyPrefix + result.pid, privateToken, loginTokenExpiration);
 

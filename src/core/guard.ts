@@ -49,6 +49,6 @@ export function againstBadFormat(key: string, argument: string, regex: RegExp) {
     if (!regex.test(argument)) throw new GuardError('The argument has a bad format', key);
 }
 
-export function againstBadEnumValue(key: string, e: { [s: number]: string }, argument: any) {
+export function againstBadEnumValue(key: string, e: {[s: number]: string}, argument: any) {
     if (!Object.keys(e).some((key) => e[key as any] === argument)) throw new GuardError('The argument is not part of the enum', key);
 }

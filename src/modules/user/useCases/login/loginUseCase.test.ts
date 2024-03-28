@@ -93,14 +93,16 @@ test('LoginUseCase - Successful login', async () => {
 
     expect(jwtSign).toHaveBeenCalledWith({
         userPid: expect.any(String),
-        exp: expect.any(Number),
+    }, {
+        expiresIn: expect.any(Number),
     });
 
     expect(jwtSign).toHaveBeenCalledWith({
         userPid: expect.any(String),
         userEmail: expect.any(String),
         userId: expect.any(Number),
-        exp: expect.any(Number),
+    }, {
+        expiresIn: expect.any(Number),
     });
 
     // TODO: fix this to actually check the key value

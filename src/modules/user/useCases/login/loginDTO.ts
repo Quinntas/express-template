@@ -11,12 +11,10 @@ export interface LoginResponseDTO {
 
 export interface PublicLoginToken {
     userPid: string;
-    exp: number;
 }
 
 export interface PrivateLoginToken {
     userPid: string;
     userEmail: string;
     userId: number;
-    exp: number;
 }

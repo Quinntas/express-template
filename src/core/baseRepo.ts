@@ -2,7 +2,7 @@ import {SQL, sql} from 'drizzle-orm';
 import {MySql2Database} from 'drizzle-orm/mysql2';
 import {MySqlTable} from 'drizzle-orm/mysql-core';
 import {db} from '../infra/database/mysql';
-import {PaginateDTO, paginate} from '../utils/paginate';
+import {paginate, PaginateDTO} from '../utils/paginate';
 import {BaseDomain} from './baseDomain';
 import {BaseMapper} from './baseMapper';
 
@@ -40,7 +40,7 @@ export abstract class BaseRepo<Domain extends BaseDomain> {
         return this.mapper.rawToDomainList(res);
     }
 
-    select(where: SQL | undefined) {
+    select(where: SQL) {
         return this.db.select().from(this.table).where(where);
     }
 
