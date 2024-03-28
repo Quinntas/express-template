@@ -7,6 +7,7 @@ import {jwtSign} from '../../../../utils/jsonWebToken';
 import {userRepo} from '../../repo/userRepo';
 import {LoginDTO} from './loginDTO';
 import {loginUseCase} from './loginUseCase';
+import {redisClient} from "../../../../infra/database/redis";
 
 vi.mock('../../../../utils/env', () => ({
     env: {},
@@ -35,6 +36,14 @@ vi.mock('../../../../utils/encryption', () => {
         compare: vi.fn().mockImplementation((a: string, b: string) => a === b),
     };
 });
+
+vi.mock('../../../../infra/database/redis', () => {
+    return {
+        redisClient: {
+            set: vi.fn(),
+        },
+    }
+})
 
 vi.mock('../../repo/userRepo', () => {
     class UserRepo {
@@ -93,6 +102,9 @@ test('LoginUseCase - Successful login', async () => {
         userId: expect.any(Number),
         exp: expect.any(Number),
     });
+
+    // TODO: fix this to actually check the key value
+    expect(redisClient.set).toHaveBeenCalledWith(expect.any(String), 'mocked-jwt-token', expect.any(Number));
 });
 
 test('LoginUseCase - User not found', async () => {
