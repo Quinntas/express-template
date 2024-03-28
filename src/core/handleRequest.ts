@@ -24,7 +24,7 @@ export function handleError(res: Response, error: Error) {
             }
             break;
         default:
-            const properties = Object.getOwnPropertyNames(error)
+            const properties = Object.getOwnPropertyNames(error);
             if (properties.includes('sql') && properties.includes('sqlMessage') && properties.includes('code')) {
                 if ((error as any)['code'] === 'ER_DUP_ENTRY') {
                     return jsonResponse(res, 409, {

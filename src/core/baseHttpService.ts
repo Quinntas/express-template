@@ -5,5 +5,5 @@ export abstract class BaseHttpService {
         this.url = url;
     }
 
-    abstract makeAuthHeader(): { [key: string]: string };
+    abstract makeAuthHeader(): {[key: string]: string};
 }

@@ -4,4 +4,3 @@ export interface GetTodoResponseDTO {
     completed: boolean;
     userId: number;
 }
-

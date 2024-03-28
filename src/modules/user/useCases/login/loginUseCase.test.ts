@@ -91,19 +91,25 @@ test('LoginUseCase - Successful login', async () => {
 
     expect(jwtSign).toBeCalledTimes(2);
 
-    expect(jwtSign).toHaveBeenCalledWith({
-        userPid: expect.any(String),
-    }, {
-        expiresIn: expect.any(Number),
-    });
+    expect(jwtSign).toHaveBeenCalledWith(
+        {
+            userPid: expect.any(String),
+        },
+        {
+            expiresIn: expect.any(Number),
+        },
+    );
 
-    expect(jwtSign).toHaveBeenCalledWith({
-        userPid: expect.any(String),
-        userEmail: expect.any(String),
-        userId: expect.any(Number),
-    }, {
-        expiresIn: expect.any(Number),
-    });
+    expect(jwtSign).toHaveBeenCalledWith(
+        {
+            userPid: expect.any(String),
+            userEmail: expect.any(String),
+            userId: expect.any(Number),
+        },
+        {
+            expiresIn: expect.any(Number),
+        },
+    );
 
     // TODO: fix this to actually check the key value
     expect(redisClient.set).toHaveBeenCalledWith(expect.any(String), 'mocked-jwt-token', expect.any(Number));

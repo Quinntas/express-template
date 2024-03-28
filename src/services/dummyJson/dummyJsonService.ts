@@ -1,22 +1,22 @@
-import {BaseHttpService} from "../../core/baseHttpService";
-import {request} from "../../utils/fetcher";
-import {GetTodoResponseDTO} from "./dto/getTodoDTO";
-import {CreateTodoDTO} from "./dto/createTodoDTO";
+import {BaseHttpService} from '../../core/baseHttpService';
+import {request} from '../../utils/fetcher';
+import {CreateTodoDTO} from './dto/createTodoDTO';
+import {GetTodoResponseDTO} from './dto/getTodoDTO';
 
 export class DummyJsonService extends BaseHttpService {
     constructor() {
         super('https://dummyjson.com');
     }
 
-    makeAuthHeader(): { [p: string]: string } {
-        return {}
+    makeAuthHeader(): {[p: string]: string} {
+        return {};
     }
 
     getTodo(id: number) {
         return request<null, GetTodoResponseDTO>({
             url: `${this.url}/todos/${id}`,
             method: 'get',
-        })
+        });
     }
 
     createTodo(dto: CreateTodoDTO) {
@@ -25,9 +25,9 @@ export class DummyJsonService extends BaseHttpService {
             method: 'post',
             body: dto,
             headers: {
-                'Content-Type': 'application/json'
-            }
-        })
+                'Content-Type': 'application/json',
+            },
+        });
     }
 }
 
