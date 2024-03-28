@@ -201,7 +201,7 @@ test('Guard - Not Object - Valid', () => {
 
 test('Guard - Not Object - Invalid', () => {
     expect(() => {
-        againstNotObject('key', 123);
+        againstNotObject('key', 123 as any);
     }).toThrowError();
 });
 
@@ -213,7 +213,7 @@ test('Guard - Not Object - Invalid with array', () => {
 
 test('Guard - Not Object - Invalid with null value', () => {
     expect(() => {
-        againstNotObject('key', null);
+        againstNotObject('key', null as any);
     }).toThrowError();
 });
 

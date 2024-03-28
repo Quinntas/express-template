@@ -7,7 +7,6 @@ import {HttpError, InternalError} from './errors';
 import {MiddlewareFunction, wrapMiddlewares} from './middleware';
 import {jsonResponse} from './responses';
 
-// TODO: mysql2 error handling
 export function handleError(res: Response, error: Error) {
     switch (true) {
         case error instanceof HttpError:

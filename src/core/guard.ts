@@ -4,25 +4,29 @@ export function againstNullOrUndefinedBulk(args: [string, any][]) {
     args.forEach((arg) => againstNullOrUndefined(arg[0], arg[1]));
 }
 
-export function againstNotString(key: string, argument: any) {
+export function againstNotString(key: string, argument: any): argument is string {
     if (typeof argument !== 'string') throw new GuardError('The argument is not a string', key);
+    return true;
 }
 
-export function againstNotNumber(key: string, argument: any) {
+export function againstNotNumber(key: string, argument: any): argument is number {
     if (typeof argument !== 'number') throw new GuardError('The argument is not a number', key);
+    return true;
 }
 
-export function againstNotBoolean(key: string, argument: any) {
+export function againstNotBoolean(key: string, argument: any): argument is boolean {
     if (typeof argument !== 'boolean') throw new GuardError('The argument is not a boolean', key);
+    return true;
 }
 
-export function againstNotArray(key: string, argument: any) {
+export function againstNotArray<T extends object = any>(key: string, argument: T): argument is T {
     if (!Array.isArray(argument)) throw new GuardError('The argument is not an array', key);
+    return true;
 }
 
-export function againstNotObject(key: string, argument: any) {
-    // null and array are considered objects
+export function againstNotObject<T extends object = any>(key: string, argument: T): argument is T {
     if (argument == null || Array.isArray(argument) || typeof argument !== 'object') throw new GuardError('The argument is not an object', key);
+    return true;
 }
 
 export function againstNullOrUndefined(key: string, argument: any) {
@@ -45,6 +49,6 @@ export function againstBadFormat(key: string, argument: string, regex: RegExp) {
     if (!regex.test(argument)) throw new GuardError('The argument has a bad format', key);
 }
 
-export function againstBadEnumValue(key: string, e: {[s: number]: string}, argument: any) {
+export function againstBadEnumValue(key: string, e: { [s: number]: string }, argument: any) {
     if (!Object.keys(e).some((key) => e[key as any] === argument)) throw new GuardError('The argument is not part of the enum', key);
 }
