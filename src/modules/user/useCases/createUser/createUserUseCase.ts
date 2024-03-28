@@ -11,7 +11,7 @@ import {validateUserPassword} from '../../domain/valueObjects/userPassword';
 import {userRepo} from '../../repo/userRepo';
 import {CreateUserDTO} from './createUserDTO';
 
-export async function CreateUserUseCase(request: DecodedExpressRequest<CreateUserDTO, null>, response: Response) {
+export async function createUserUseCase(request: DecodedExpressRequest<CreateUserDTO, null>, response: Response) {
     const name = validateUserName(request.bodyObject.name!);
     const email = validateUserEmail(request.bodyObject.email!);
     const password = validateUserPassword(request.bodyObject.password!);

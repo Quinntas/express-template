@@ -1,7 +1,10 @@
 import {expect, test, vi} from 'vitest';
-import {RedisClient} from "./redisClient";
+import {RedisClient} from './redisClient';
 
-// Mocking the Redis module
+vi.mock('../../../../utils/env', () => ({
+    env: {},
+}));
+
 vi.mock('ioredis', () => {
     return {
         Redis: class {
@@ -23,7 +26,7 @@ vi.mock('ioredis', () => {
             async expire(_key: string, _seconds: number): Promise<boolean> {
                 return true;
             }
-        }
+        },
     };
 });
 
@@ -56,5 +59,3 @@ test('RedisClient - Error on Setting null Value', async () => {
 
     await expect(redisClient.set(key, value)).rejects.toThrowError('Value cannot be null or undefined');
 });
-
-

@@ -1,12 +1,12 @@
 import jwt, {DecodeOptions, SignOptions} from 'jsonwebtoken';
 import {InternalError} from '../core/errors';
+import {env} from './env';
 
-export function jwtSign<T extends object = any>(payload: T, secret: string, options?: SignOptions): string {
+export function jwtSign<T extends object = any>(payload: T, options?: SignOptions): string {
     if (!payload || typeof payload !== 'object' || Array.isArray(payload)) throw new InternalError('Invalid payload');
-    if (!secret || typeof secret !== 'string') throw new InternalError('Invalid secret');
     if (!options) options = {};
     options.expiresIn = options?.expiresIn ?? 3600;
-    return jwt.sign(payload, secret, options);
+    return jwt.sign(payload, env.JWT_SECRET, options);
 }
 
 export function jwtDecode<T extends object = any>(token: string, options: DecodeOptions = {json: true}): T {

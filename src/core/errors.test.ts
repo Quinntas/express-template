@@ -36,10 +36,12 @@ test('GuardError', () => {
     expect(guardError.message).toBe(errorMessage);
     expect(guardError.code).toBe(errorCode); // It's inherited from HttpError
     expect(guardError.key).toBe(errorKey);
-    expect(guardError.body).toEqual(expect.objectContaining({
-        key: errorKey,
-        message: errorMessage,
-        reason: 'Invalid email format'
-    }));
+    expect(guardError.body).toEqual(
+        expect.objectContaining({
+            key: errorKey,
+            message: errorMessage,
+            reason: 'Invalid email format',
+        }),
+    );
     expect(guardError.name).toBe('GuardError');
 });

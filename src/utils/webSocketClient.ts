@@ -1,5 +1,5 @@
 import {WebSocket} from 'ws';
-import {InternalError} from "../core/errors";
+import {InternalError} from '../core/errors';
 
 export class WebSocketService {
     private socket: WebSocket;

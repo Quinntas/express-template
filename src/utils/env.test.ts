@@ -9,7 +9,7 @@ test('Environment Variables Retrieval', async () => {
         PEPPER: 'test_pepper',
         REDIS_URL: 'test_redis_url',
         JWT_SECRET: 'test_jwt_secret',
-    }
+    };
 
     const {env} = await import('./env');
 
@@ -26,5 +26,3 @@ test('Environment Variables Retrieval', async () => {
 
     process.env = originalEnv;
 });
-
-

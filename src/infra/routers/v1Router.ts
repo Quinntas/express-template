@@ -1,9 +1,9 @@
 import {NextFunction, Request, Response, Router} from 'express';
 import {route} from '../../core/handleRequest';
+import {healthCheckUseCase} from '../../modules/shared/useCases/healthCheck/healthCheckUseCase';
 import {userRouter} from '../../modules/user/infra/http/userRouter';
 import {userRateLimitMiddleware} from '../../modules/user/infra/middleware/rateLimit/userRateLimitMiddleware';
 import {DecodedExpressRequest} from '../../types/decodedExpressRequest';
-import {healthCheckUseCase} from "../../modules/shared/useCases/healthCheck/healthCheckUseCase";
 
 export const v1Router: Router = Router();
 

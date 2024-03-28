@@ -1,9 +1,9 @@
-import {expect, test, vi} from 'vitest';
 import {Response, Router} from 'express';
-import {handleRequest, route} from "./handleRequest";
-import {DecodedExpressRequest} from "../types/decodedExpressRequest";
-import {InternalError} from "./errors";
-import {jsonResponse} from "./responses";
+import {expect, test, vi} from 'vitest';
+import {DecodedExpressRequest} from '../types/decodedExpressRequest';
+import {InternalError} from './errors';
+import {handleRequest, route} from './handleRequest';
+import {jsonResponse} from './responses';
 
 vi.mock('express', () => ({
     Request: {
@@ -34,7 +34,6 @@ vi.mock(`../utils/env`, () => ({
     },
 }));
 
-
 test('Handle request - Handle Internal error - Development', async () => {
     const body = {key: 'value'} as const;
 
@@ -56,7 +55,7 @@ test('Handle request - Handle Internal error - Development', async () => {
     expect(jsonResponse).toHaveBeenCalledWith(mockRes, 500, {
         message: error.message,
     });
-})
+});
 
 test('Handle request - Route', () => {
     // @ts-ignore

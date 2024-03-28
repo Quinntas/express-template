@@ -1,6 +1,6 @@
-import {expect, test, vi} from 'vitest';
 import {Response} from 'express';
-import {htmlResponse, jsonResponse, objectResponse, textResponse} from "./responses";
+import {expect, test, vi} from 'vitest';
+import {htmlResponse, jsonResponse, objectResponse, textResponse} from './responses';
 
 vi.mock('express', () => {
     return {

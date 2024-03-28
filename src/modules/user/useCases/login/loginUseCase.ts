@@ -12,7 +12,7 @@ import {userRepo} from '../../repo/userRepo';
 import {loginRedisKeyPrefix, loginTokenExpiration} from './loginConstants';
 import {LoginDTO, LoginResponseDTO, PrivateLoginToken, PublicLoginToken} from './loginDTO';
 
-export async function LoginUseCase(request: DecodedExpressRequest<LoginDTO, null>, response: Response) {
+export async function loginUseCase(request: DecodedExpressRequest<LoginDTO, null>, response: Response) {
     const email = validateUserEmail(request.bodyObject.email!);
     const password = validateUserPassword(request.bodyObject.password!);
 
@@ -22,7 +22,8 @@ export async function LoginUseCase(request: DecodedExpressRequest<LoginDTO, null
 
     const parsedPassword = parseEncryptedString(result.password);
 
-    if (!compare(encrypt(password, env.PEPPER, parsedPassword.iterations, parsedPassword.salt), result.password)) throw new HttpError(401, 'Invalid password');
+    if (!compare(encrypt(password, env.PEPPER, parsedPassword.iterations, parsedPassword.salt), result.password))
+        throw new HttpError(401, 'Invalid email or password');
 
     const expireDate = Math.floor(Date.now() / 1000) + loginTokenExpiration;
 
@@ -30,7 +31,7 @@ export async function LoginUseCase(request: DecodedExpressRequest<LoginDTO, null
         userPid: result.pid,
         exp: expireDate,
     };
-    const publicToken: string = jwtSign(publicTokenObject, env.JWT_SECRET);
+    const publicToken: string = jwtSign(publicTokenObject);
 
     const privateTokenObject: PrivateLoginToken = {
         userPid: result.pid,
@@ -38,7 +39,7 @@ export async function LoginUseCase(request: DecodedExpressRequest<LoginDTO, null
         userId: result.id,
         exp: expireDate,
     };
-    const privateToken: string = jwtSign(privateTokenObject, env.JWT_SECRET);
+    const privateToken: string = jwtSign(privateTokenObject);
 
     await redisClient.set(loginRedisKeyPrefix + result.pid, privateToken, loginTokenExpiration);
 
