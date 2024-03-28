@@ -2,12 +2,12 @@ import {Response} from 'express';
 import {expect, test, vi} from 'vitest';
 import {HttpError} from '../../../../core/errors';
 import {jsonResponse} from '../../../../core/responses';
+import {redisClient} from '../../../../infra/database/redis';
 import {DecodedExpressRequest} from '../../../../types/decodedExpressRequest';
 import {jwtSign} from '../../../../utils/jsonWebToken';
 import {userRepo} from '../../repo/userRepo';
 import {LoginDTO} from './loginDTO';
 import {loginUseCase} from './loginUseCase';
-import {redisClient} from "../../../../infra/database/redis";
 
 vi.mock('../../../../utils/env', () => ({
     env: {},
@@ -42,8 +42,8 @@ vi.mock('../../../../infra/database/redis', () => {
         redisClient: {
             set: vi.fn(),
         },
-    }
-})
+    };
+});
 
 vi.mock('../../repo/userRepo', () => {
     class UserRepo {
