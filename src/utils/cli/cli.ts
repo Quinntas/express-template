@@ -4,13 +4,13 @@ import {domainTemplate} from './domainTemplate';
 import {mapperTemplate} from './mapperTemplate';
 import {repoTemplate} from './repoTemplate';
 import {routerTemplate} from './routerTemplate';
-import {useCaseDTOTemplate} from "./useCaseDTOTemplate";
-import {useCaseTemplate} from "./useCaseTemplate";
+import {useCaseDTOTemplate} from './useCaseDTOTemplate';
+import {useCaseTemplate} from './useCaseTemplate';
 
 function parseArg(arg: string | null): arg is string {
     if (!arg) throw new Error('No argument provided');
     if (/\d/.test(arg)) throw new Error('Module name cannot contain numbers');
-    return true
+    return true;
 }
 
 function createModule(name: string | null) {
@@ -76,10 +76,10 @@ function createUseCase(modules: string | null, name: string | null) {
     fs.mkdirSync(`src/modules/${moduleName}/useCases/${useCaseName}`);
 
     const fDTO = fs.createWriteStream(`src/modules/${moduleName}/useCases/${useCaseName}/${useCaseName}DTO.ts`);
-    fDTO.write(useCaseDTOTemplate(useCaseName))
+    fDTO.write(useCaseDTOTemplate(useCaseName));
 
     const fUseCase = fs.createWriteStream(`src/modules/${moduleName}/useCases/${useCaseName}/${useCaseName}UseCase.ts`);
-    fUseCase.write(useCaseTemplate(useCaseName))
+    fUseCase.write(useCaseTemplate(useCaseName));
 
     console.log(`Use case ${useCaseName} created successfully`);
 }
