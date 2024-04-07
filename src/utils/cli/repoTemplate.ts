@@ -7,10 +7,11 @@ import {db} from "../../../infra/database/mysql";
 import {${exportName}Table} from "../infra/database/${exportName}Table";
 import {BaseRepo} from "../../../core/baseRepo";
 import {${exportName}Mapper} from "../mapper/${exportName}Mapper";
+import {redisClient} from "../../../infra/database/redis";
 
 export class ${domainName}Repo extends BaseRepo<${domainName}> {
     constructor() {
-        super(${exportName}Table, db, ${exportName}Mapper)
+        super(${exportName}Table, db, ${exportName}Mapper, redisClient)
     }
 }
 

@@ -36,6 +36,7 @@ export async function loginUseCase(request: DecodedExpressRequest<LoginDTO, null
 
     const privateTokenObject: PrivateLoginToken = {
         userPid: result.pid,
+        roleId: result.roleId,
         userEmail: result.email,
         userId: result.id,
     };

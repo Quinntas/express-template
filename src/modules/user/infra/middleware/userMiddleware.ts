@@ -5,6 +5,7 @@ import {jwtDecode} from '../../../../utils/jsonWebToken';
 import {loginRedisKeyPrefix} from '../../useCases/login/loginConstants';
 import {PrivateLoginToken, PublicLoginToken} from '../../useCases/login/loginDTO';
 import {UserDecodedExpressRequest} from '../http/userDecodedExpressRequest';
+import {hasPermissionUseCase} from "../../../permission/useCases/hasPermission/hasPermissionUseCase";
 
 export async function ensureUserAuthenticated(req: UserDecodedExpressRequest<null, null>, _res: Response, next: NextFunction) {
     const token = req.headers.authorization;
@@ -24,6 +25,13 @@ export async function ensureUserAuthenticated(req: UserDecodedExpressRequest<nul
     if (!privateToken) throw new HttpError(401, 'Token not found');
 
     const privateDecoded: PrivateLoginToken = jwtDecode<PrivateLoginToken>(privateToken);
+
+    const hasPermission = await hasPermissionUseCase({
+        roleId: privateDecoded.roleId,
+        path: req.path,
+    })
+
+    if (!hasPermission) throw new HttpError(403, 'Forbidden');
 
     req.user = {
         pid: privateDecoded.userPid,

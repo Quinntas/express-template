@@ -9,6 +9,7 @@ test('Environment Variables Retrieval', async () => {
         PEPPER: 'test_pepper',
         REDIS_URL: 'test_redis_url',
         JWT_SECRET: 'test_jwt_secret',
+        DEFAULT_ROLE_ID: '1',
     };
 
     const {env} = await import('./env');
@@ -20,6 +21,7 @@ test('Environment Variables Retrieval', async () => {
         PEPPER: 'test_pepper',
         REDIS_URL: 'test_redis_url',
         JWT_SECRET: 'test_jwt_secret',
+        DEFAULT_ROLE_ID: 1,
     };
 
     expect(env).toEqual(expectedEnv);

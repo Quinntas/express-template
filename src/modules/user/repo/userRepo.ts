@@ -4,10 +4,11 @@ import {db} from '../../../infra/database/mysql';
 import {User} from '../domain/user';
 import {userTable} from '../infra/database/userTable';
 import {userMapper} from '../mapper/userMapper';
+import {redisClient} from "../../../infra/database/redis";
 
 export class UserRepo extends BaseRepo<User> {
     constructor() {
-        super(userTable, db, userMapper);
+        super(userTable, db, userMapper, redisClient);
     }
 
     selectByEmail(email: string) {

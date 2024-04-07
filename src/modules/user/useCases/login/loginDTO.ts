@@ -17,4 +17,5 @@ export interface PrivateLoginToken {
     userPid: string;
     userEmail: string;
     userId: number;
+    roleId: number;
 }

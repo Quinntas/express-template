@@ -21,6 +21,7 @@ export async function createUserUseCase(request: DecodedExpressRequest<CreateUse
         name,
         email,
         password: encrypt(password, env.PEPPER),
+        roleId: env.DEFAULT_ROLE_ID,
     });
 
     if (!result) throw new HttpError(500, 'Error creating user');

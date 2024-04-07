@@ -39,6 +39,7 @@ test('UserMapper - To Public Domain - Valid', () => {
             password: 'password',
             createdAt: new Date(),
             updatedAt: new Date(),
+            roleId: 1,
         }),
     ).toEqual({
         pid: '123',
