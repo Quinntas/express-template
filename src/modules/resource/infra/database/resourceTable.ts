@@ -8,4 +8,3 @@ export const resourceTable = dbSchema.table('Resources', {
     description: varchar('description', {length: 191}).notNull(),
     path: varchar('path', {length: 191}).notNull(),
 });
- 

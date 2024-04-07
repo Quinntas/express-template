@@ -1,9 +1,9 @@
 import {BaseRepo} from '../../../core/baseRepo';
 import {db} from '../../../infra/database/mysql';
+import {redisClient} from '../../../infra/database/redis';
 import {Resource} from '../domain/resource';
 import {resourceTable} from '../infra/database/resourceTable';
 import {resourceMapper} from '../mapper/resourceMapper';
-import {redisClient} from "../../../infra/database/redis";
 
 export class ResourceRepo extends BaseRepo<Resource> {
     constructor() {

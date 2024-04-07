@@ -1,10 +1,10 @@
 import {eq} from 'drizzle-orm';
 import {BaseRepo} from '../../../core/baseRepo';
 import {db} from '../../../infra/database/mysql';
+import {redisClient} from '../../../infra/database/redis';
 import {User} from '../domain/user';
 import {userTable} from '../infra/database/userTable';
 import {userMapper} from '../mapper/userMapper';
-import {redisClient} from "../../../infra/database/redis";
 
 export class UserRepo extends BaseRepo<User> {
     constructor() {

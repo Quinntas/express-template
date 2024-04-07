@@ -2,14 +2,14 @@ import {SQL, sql} from 'drizzle-orm';
 import {MySql2Database} from 'drizzle-orm/mysql2';
 import {MySqlTable} from 'drizzle-orm/mysql-core';
 import {db} from '../infra/database/mysql';
-import {paginate, PaginateDTO} from '../utils/paginate';
+import {PaginateDTO, paginate} from '../utils/paginate';
+import {RedisClient} from '../utils/redisClient';
 import {BaseDomain} from './baseDomain';
 import {BaseMapper} from './baseMapper';
-import {RedisClient} from "../utils/redisClient";
 
 interface CachingOptions {
     expires: number;
-    key: string | null
+    key: string | null;
 }
 
 export abstract class BaseRepo<Domain extends BaseDomain> {
@@ -39,8 +39,7 @@ export abstract class BaseRepo<Domain extends BaseDomain> {
     //@formatter:off
     private async handleCaching(options: CachingOptions, query: Promise<{[p: string]: unknown}[]>): Promise<{[p: string]: unknown}[]> {
         let key = options.key;
-        if (!key)
-            key = query.toString();
+        if (!key) key = query.toString();
         const cacheRes = await this.redisClient.get(key);
         if (!cacheRes) {
             const res = await query;
@@ -62,7 +61,7 @@ export abstract class BaseRepo<Domain extends BaseDomain> {
         return this.mapper.rawToDomainList(res);
     }
 
-    select(where: SQL, cachingOptions?: CachingOptions):Promise<{[p: string]: unknown}[]> {
+    select(where: SQL, cachingOptions?: CachingOptions): Promise<{[p: string]: unknown}[]> {
         const q = this.db.select().from(this.table).where(where).execute();
         if (cachingOptions) return this.handleCaching(cachingOptions, q);
         return q;
@@ -74,6 +73,9 @@ export abstract class BaseRepo<Domain extends BaseDomain> {
 
     //@formatter:off
     update(id: number, values: Partial<Domain>) {
-        return this.db.update(this.table).set(values).where(sql`id = ${id}`);
+        return this.db
+            .update(this.table)
+            .set(values)
+            .where(sql`id = ${id}`);
     }
 }

@@ -1,11 +1,11 @@
 import {sql} from 'drizzle-orm';
 import {BaseRepo} from '../../../core/baseRepo';
 import {db} from '../../../infra/database/mysql';
+import {redisClient} from '../../../infra/database/redis';
 import {resourceTable} from '../../resource/infra/database/resourceTable';
 import {Permission} from '../domain/permission';
 import {permissionTable} from '../infra/database/permissionTable';
 import {permissionMapper} from '../mapper/permissionMapper';
-import {redisClient} from "../../../infra/database/redis";
 
 export class PermissionRepo extends BaseRepo<Permission> {
     constructor() {
@@ -18,8 +18,8 @@ export class PermissionRepo extends BaseRepo<Permission> {
             sql`${permissionTable.roleId} = ${roleId} AND ${permissionTable.resourceId} = (SELECT ${resourceTable.id} FROM ${resourceTable} WHERE path = ${path})`,
             {
                 key: `findByRoleIdAndPath:${roleId}:${path}`,
-                expires: 60 * 60 // 1 hour
-            }
+                expires: 60 * 60, // 1 hour
+            },
         );
     }
 }

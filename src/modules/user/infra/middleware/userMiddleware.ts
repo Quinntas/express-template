@@ -2,10 +2,10 @@ import {NextFunction, Response} from 'express';
 import {HttpError} from '../../../../core/errors';
 import {redisClient} from '../../../../infra/database/redis';
 import {jwtDecode} from '../../../../utils/jsonWebToken';
+import {hasPermissionUseCase} from '../../../permission/useCases/hasPermission/hasPermissionUseCase';
 import {loginRedisKeyPrefix} from '../../useCases/login/loginConstants';
 import {PrivateLoginToken, PublicLoginToken} from '../../useCases/login/loginDTO';
 import {UserDecodedExpressRequest} from '../http/userDecodedExpressRequest';
-import {hasPermissionUseCase} from "../../../permission/useCases/hasPermission/hasPermissionUseCase";
 
 export async function ensureUserAuthenticated(req: UserDecodedExpressRequest<null, null>, _res: Response, next: NextFunction) {
     const token = req.headers.authorization;
@@ -29,7 +29,7 @@ export async function ensureUserAuthenticated(req: UserDecodedExpressRequest<nul
     const hasPermission = await hasPermissionUseCase({
         roleId: privateDecoded.roleId,
         path: req.path,
-    })
+    });
 
     if (!hasPermission) throw new HttpError(403, 'Forbidden');
 
