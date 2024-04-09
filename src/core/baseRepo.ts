@@ -1,15 +1,15 @@
 import {SQL, sql} from 'drizzle-orm';
 import {MySql2Database} from 'drizzle-orm/mysql2';
-import {MySqlDialect, MySqlTable} from 'drizzle-orm/mysql-core';
+import {MySqlTable} from 'drizzle-orm/mysql-core';
 import {db} from '../infra/database/mysql';
-import {PaginateDTO, paginate} from '../utils/paginate';
+import {paginate, PaginateDTO} from '../utils/paginate';
 import {RedisClient} from '../utils/redisClient';
 import {BaseDomain} from './baseDomain';
 import {BaseMapper} from './baseMapper';
 
 interface CachingOptions {
     expires: number;
-    key: string | null;
+    key: string;
 }
 
 export abstract class BaseRepo<Domain extends BaseDomain> {
@@ -37,17 +37,11 @@ export abstract class BaseRepo<Domain extends BaseDomain> {
     }
 
     //@formatter:off
-    private async handleCaching(options: CachingOptions, where: SQL): Promise<{[p: string]: unknown}[]> {
-        let key = options.key;
-        if (!key) {
-            const dialect = new MySqlDialect();
-            const whereQueryString = dialect.sqlToQuery(where).sql; // TODO: make this the hash of the hole query | now it may cause conflicts
-            key = Buffer.from(whereQueryString).toString('base64');
-        }
-        const cacheRes = await this.redisClient.get(key);
+    private async handleCaching(where: SQL, options: CachingOptions): Promise<{[p: string]: unknown}[]> {
+        const cacheRes = await this.redisClient.get(options.key);
         if (!cacheRes) {
             const res = await this.select(where);
-            await this.redisClient.set(key, JSON.stringify(res), options.expires);
+            await this.redisClient.set(options.key, JSON.stringify(res), options.expires);
             return res;
         }
         return JSON.parse(cacheRes) as {[p: string]: unknown}[];
@@ -66,13 +60,19 @@ export abstract class BaseRepo<Domain extends BaseDomain> {
     }
 
     select(where: SQL, cachingOptions?: CachingOptions): Promise<{[p: string]: unknown}[]> {
-        const q = this.db.select().from(this.table).where(where).execute();
-        if (cachingOptions) return this.handleCaching(cachingOptions, where);
-        return q;
+        if (cachingOptions) return this.handleCaching(where, cachingOptions);
+        return this.db
+            .select()
+            .from(this.table)
+            .where(where)
+            .execute()
     }
 
     insert(values: Domain) {
-        return this.db.insert(this.table).values(values).execute();
+        return this.db
+            .insert(this.table)
+            .values(values)
+            .execute();
     }
 
     //@formatter:off
