@@ -14,7 +14,9 @@ export class DummyJsonService extends BaseHttpService {
 
     getTodo(id: number) {
         return request<null, GetTodoResponseDTO>({
-            url: `${this.url}/todos/${id}`,
+            url: this.createUrlWithQueryParams(`${this.url}/todos/${id}`, {
+                id: id.toString(),
+            }),
             method: 'get',
         });
     }

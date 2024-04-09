@@ -2,7 +2,7 @@ import {SQL, sql} from 'drizzle-orm';
 import {MySql2Database} from 'drizzle-orm/mysql2';
 import {MySqlDialect, MySqlTable} from 'drizzle-orm/mysql-core';
 import {db} from '../infra/database/mysql';
-import {paginate, PaginateDTO} from '../utils/paginate';
+import {PaginateDTO, paginate} from '../utils/paginate';
 import {RedisClient} from '../utils/redisClient';
 import {BaseDomain} from './baseDomain';
 import {BaseMapper} from './baseMapper';
@@ -40,13 +40,13 @@ export abstract class BaseRepo<Domain extends BaseDomain> {
     private async handleCaching(options: CachingOptions, where: SQL): Promise<{[p: string]: unknown}[]> {
         let key = options.key;
         if (!key) {
-            const dialect = new MySqlDialect()
-            const whereQueryString = dialect.sqlToQuery(where).sql // TODO: make this the hash of the hole query | now it may cause conflicts
+            const dialect = new MySqlDialect();
+            const whereQueryString = dialect.sqlToQuery(where).sql; // TODO: make this the hash of the hole query | now it may cause conflicts
             key = Buffer.from(whereQueryString).toString('base64');
         }
         const cacheRes = await this.redisClient.get(key);
         if (!cacheRes) {
-            const res = await this.select(where)
+            const res = await this.select(where);
             await this.redisClient.set(key, JSON.stringify(res), options.expires);
             return res;
         }
@@ -66,20 +66,13 @@ export abstract class BaseRepo<Domain extends BaseDomain> {
     }
 
     select(where: SQL, cachingOptions?: CachingOptions): Promise<{[p: string]: unknown}[]> {
-        const q = this.db
-            .select()
-            .from(this.table)
-            .where(where)
-            .execute();
+        const q = this.db.select().from(this.table).where(where).execute();
         if (cachingOptions) return this.handleCaching(cachingOptions, where);
         return q;
     }
 
     insert(values: Domain) {
-        return this.db
-            .insert(this.table)
-            .values(values)
-            .execute();
+        return this.db.insert(this.table).values(values).execute();
     }
 
     //@formatter:off
