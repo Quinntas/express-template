@@ -19,6 +19,6 @@ server.use(bodyParser.urlencoded({extended: true}));
 
 server.use('/api/v1', v1Router);
 
-server.listen(env.PORT, () => {
+server.listen(env.PORT, '0.0.0.0',() => {
     env.NODE_ENV === 'development' && console.log(`[Server] is running on port ${env.PORT}`);
 });
