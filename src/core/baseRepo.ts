@@ -1,7 +1,7 @@
 import {SQL, sql} from 'drizzle-orm';
 import {MySql2Database} from 'drizzle-orm/mysql2';
 import {MySqlTable} from 'drizzle-orm/mysql-core';
-import {paginate, PaginateDTO} from '../utils/paginate';
+import {PaginateDTO, paginate} from '../utils/paginate';
 import {RedisClient} from '../utils/redisClient';
 import {BaseDomain} from './baseDomain';
 import {BaseMapper} from './baseMapper';
@@ -60,18 +60,11 @@ export abstract class BaseRepo<Domain extends BaseDomain> {
 
     select(where: SQL, cachingOptions?: CachingOptions): Promise<{[p: string]: unknown}[]> {
         if (cachingOptions) return this.handleCaching(where, cachingOptions);
-        return this.db
-            .select()
-            .from(this.table)
-            .where(where)
-            .execute()
+        return this.db.select().from(this.table).where(where).execute();
     }
 
     insert(values: Domain) {
-        return this.db
-            .insert(this.table)
-            .values(values)
-            .execute();
+        return this.db.insert(this.table).values(values).execute();
     }
 
     //@formatter:off

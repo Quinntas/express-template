@@ -1,11 +1,12 @@
-import {BaseMapper} from './baseMapper';
-import {BaseDomain} from "./baseDomain";
-import {BaseRepo} from "./baseRepo";
-import {expect, test, vi} from 'vitest';
-import {MySqlTable} from "drizzle-orm/mysql-core";
-import mysql from "mysql2/promise";
+import {sql} from 'drizzle-orm';
 import {drizzle} from 'drizzle-orm/mysql2';
-import {RedisClient} from "../utils/redisClient";
+import {MySqlTable} from 'drizzle-orm/mysql-core';
+import mysql from 'mysql2/promise';
+import {expect, test, vi} from 'vitest';
+import {RedisClient} from '../utils/redisClient';
+import {BaseDomain} from './baseDomain';
+import {BaseMapper} from './baseMapper';
+import {BaseRepo} from './baseRepo';
 
 vi.mock('../infra/database/redis', () => {
     return {
@@ -23,8 +24,8 @@ vi.mock('mysql2/promise', () => {
             createPool: vi.fn().mockReturnValue({
                 query: vi.fn(),
             }),
-        }
-    }
+        },
+    };
 });
 
 vi.mock('drizzle-orm/mysql2', () => ({
@@ -39,7 +40,7 @@ vi.mock('drizzle-orm/mysql2', () => ({
         insert: vi.fn().mockReturnValue({
             values: vi.fn().mockReturnValue({
                 execute: vi.fn().mockReturnValue({insertId: 1}),
-            })
+            }),
         }),
         update: vi.fn().mockReturnValue({
             set: vi.fn().mockReturnValue({
@@ -51,9 +52,8 @@ vi.mock('drizzle-orm/mysql2', () => ({
     }),
 }));
 
-
 interface MockDomain extends BaseDomain {
-    id: number
+    id: number;
 }
 
 class MockMapper extends BaseMapper<MockDomain> {
@@ -91,10 +91,35 @@ test('BaseRepo - Insert', async () => {
     const repo = new MockRepo();
     const mockDomain: MockDomain = {
         id: 1,
-    }
+    };
     const res = await repo.insert(mockDomain);
-    expect(mockDB.insert).toBeCalledWith(mockTable)
-    expect(mockDB.insert(mockTable).values).toBeCalledWith(mockDomain)
-    expect(mockDB.insert(mockTable).values(mockDomain).execute).toBeCalled()
-    expect(res).toEqual({insertId: 1})
-})
+    expect(mockDB.insert).toBeCalledWith(mockTable);
+    expect(mockDB.insert(mockTable).values).toBeCalledWith(mockDomain);
+    expect(mockDB.insert(mockTable).values(mockDomain).execute).toBeCalled();
+    expect(res).toEqual({insertId: 1});
+});
+
+// @formatter:off
+test('BaseRepo - Select', async () => {
+    const repo = new MockRepo();
+    const where = sql`id = 1`;
+    const res = await repo.select(where);
+    expect(mockDB.select).toBeCalled();
+    expect(mockDB.select().from).toBeCalledWith(mockTable);
+    expect(mockDB.select().from(mockTable).where).toBeCalledWith(where);
+    expect(mockDB.select().from(mockTable).where(where).execute).toBeCalled();
+    expect(res).toEqual([{id: 1}]);
+});
+
+// @formatter:off
+test('BaseRepo - Update', async () => {
+    const repo = new MockRepo();
+    const values = {id: 1};
+    const res = await repo.update(1, values);
+    const where = sql`id = ${1}`;
+    expect(mockDB.update).toBeCalledWith(mockTable);
+    expect(mockDB.update(mockTable).set).toBeCalledWith(values);
+    expect(mockDB.update(mockTable).set(values).where).toBeCalledWith(where);
+    expect(mockDB.update(mockTable).set(values).where(where).execute).toBeCalled();
+    expect(res).toEqual({affectedRows: 1});
+});
