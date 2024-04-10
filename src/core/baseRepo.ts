@@ -1,7 +1,6 @@
 import {SQL, sql} from 'drizzle-orm';
 import {MySql2Database} from 'drizzle-orm/mysql2';
 import {MySqlTable} from 'drizzle-orm/mysql-core';
-import {db} from '../infra/database/mysql';
 import {paginate, PaginateDTO} from '../utils/paginate';
 import {RedisClient} from '../utils/redisClient';
 import {BaseDomain} from './baseDomain';
@@ -27,7 +26,7 @@ export abstract class BaseRepo<Domain extends BaseDomain> {
 
     paginate(where: SQL, paginateDTO: PaginateDTO) {
         return paginate<typeof this.table, Domain>({
-            db,
+            db: this.db,
             table: this.table,
             limit: paginateDTO.limit,
             offset: paginateDTO.offset,

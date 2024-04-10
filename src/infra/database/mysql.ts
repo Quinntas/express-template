@@ -7,3 +7,4 @@ export const db = drizzle(
         uri: env.DATABASE_URL,
     }),
 );
+

@@ -3,7 +3,6 @@ import {MySql2Database} from 'drizzle-orm/mysql2';
 import {MySqlTable} from 'drizzle-orm/mysql-core';
 import {BaseDomain} from '../core/baseDomain';
 import {BaseMapper} from '../core/baseMapper';
-import {db} from '../infra/database/mysql';
 
 export interface PaginateDTO {
     limit: number;
@@ -31,7 +30,7 @@ export async function paginate<T extends MySqlTable, D extends BaseDomain>(dto: 
         WHERE ${dto.where} LIMIT ${dto.limit + 1}
         OFFSET ${dto.offset}
     `;
-    const res = await db.execute(q);
+    const res = await dto.db.execute(q);
 
     const hasMore = res.length > dto.limit;
 
