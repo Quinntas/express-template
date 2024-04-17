@@ -5,7 +5,7 @@ import {redisClient} from '../../../../../infra/database/redis';
 import {DecodedExpressRequest} from '../../../../../types/decodedExpressRequest';
 import {maxRequestsPerMinute, redisRateLimitKeyPrefix} from './constants';
 
-export async function userRateLimitMiddleware(req: DecodedExpressRequest<null, null>, _res: Response, next: NextFunction):Promise<void> {
+export async function userRateLimitMiddleware(req: DecodedExpressRequest<null, null>, _res: Response, next: NextFunction): Promise<void> {
     const ip: string | null = getClientIp(req);
 
     if (!ip) throw new HttpError(401, 'Could not get client IP');

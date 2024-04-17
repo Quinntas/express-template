@@ -3,8 +3,7 @@ export function pipe<F extends AnyFunc[], FirstFn extends (v: any) => [] extends
     firstFn: FirstFn,
     ...fns: PipeArgs<F> extends F ? F : PipeArgs<F>
 ): LastFnReturnType<F, ReturnType<FirstFn>> {
-    // @ts-ignore
-    return (fns as AnyFunc[]).reduce((acc, fn) => fn(acc), firstFn(arg));
+    return (fns as AnyFunc[]).reduce((acc, fn) => fn(acc), firstFn(arg)) as LastFnReturnType<F, ReturnType<FirstFn>>;
 }
 
 type AnyFunc = (...arg: any) => any;

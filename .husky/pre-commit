@@ -1,3 +1,2 @@
-pnpm prettify
 pnpm build
 pnpm test
