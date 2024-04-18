@@ -69,17 +69,19 @@ function createUseCase(modules: string | null, name: string | null) {
 
     if (!fs.existsSync(`src/modules/${moduleName}`)) throw new Error(`Module ${moduleName} does not exist`);
 
-    const useCaseName = name.charAt(0).toLowerCase() + name.slice(1);
+    const useCaseName = name.charAt(0).toUpperCase() + name.slice(1);
+
+    const useCaseFullName = moduleName + useCaseName;
 
     console.log(`Creating use case structure for ${useCaseName}`);
 
-    fs.mkdirSync(`src/modules/${moduleName}/useCases/${useCaseName}`);
+    fs.mkdirSync(`src/modules/${moduleName}/useCases/${moduleName}${useCaseName}`);
 
-    const fDTO = fs.createWriteStream(`src/modules/${moduleName}/useCases/${useCaseName}/${useCaseName}DTO.ts`);
-    fDTO.write(useCaseDTOTemplate(useCaseName));
+    const fDTO = fs.createWriteStream(`src/modules/${moduleName}/useCases/${useCaseFullName}/${useCaseFullName}DTO.ts`);
+    fDTO.write(useCaseDTOTemplate(useCaseFullName));
 
-    const fUseCase = fs.createWriteStream(`src/modules/${moduleName}/useCases/${useCaseName}/${useCaseName}UseCase.ts`);
-    fUseCase.write(useCaseTemplate(useCaseName));
+    const fUseCase = fs.createWriteStream(`src/modules/${moduleName}/useCases/${useCaseFullName}/${useCaseFullName}UseCase.ts`);
+    fUseCase.write(useCaseTemplate(useCaseFullName));
 
     console.log(`Use case ${useCaseName} created successfully`);
 }

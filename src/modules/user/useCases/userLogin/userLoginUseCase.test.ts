@@ -6,8 +6,8 @@ import {redisClient} from '../../../../infra/database/redis';
 import {DecodedExpressRequest} from '../../../../types/decodedExpressRequest';
 import {jwtSign} from '../../../../utils/jsonWebToken';
 import {userRepo} from '../../repo/userRepo';
-import {LoginDTO} from './loginDTO';
-import {loginUseCase} from './loginUseCase';
+import {UserLoginDTO} from './userLoginDTO';
+import {userLoginUseCase} from './userLoginUseCase';
 
 vi.mock('../../../../utils/env', () => ({
     env: {},
@@ -71,15 +71,15 @@ vi.mock('../../repo/userRepo', () => {
 test('LoginUseCase - Successful login', async () => {
     const email = 'test@example.com';
 
-    const mockReq: DecodedExpressRequest<LoginDTO, null> = {
+    const mockReq: DecodedExpressRequest<UserLoginDTO, null> = {
         bodyObject: {
             email,
             password: 'password123',
         },
-    } as DecodedExpressRequest<LoginDTO, null>;
+    } as DecodedExpressRequest<UserLoginDTO, null>;
     const mockRes: Response = {} as Response;
 
-    await loginUseCase(mockReq, mockRes);
+    await userLoginUseCase(mockReq, mockRes);
 
     expect(jsonResponse).toHaveBeenCalledWith(mockRes, 200, {
         token: 'mocked-jwt-token',
@@ -118,16 +118,16 @@ test('LoginUseCase - Successful login', async () => {
 test('LoginUseCase - User not found', async () => {
     const email = 'test2@example.com';
 
-    const mockReq: DecodedExpressRequest<LoginDTO, null> = {
+    const mockReq: DecodedExpressRequest<UserLoginDTO, null> = {
         bodyObject: {
             email,
             password: 'password123',
         },
-    } as DecodedExpressRequest<LoginDTO, null>;
+    } as DecodedExpressRequest<UserLoginDTO, null>;
     const mockRes: Response = {} as Response;
 
     try {
-        await loginUseCase(mockReq, mockRes);
+        await userLoginUseCase(mockReq, mockRes);
     } catch (e) {
         const isErrorInstance = e instanceof HttpError;
         expect(isErrorInstance).toBe(true);
@@ -138,16 +138,16 @@ test('LoginUseCase - User not found', async () => {
 test('LoginUseCase - Invalid usernane or password', async () => {
     const email = 'test@example.com';
 
-    const mockReq: DecodedExpressRequest<LoginDTO, null> = {
+    const mockReq: DecodedExpressRequest<UserLoginDTO, null> = {
         bodyObject: {
             email,
             password: 'password1234',
         },
-    } as DecodedExpressRequest<LoginDTO, null>;
+    } as DecodedExpressRequest<UserLoginDTO, null>;
     const mockRes: Response = {} as Response;
 
     try {
-        await loginUseCase(mockReq, mockRes);
+        await userLoginUseCase(mockReq, mockRes);
     } catch (e) {
         const isErrorInstance = e instanceof HttpError;
         expect(isErrorInstance).toBe(true);

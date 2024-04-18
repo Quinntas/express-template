@@ -1,3 +1,4 @@
+import {validateEnum} from '../utils/validations';
 import {GuardError} from './errors';
 
 export function againstNullOrUndefinedBulk(args: [string, any][]) {
@@ -50,5 +51,5 @@ export function againstBadFormat(key: string, argument: string, regex: RegExp) {
 }
 
 export function againstBadEnumValue(key: string, e: {[s: number]: string}, argument: any) {
-    if (!Object.keys(e).some((key) => e[key as any] === argument)) throw new GuardError('The argument is not part of the enum', key);
+    if (!validateEnum(e, argument)) throw new GuardError('The argument is not part of the enum', key);
 }

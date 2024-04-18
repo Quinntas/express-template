@@ -1,9 +1,9 @@
-export interface LoginDTO {
+export interface UserLoginDTO {
     email: string;
     password: string;
 }
 
-export interface LoginResponseDTO {
+export interface UserLoginResponseDTO {
     token: string;
     expiresIn: number;
     expireDate: number;

@@ -9,10 +9,10 @@ import {jwtSign} from '../../../../utils/jsonWebToken';
 import {validateUserEmail} from '../../domain/valueObjects/userEmail';
 import {validateUserPassword} from '../../domain/valueObjects/userPassword';
 import {userRepo} from '../../repo/userRepo';
-import {loginRedisKeyPrefix, loginTokenExpiration} from './loginConstants';
-import {LoginDTO, LoginResponseDTO, PrivateLoginToken, PublicLoginToken} from './loginDTO';
+import {loginRedisKeyPrefix, loginTokenExpiration} from './userLoginConstants';
+import {PrivateLoginToken, PublicLoginToken, UserLoginDTO, UserLoginResponseDTO} from './userLoginDTO';
 
-export async function loginUseCase(request: DecodedExpressRequest<LoginDTO, null>, response: Response) {
+export async function userLoginUseCase(request: DecodedExpressRequest<UserLoginDTO, null>, response: Response) {
     const email = validateUserEmail(request.bodyObject.email!);
     const password = validateUserPassword(request.bodyObject.password!);
 
@@ -46,7 +46,7 @@ export async function loginUseCase(request: DecodedExpressRequest<LoginDTO, null
 
     await redisClient.set(loginRedisKeyPrefix + result.pid, privateToken, loginTokenExpiration);
 
-    return jsonResponse<LoginResponseDTO>(response, 200, {
+    return jsonResponse<UserLoginResponseDTO>(response, 200, {
         token: publicToken,
         expiresIn: loginTokenExpiration,
         expireDate,
