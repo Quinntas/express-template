@@ -11,7 +11,6 @@ import {
     againstNotObject,
     againstNotString,
     againstNullOrUndefined,
-    againstNullOrUndefinedBulk,
 } from './guard';
 
 test('Guard - Null or Undefined - Invalid with null', () => {
@@ -214,25 +213,5 @@ test('Guard - Not Object - Invalid with array', () => {
 test('Guard - Not Object - Invalid with null value', () => {
     expect(() => {
         againstNotObject('key', null as any);
-    }).toThrowError();
-});
-
-// **********************
-
-test('Guard - Null or Undefined Bulk - Valid', () => {
-    expect(() => {
-        againstNullOrUndefinedBulk([
-            ['key', 123],
-            ['key', '123'],
-        ]);
-    });
-});
-
-test('Guard - Null or Undefined Bulk - Invalid', () => {
-    expect(() => {
-        againstNullOrUndefinedBulk([
-            ['key', 123],
-            ['key', undefined],
-        ]);
     }).toThrowError();
 });

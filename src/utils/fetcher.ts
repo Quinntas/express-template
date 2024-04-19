@@ -30,6 +30,16 @@ const defaultHeaders = {
     'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
 };
 
+/**
+ * Makes an HTTP request using the provided fetcherDTO object
+ *
+ * @param fetcherDTO - The data transfer object containing the request details
+ * @returns A promise that resolves to an object containing the response details
+ *          - response: The response body (if any)
+ *          - ok: A boolean indicating if the response was successful
+ *          - status: The HTTP status code of the response
+ * @throws InternalError - If all fetch attempts fail
+ */
 export async function request<BodyType = any, ResponseType = any>(
     fetcherDTO: FetcherDTO<BodyType>,
 ): Promise<{

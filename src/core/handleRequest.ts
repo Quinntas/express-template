@@ -7,6 +7,14 @@ import {HttpError, InternalError} from './errors';
 import {MiddlewareFunction, wrapMiddlewares} from './middleware';
 import {jsonResponse} from './responses';
 
+/**
+ * Handles errors and sends appropriate response.
+ *
+ * @param {Response} res - The response object.
+ * @param {Error} error - The error object.
+ *
+ * @returns {Response} The response object.
+ */
 export function handleError(res: Response, error: Error) {
     switch (true) {
         case error instanceof HttpError:
@@ -37,6 +45,14 @@ export function handleError(res: Response, error: Error) {
     return jsonResponse(res, 500, {message: 'Internal server error'});
 }
 
+/**
+ * Handles an HTTP request.
+ *
+ * @param {DecodedExpressRequest<object | null, object | null>} req - The decoded Express request object.
+ * @param {Response} res - The response object.
+ * @param {Function} handler - The request handler function.
+ * @returns {Promise<any>} - A promise that resolves or rejects with the result of the request handler function.
+ */
 export async function handleRequest<iBody extends object | null, iQuery extends object | null>(
     req: DecodedExpressRequest<iBody, iQuery>,
     res: Response,
@@ -58,6 +74,17 @@ export async function handleRequest<iBody extends object | null, iQuery extends 
     }
 }
 
+/**
+ * Adds a route to the express router with the specified method, path, and handler.
+ *
+ * @param {Router} router - The express router object.
+ * @param {Method} method - The HTTP method for the route.
+ * @param {string} path - The path for the route.
+ * @param {Function} handler - The handler function for the route.
+ * @param {MiddlewareFunction[]} [middlewares=[]] - An array of middleware functions to be executed before the handler.
+ *
+ * @return {void}
+ */
 export function route<iBody extends object, iQuery extends object>(
     router: Router,
     method: Method,

@@ -1,12 +1,6 @@
 import {validateArray, validateBoolean, validateEnum, validateNullOrUndefined, validateNumber, validateObject, validateString} from '../utils/validations';
 import {GuardError} from './errors';
 
-export function againstNullOrUndefinedBulk(args: [string, any][]) {
-    for (let i = 0; i < args.length; i++) {
-        againstNullOrUndefined(args[i][0], args[i][1]);
-    }
-}
-
 export function againstNotString(key: string, argument: any): argument is string {
     if (!validateString(argument)) throw new GuardError('The argument is not a string', key);
     return true;

@@ -1,3 +1,12 @@
+/**
+ * Takes an argument and passes it through a series of functions,
+ * returning the result of the final function call.
+ *
+ * @param arg - The argument to be passed through the functions.
+ * @param firstFn - The first function to be called with the argument.
+ * @param fns - Additional functions to be called in sequence.
+ * @returns The result of the final function call.
+ */
 export function pipe<F extends AnyFunc[], FirstFn extends (v: any) => [] extends F ? any : Parameters<F[0]>[0]>(
     arg: Parameters<FirstFn>[0],
     firstFn: FirstFn,

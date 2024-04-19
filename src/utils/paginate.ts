@@ -4,11 +4,19 @@ import {MySqlTable} from 'drizzle-orm/mysql-core';
 import {BaseDomain} from '../core/baseDomain';
 import {BaseMapper} from '../core/baseMapper';
 
+/**
+ * Represents a pagination data transfer object.
+ */
 export interface PaginateDTO {
     limit: number;
     offset: number;
 }
 
+/**
+ * Represents the response for paginated data.
+ *
+ * @template D - The type of the data contained in the response.
+ */
 export type PaginateResponseDTO<D extends BaseDomain> = {
     count: number;
     hasMore: boolean;
@@ -16,6 +24,13 @@ export type PaginateResponseDTO<D extends BaseDomain> = {
     data: D[];
 };
 
+/**
+ * Represents a PaginateInternalDTO object which is used for pagination with a specific MySqlTable and BaseDomain.
+ * @interface
+ * @extends PaginateDTO
+ * @template T - Represents a MySqlTable type.
+ * @template D - Represents a BaseDomain type.
+ */
 export interface PaginateInternalDTO<T extends MySqlTable, D extends BaseDomain> extends PaginateDTO {
     db: MySql2Database;
     table: T;
@@ -23,6 +38,12 @@ export interface PaginateInternalDTO<T extends MySqlTable, D extends BaseDomain>
     mapper: BaseMapper<D>;
 }
 
+/**
+ * Paginates data from a MySQL table based on the given parameters.
+ *
+ * @param {PaginateInternalDTO<T, D>} dto - The pagination parameters.
+ * @returns {Promise<PaginateResponseDTO<D>>} - The paginated data.
+ */
 export async function paginate<T extends MySqlTable, D extends BaseDomain>(dto: PaginateInternalDTO<T, D>): Promise<PaginateResponseDTO<D>> {
     const q = sql<T>`
         SELECT *
