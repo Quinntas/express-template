@@ -3,6 +3,12 @@ import {describe, expect, it, vi} from 'vitest';
 import {DecodedExpressRequest} from '../types/decodedExpressRequest';
 import {handleMiddleware} from './middleware';
 
+vi.mock(`../utils/env`, () => ({
+    env: {
+        NODE_ENV: 'development',
+    },
+}));
+
 describe('handleMiddleware', () => {
     it('should execute middleware successfully', async () => {
         const next = vi.fn();
