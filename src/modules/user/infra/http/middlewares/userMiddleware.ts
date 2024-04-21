@@ -7,6 +7,13 @@ import {loginRedisKeyPrefix} from '../../../useCases/userLogin/userLoginConstant
 import {PrivateLoginToken, PublicLoginToken} from '../../../useCases/userLogin/userLoginDTO';
 import {UserDecodedExpressRequest} from '../userDecodedExpressRequest';
 
+function formatPath(originalUrl:string):string {
+    const splitUrl = originalUrl.split('/');
+    const baseUrl = splitUrl[2] + '/';
+    const url = baseUrl + splitUrl.slice(3).join('/');
+    return url.split('?')[0];
+}
+
 export async function ensureUserAuthenticated(req: UserDecodedExpressRequest<null, null>, _res: Response, next: NextFunction) {
     const token = req.headers.authorization;
 
@@ -28,7 +35,7 @@ export async function ensureUserAuthenticated(req: UserDecodedExpressRequest<nul
 
     const hasPermission = await permissionCheckUseCase({
         roleId: privateDecoded.roleId,
-        path: req.path,
+        path: formatPath(req.originalUrl)
     });
 
     if (!hasPermission) throw new HttpError(403, 'Forbidden');
