@@ -30,8 +30,22 @@ docker-compose up -d
 pnpm install
 ```
 
-### Running
+### Running dev server
 
 ```bash
 pnpm dev
+```
+
+### Running tests
+
+```bash
+pnpm test
+```
+
+### Running prod
+
+```bash
+pnpm build
+
+pnpm start
 ```

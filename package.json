@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon ",
     "build": "rimraf dist && tsc",
+    "start": "node ./dist/src/infra/index.js",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "db:push": "drizzle-kit push:pg",

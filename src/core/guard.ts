@@ -1,12 +1,4 @@
-import {
-    validateArray,
-    validateBoolean,
-    validateEnum,
-    validateNullOrUndefined,
-    validateNumber,
-    validateObject,
-    validateString
-} from '../utils/validations';
+import {validateArray, validateBoolean, validateEnum, validateNullOrUndefined, validateNumber, validateObject, validateString} from '../utils/validations';
 import {GuardError} from './errors';
 
 /**

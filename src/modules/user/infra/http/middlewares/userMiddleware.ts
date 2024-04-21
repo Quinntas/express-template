@@ -14,7 +14,7 @@ import {UserDecodedExpressRequest} from '../userDecodedExpressRequest';
  *
  * @return {string} The formatted path URL.
  */
-function formatPath(originalUrl:string):string {
+function formatPath(originalUrl: string): string {
     const splitUrl = originalUrl.split('/');
     const baseUrl = splitUrl[2] + '/';
     const url = baseUrl + splitUrl.slice(3).join('/');
@@ -42,7 +42,7 @@ export async function ensureUserAuthenticated(req: UserDecodedExpressRequest<nul
 
     const hasPermission = await permissionCheckUseCase({
         roleId: privateDecoded.roleId,
-        path: formatPath(req.originalUrl)
+        path: formatPath(req.originalUrl),
     });
 
     if (!hasPermission) throw new HttpError(403, 'Forbidden');
