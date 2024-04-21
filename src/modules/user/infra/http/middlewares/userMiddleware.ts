@@ -7,6 +7,13 @@ import {loginRedisKeyPrefix} from '../../../useCases/userLogin/userLoginConstant
 import {PrivateLoginToken, PublicLoginToken} from '../../../useCases/userLogin/userLoginDTO';
 import {UserDecodedExpressRequest} from '../userDecodedExpressRequest';
 
+/**
+ * Formats the given original URL into a clean path URL.
+ *
+ * @param {string} originalUrl - The original URL to format.
+ *
+ * @return {string} The formatted path URL.
+ */
 function formatPath(originalUrl:string):string {
     const splitUrl = originalUrl.split('/');
     const baseUrl = splitUrl[2] + '/';

@@ -9,5 +9,5 @@ export const baseColumns = {
         .default(sql`CURRENT_TIMESTAMP`),
     updatedAt: datetime('updatedAt')
         .notNull()
-        .default(sql`CURRENT_TIMESTAMP`),
+        .default(sql`CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP`)
 };

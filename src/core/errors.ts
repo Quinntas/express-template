@@ -16,6 +16,7 @@ export class InternalError extends Error {
 
 /**
  * Represents an HTTP error.
+ * @extends Error
  */
 export class HttpError extends Error {
     public code: number;
