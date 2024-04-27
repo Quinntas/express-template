@@ -3,7 +3,7 @@ import {v4} from 'uuid';
 import {HttpError} from '../../../../core/errors';
 import {jsonResponse} from '../../../../core/responses';
 import {DecodedExpressRequest} from '../../../../types/decodedExpressRequest';
-import {encrypt} from '../../../../utils/encryption';
+import {Encryption} from '../../../../utils/encryption';
 import {env} from '../../../../utils/env';
 import {validateUserEmail} from '../../domain/valueObjects/userEmail';
 import {validateUserName} from '../../domain/valueObjects/userName';
@@ -20,7 +20,7 @@ export async function userCreateUseCase(request: DecodedExpressRequest<UserCreat
         pid: v4(),
         name,
         email,
-        password: encrypt(password, env.PEPPER),
+        password: Encryption.encrypt(password, env.PEPPER),
         roleId: env.DEFAULT_ROLE_ID,
     });
 

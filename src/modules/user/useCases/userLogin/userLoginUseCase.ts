@@ -3,9 +3,9 @@ import {HttpError} from '../../../../core/errors';
 import {jsonResponse} from '../../../../core/responses';
 import {redisClient} from '../../../../infra/database/redis';
 import {DecodedExpressRequest} from '../../../../types/decodedExpressRequest';
-import {compare, encrypt, parseEncryptedString} from '../../../../utils/encryption';
+import {Encryption} from '../../../../utils/encryption';
 import {env} from '../../../../utils/env';
-import {jwtSign} from '../../../../utils/jsonWebToken';
+import {JWT} from '../../../../utils/jsonWebToken';
 import {validateUserEmail} from '../../domain/valueObjects/userEmail';
 import {validateUserPassword} from '../../domain/valueObjects/userPassword';
 import {userRepo} from '../../repo/userRepo';
@@ -20,9 +20,9 @@ export async function userLoginUseCase(request: DecodedExpressRequest<UserLoginD
 
     if (!result) throw new HttpError(404, 'User not found');
 
-    const parsedPassword = parseEncryptedString(result.password);
+    const parsedPassword = Encryption.parseEncryptedString(result.password);
 
-    if (!compare(encrypt(password, env.PEPPER, parsedPassword.iterations, parsedPassword.salt), result.password))
+    if (!Encryption.compare(Encryption.encrypt(password, env.PEPPER, parsedPassword.iterations, parsedPassword.salt), result.password))
         throw new HttpError(401, 'Invalid email or password');
 
     const expireDate = Math.floor(Date.now() / 1000) + loginTokenExpiration;
@@ -30,7 +30,7 @@ export async function userLoginUseCase(request: DecodedExpressRequest<UserLoginD
     const publicTokenObject: PublicLoginToken = {
         userPid: result.pid,
     };
-    const publicToken: string = jwtSign(publicTokenObject, {
+    const publicToken: string = JWT.sign(publicTokenObject, {
         expiresIn: expireDate,
     });
 
@@ -40,7 +40,7 @@ export async function userLoginUseCase(request: DecodedExpressRequest<UserLoginD
         userEmail: result.email,
         userId: result.id,
     };
-    const privateToken: string = jwtSign(privateTokenObject, {
+    const privateToken: string = JWT.sign(privateTokenObject, {
         expiresIn: expireDate,
     });
 

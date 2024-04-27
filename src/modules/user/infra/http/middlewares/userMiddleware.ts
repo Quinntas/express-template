@@ -1,7 +1,7 @@
 import {NextFunction, Response} from 'express';
 import {HttpError} from '../../../../../core/errors';
 import {redisClient} from '../../../../../infra/database/redis';
-import {jwtDecode} from '../../../../../utils/jsonWebToken';
+import {JWT} from '../../../../../utils/jsonWebToken';
 import {permissionCheckUseCase} from '../../../../permission/useCases/permissionCheck/permissionCheckUseCase';
 import {loginRedisKeyPrefix} from '../../../useCases/userLogin/userLoginConstants';
 import {PrivateLoginToken, PublicLoginToken} from '../../../useCases/userLogin/userLoginDTO';
@@ -30,7 +30,7 @@ export async function ensureUserAuthenticated(req: UserDecodedExpressRequest<nul
 
     if (tokenValue.length !== 2 || tokenValue[0] !== 'Bearer') throw new HttpError(401, 'Invalid token format');
 
-    const publicDecoded: PublicLoginToken = jwtDecode<PublicLoginToken>(tokenValue[1]);
+    const publicDecoded: PublicLoginToken = JWT.decode<PublicLoginToken>(tokenValue[1]);
 
     if (!publicDecoded) throw new HttpError(401, 'Invalid token');
 
@@ -38,7 +38,7 @@ export async function ensureUserAuthenticated(req: UserDecodedExpressRequest<nul
 
     if (!privateToken) throw new HttpError(401, 'Token not found');
 
-    const privateDecoded: PrivateLoginToken = jwtDecode<PrivateLoginToken>(privateToken);
+    const privateDecoded: PrivateLoginToken = JWT.decode<PrivateLoginToken>(privateToken);
 
     const hasPermission = await permissionCheckUseCase({
         roleId: privateDecoded.roleId,
