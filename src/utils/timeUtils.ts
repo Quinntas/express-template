@@ -5,7 +5,7 @@ export namespace TimeUtils {
      * @param {Date} date - The Date object to be converted.
      * @return {string} The formatted string representing the date in 'YYYY/MM/DD' format.
      */
-    export function dateToYYYYMMDD(date: Date): string {
+    export function dateToYYYYMMDD(date: Date = new Date()): string {
         return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
     }
 
@@ -15,7 +15,7 @@ export namespace TimeUtils {
      * @param {Date} date - The Date object to convert.
      * @return {string} The string representation of the date in the format DD/MM/YYYY.
      */
-    export function dateToDDMMYYYY(date: Date): string {
+    export function dateToDDMMYYYY(date: Date = new Date()): string {
         return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
     }
 }

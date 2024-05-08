@@ -1,7 +1,7 @@
 import {InternalError} from '../core/errors';
 
 export namespace StringUtils {
-    export function removeSpaces(str: string, orientation: 'start' | 'end' | 'all') {
+    export function removeSpaces(str: string, orientation: 'start' | 'end' | 'all' = 'all') {
         switch (orientation) {
             case 'start':
                 return str.trimStart();
