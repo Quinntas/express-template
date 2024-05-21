@@ -4,14 +4,14 @@
   "description": "",
   "main": "src/infra/index.ts",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development nodemon ",
+    "dev": "cross-env NODE_ENV=development tsx watch src/infra/index.ts",
     "build": "rimraf dist && tsc",
     "start": "node ./dist/src/infra/index.js",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "db:push": "drizzle-kit push:pg",
+    "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "cli": "ts-node src/utils/cli/cli.ts",
+    "cli": "tsx src/utils/cli/cli.ts",
     "prepare": "husky",
     "prettify": "prettier . --write --ignore-unknown"
   },
@@ -31,7 +31,6 @@
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
     "mysql2": "^3.9.2",
-    "node-fetch": "^3.3.2",
     "request-ip": "^3.3.0",
     "uuid": "^9.0.1",
     "winston": "^3.11.0",
@@ -53,10 +52,9 @@
     "@vitest/coverage-v8": "^1.4.0",
     "drizzle-kit": "^0.20.14",
     "husky": "^9.0.11",
-    "nodemon": "^3.0.3",
     "prettier": "^3.2.5",
     "rimraf": "^5.0.5",
-    "ts-node": "^10.9.1",
+    "tsx": "^4.10.5",
     "typescript": "^5.2.2",
     "vitest": "^1.4.0"
   }
