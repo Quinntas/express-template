@@ -3,9 +3,10 @@
   "display": "Default",
   "compilerOptions": {
     "outDir": "./dist",
-    "target": "es2020",
+    "lib": ["ES2023"],
+    "module": "node16",
+    "target": "ES2022",
     "experimentalDecorators": true,
-    "module": "commonjs",
     // NAO MUDA ISSO
     "strict": true,
     // NAO MUDA ISSO

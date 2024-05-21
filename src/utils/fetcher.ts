@@ -1,4 +1,3 @@
-import fetch, {Response} from 'node-fetch';
 import {InternalError} from '../core/errors';
 import {Method} from '../types/methods';
 

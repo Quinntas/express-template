@@ -1,4 +1,4 @@
-import {varchar} from 'drizzle-orm/mysql-core/index';
+import {varchar} from 'drizzle-orm/mysql-core';
 import {baseColumns} from '../../../shared/infra/database/baseColumns';
 import {dbSchema} from '../../../shared/infra/database/schema';
 
