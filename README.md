@@ -1,13 +1,19 @@
 # Express Template [REST]
 
-## This is a heavy opinionated template for express backend projects
+### This is a heavily opinionated template for express backend projects
 
 ### Features
 
 -   [x] Latest packages
+-   [x] Namespaces
+-   [x] Clean architecture
+-  [x] Dependency injection
+-  [x] Cli commands
+-   [x] RBAC (Role Based Access Control) out of the box
 -   [x] Fully tested, documented and typesafe
 -   [x] Plug and play
 -   [x] Drizzle-orm
+-   [x] Serverless ready
 
 ### Docs
 
@@ -36,16 +42,19 @@ pnpm install
 pnpm dev
 ```
 
+### Running prod
+
+```bash
+pnpm build
+```
+
+```bash
+pnpm start
+```
+
 ### Running tests
 
 ```bash
 pnpm test
 ```
 
-### Running prod
-
-```bash
-pnpm build
-
-pnpm start
-```
