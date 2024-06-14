@@ -1,11 +1,11 @@
 import {Request, Response, Router} from 'express';
 import {parse} from 'querystring';
-import {DecodedExpressRequest} from '../types/decodedExpressRequest';
-import {Method} from '../types/methods';
 import {env} from '../utils/env';
 import {HttpError, InternalError} from './errors';
 import {MiddlewareFunction, wrapMiddlewares} from './middleware';
 import {jsonResponse} from './responses';
+import {DecodedExpressRequest} from './types/decodedExpressRequest';
+import {Method} from './types/methods';
 
 /**
  * Handles errors and sends appropriate response.
@@ -18,6 +18,7 @@ import {jsonResponse} from './responses';
 export function handleError(res: Response, error: Error) {
     switch (true) {
         case error instanceof HttpError:
+            console.error(error);
             return jsonResponse(res, error.code, {
                 message: error.message,
                 ...error.body,

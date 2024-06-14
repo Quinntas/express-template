@@ -3,29 +3,21 @@
   "display": "Default",
   "compilerOptions": {
     "outDir": "./dist",
-    "lib": ["ES2023"],
+    "lib": [
+      "ES2023"
+    ],
     "module": "node16",
     "target": "ES2022",
     "experimentalDecorators": true,
-    // NAO MUDA ISSO
     "strict": true,
-    // NAO MUDA ISSO
     "strictNullChecks": true,
-    // NAO MUDA ISSO
     "strictFunctionTypes": true,
-    // NAO MUDA ISSO
     "inlineSources": false,
-    // NAO MUDA ISSO
     "esModuleInterop": true,
-    // NAO MUDA ISSO
     "isolatedModules": true,
-    // NAO MUDA ISSO
     "noUnusedLocals": true,
-    // NAO MUDA ISSO
     "noUnusedParameters": true,
-    // NAO MUDA ISSO
     "noImplicitReturns": true,
-    // NAO MUDA ISSO
     "skipLibCheck": true
   },
   "exclude": [

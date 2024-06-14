@@ -1,8 +1,11 @@
-import {BaseDomain} from '../../../core/baseDomain';
+import {Domain} from '../../../core/types/domain';
+import {userTable} from '../infra/database/userTable';
 
-export interface User extends BaseDomain {
-    name: string;
-    email: string;
-    password: string;
-    roleId: number;
+export enum UserRolesEnum {
+    CLIENT = 'CLIENT',
+    ADMIN = 'ADMIN',
+}
+
+export interface User extends Domain<typeof userTable> {
+    role: UserRolesEnum;
 }

@@ -1,22 +1,12 @@
 import {map} from '../utils/iterators';
-import {BaseDomain} from './baseDomain';
-
-/**
- * Represents a Mapper that converts objects between different domains.
- *
- * @template Domain - The domain type of the objects being mapped.
- */
-export interface Mapper<Domain extends BaseDomain> {
-    toDomain: (raw: object) => Required<Domain>;
-    toPublicDomain: (data: Domain) => Partial<Domain>;
-}
+import {Domain as DomainType} from './types/domain';
 
 /**
  * BaseMapper class is an abstract class that provides basic mapping functionality for converting
  * raw objects to domain objects and vice versa.
  * @typeparam Domain - The domain object type that this mapper will be converting to/from.
  */
-export abstract class BaseMapper<Domain extends BaseDomain> implements Mapper<Domain> {
+export abstract class Mapper<Domain extends DomainType<any>> implements Mapper<Domain> {
     /**
      * Converts a raw object into a required domain object.
      *

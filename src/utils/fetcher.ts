@@ -1,5 +1,5 @@
 import {InternalError} from '../core/errors';
-import {Method} from '../types/methods';
+import {Method} from '../core/types/methods';
 
 interface FetcherRetryDTO {
     count: number;

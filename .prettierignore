@@ -1,6 +1,8 @@
 *.json
 *.md
 *.yml
+*.yaml
+*.graphql
 Dockerfile
 LICENSE
 pnpm-lock.yaml

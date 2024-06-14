@@ -1,8 +1,8 @@
 import {Response} from 'express';
 import {HttpError} from '../../../../core/errors';
 import {jsonResponse} from '../../../../core/responses';
+import {DecodedExpressRequest} from '../../../../core/types/decodedExpressRequest';
 import {redisClient} from '../../../../infra/database/redis';
-import {DecodedExpressRequest} from '../../../../types/decodedExpressRequest';
 import {Encryption} from '../../../../utils/encryption';
 import {env} from '../../../../utils/env';
 import {JWT} from '../../../../utils/jsonWebToken';
@@ -28,17 +28,16 @@ export async function userLoginUseCase(request: DecodedExpressRequest<UserLoginD
     const expireDate = Math.floor(Date.now() / 1000) + loginTokenExpiration;
 
     const publicTokenObject: PublicLoginToken = {
-        userPid: result.pid,
+        user: {
+            pid: result.pid,
+        },
     };
     const publicToken: string = JWT.sign(publicTokenObject, {
         expiresIn: expireDate,
     });
 
     const privateTokenObject: PrivateLoginToken = {
-        userPid: result.pid,
-        roleId: result.roleId,
-        userEmail: result.email,
-        userId: result.id,
+        user: result,
     };
     const privateToken: string = JWT.sign(privateTokenObject, {
         expiresIn: expireDate,

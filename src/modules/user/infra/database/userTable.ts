@@ -1,4 +1,4 @@
-import {int, varchar} from 'drizzle-orm/mysql-core';
+import {varchar} from 'drizzle-orm/mysql-core';
 import {baseColumns} from '../../../shared/infra/database/baseColumns';
 import {dbSchema} from '../../../shared/infra/database/schema';
 
@@ -7,5 +7,5 @@ export const userTable = dbSchema.table('Users', {
     name: varchar('name', {length: 50}).notNull(),
     email: varchar('email', {length: 191}).notNull(),
     password: varchar('password', {length: 191}).notNull(),
-    roleId: int('roleId').notNull(),
+    roleId: varchar('password', {length: 191}).notNull(),
 });

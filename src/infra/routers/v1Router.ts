@@ -1,11 +1,11 @@
 import {NextFunction, Request, Response, Router} from 'express';
 import {route} from '../../core/handleRequest';
 import {handleMiddleware} from '../../core/middleware';
+import {DecodedExpressRequest} from '../../core/types/decodedExpressRequest';
 import {performanceMiddleware} from '../../modules/shared/infra/http/middlewares/performanceMiddleware';
 import {rateLimitMiddleware} from '../../modules/shared/infra/http/middlewares/rateLimit/rateLimitMiddleware';
 import {healthCheckUseCase} from '../../modules/shared/useCases/healthCheck/healthCheckUseCase';
 import {userRouter} from '../../modules/user/infra/http/routers/userRouter';
-import {DecodedExpressRequest} from '../../types/decodedExpressRequest';
 
 export const v1Router: Router = Router();
 

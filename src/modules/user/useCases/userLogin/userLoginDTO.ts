@@ -1,3 +1,5 @@
+import {User} from '../../domain/user';
+
 export interface UserLoginDTO {
     email: string;
     password: string;
@@ -10,12 +12,11 @@ export interface UserLoginResponseDTO {
 }
 
 export interface PublicLoginToken {
-    userPid: string;
+    user: {
+        pid: string;
+    };
 }
 
 export interface PrivateLoginToken {
-    userPid: string;
-    userEmail: string;
-    userId: number;
-    roleId: number;
+    user: User;
 }

@@ -1,20 +1,4 @@
 /**
- * Represents an internal error.
- *
- * @class
- * @extends Error
- */
-export class InternalError extends Error {
-    public body?: object;
-
-    constructor(message: string, body?: object) {
-        super(message);
-        this.name = 'InternalError';
-        this.body = body;
-    }
-}
-
-/**
  * Represents an HTTP error.
  * @extends Error
  */
@@ -26,6 +10,23 @@ export class HttpError extends Error {
         super(message);
         this.name = 'HttpError';
         this.code = code;
+        this.body = body;
+    }
+}
+
+/**
+ * Represents an internal error.
+ *
+ * @class
+ * @extends Error
+ */
+export class InternalError extends HttpError {
+    public body?: object;
+
+    constructor(message: string, body?: object) {
+        super(500, message, body);
+        this.code = 500;
+        this.name = 'InternalError';
         this.body = body;
     }
 }

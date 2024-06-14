@@ -1,7 +1,7 @@
 import {ErrorRequestHandler, NextFunction, Request, RequestHandler, Response} from 'express';
-import {DecodedExpressRequest} from '../types/decodedExpressRequest';
 import {forEach} from '../utils/iterators';
 import {handleError} from './handleRequest';
+import {DecodedExpressRequest} from './types/decodedExpressRequest';
 
 /**
  * MiddlewareFunction is a type definition for a middleware function that is used in Express.js applications.

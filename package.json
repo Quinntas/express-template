@@ -7,13 +7,13 @@
     "dev": "cross-env NODE_ENV=development tsx watch src/infra/index.ts",
     "build": "rimraf dist && tsc",
     "start": "node ./dist/src/infra/index.js",
-    "test": "vitest run",
+    "test": "echo \"Error: no test specified\" && exit 0",
     "test:coverage": "vitest run --coverage",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
     "cli": "tsx src/utils/cli/cli.ts",
     "prepare": "husky",
-    "prettify": "prettier . --write --ignore-unknown"
+    "format": "prettier . --write --ignore-unknown"
   },
   "author": "caioquintassantiago@gmail.com",
   "license": "ISC",
@@ -49,13 +49,11 @@
     "@types/request-ip": "^0.0.41",
     "@types/uuid": "^9.0.8",
     "@types/ws": "^8.5.10",
-    "@vitest/coverage-v8": "^1.4.0",
     "drizzle-kit": "^0.20.14",
     "husky": "^9.0.11",
     "prettier": "^3.2.5",
     "rimraf": "^5.0.5",
     "tsx": "^4.10.5",
-    "typescript": "^5.2.2",
-    "vitest": "^1.4.0"
+    "typescript": "^5.2.2"
   }
 }

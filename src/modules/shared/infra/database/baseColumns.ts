@@ -1,13 +1,14 @@
 import {sql} from 'drizzle-orm';
 import {datetime, int, varchar} from 'drizzle-orm/mysql-core';
+import {v4} from 'uuid';
 
 export const baseColumns = {
     id: int('id').autoincrement().primaryKey(),
-    pid: varchar('pid', {length: 191}).notNull(),
+    pid: varchar('pid', {length: 191}).notNull().default(v4()),
     createdAt: datetime('createdAt')
         .notNull()
-        .default(sql`CURRENT_TIMESTAMP`),
+        .default(sql`now()`),
     updatedAt: datetime('updatedAt')
         .notNull()
-        .default(sql`CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP`),
+        .default(sql`now() on update now()`),
 };

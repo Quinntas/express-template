@@ -1,8 +1,8 @@
 import {NextFunction, Response} from 'express';
 import {getClientIp} from 'request-ip';
 import {HttpError} from '../../../../../../core/errors';
+import {DecodedExpressRequest} from '../../../../../../core/types/decodedExpressRequest';
 import {redisClient} from '../../../../../../infra/database/redis';
-import {DecodedExpressRequest} from '../../../../../../types/decodedExpressRequest';
 import {maxRequestsPerMinute, redisRateLimitKeyPrefix} from './constants';
 
 export async function rateLimitMiddleware(req: DecodedExpressRequest<null, null>, _res: Response, next: NextFunction): Promise<void> {
@@ -20,11 +20,6 @@ export async function rateLimitMiddleware(req: DecodedExpressRequest<null, null>
     }
 
     const result = parseInt(redisResult);
-
-    if (!result) {
-        await redisClient.set(key, 1, 60);
-        return next();
-    }
 
     if (result >= maxRequestsPerMinute) throw new HttpError(429, 'Rate limit exceeded');
 
