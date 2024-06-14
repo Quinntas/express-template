@@ -1,6 +1,6 @@
 import {Router} from 'express';
 import {route} from '../../../../../core/handleRequest';
-import {userCreateUseCase} from '../../../useCases/useCreate/userCreateUseCase';
+import {userCreateUseCase} from '../../../useCases/userCreate/userCreateUseCase';
 import {userLoginUseCase} from '../../../useCases/userLogin/userLoginUseCase';
 
 export const userRouter: Router = Router();

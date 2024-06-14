@@ -4,8 +4,9 @@
   "description": "",
   "main": "src/infra/index.ts",
   "scripts": {
+    "openapi:generate": "tsx src/infra/openapi/spec.ts",
     "dev": "cross-env NODE_ENV=development tsx watch src/infra/index.ts",
-    "build": "rimraf dist && tsc",
+    "build": "rimraf dist && tsc && pnpm openapi:generate",
     "start": "node ./dist/src/infra/index.js",
     "test": "echo \"Error: no test specified\" && exit 0",
     "test:coverage": "vitest run --coverage",
@@ -51,6 +52,7 @@
     "@types/ws": "^8.5.10",
     "drizzle-kit": "^0.20.14",
     "husky": "^9.0.11",
+    "openapi-types": "^12.1.3",
     "prettier": "^3.2.5",
     "rimraf": "^5.0.5",
     "tsx": "^4.10.5",
