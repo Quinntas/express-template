@@ -1,6 +1,6 @@
 import {againstBadFormat, againstNotString, againstNullOrUndefined} from '../../../../core/guard';
 
-const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+const emailRegex = /@/;
 
 export function validateUserEmail(email: string) {
     againstNullOrUndefined('email', email);
