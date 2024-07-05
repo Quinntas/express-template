@@ -45,7 +45,7 @@ export namespace Encryption {
             throw new InternalError("Argument 'chars' should not have more than 256 characters" + ', otherwise unpredictability will be broken');
 
         const bytes = randomBytes(length);
-        let result = new Array(length);
+        const result = new Array(length);
         let cursor = 0;
 
         for (let i = 0; i < length; i++) {

@@ -46,9 +46,9 @@ export async function request<BodyType = any, ResponseType = any>(
     ok: boolean;
     status: number;
 }> {
-    let headers = Object.assign({}, defaultHeaders, fetcherDTO.headers);
+    const headers = Object.assign({}, defaultHeaders, fetcherDTO.headers);
     let body: any = undefined;
-    let retryDTO: FetcherRetryDTO = fetcherDTO.retryDTO || {
+    const retryDTO: FetcherRetryDTO = fetcherDTO.retryDTO || {
         count: 1,
         secondsDelay: 0,
     };

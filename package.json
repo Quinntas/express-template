@@ -4,16 +4,16 @@
   "description": "",
   "main": "src/infra/index.ts",
   "scripts": {
-    "openapi:generate": "tsx src/infra/openapi/spec.ts",
     "dev": "cross-env NODE_ENV=development tsx watch src/infra/index.ts",
-    "build": "rimraf dist && tsc && pnpm openapi:generate",
+    "build": "rimraf dist && tsc",
     "start": "node ./dist/src/infra/index.js",
     "test": "echo \"Error: no test specified\" && exit 0",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
     "cli": "tsx src/utils/cli/cli.ts",
     "prepare": "husky",
-    "format": "prettier . --write --ignore-unknown"
+    "format": "prettier . --write --ignore-unknown",
+    "lint": "eslint ./src "
   },
   "author": "caioquintassantiago@gmail.com",
   "license": "ISC",
