@@ -18,8 +18,8 @@ export type MiddlewareFunction = (req: DecodedExpressRequest<any, any>, res: Res
 export async function middlewareHandler<iBody extends object | null, iQuery extends object | null>(
     req: DecodedExpressRequest<iBody, iQuery>,
     res: Response,
-    next: Function,
-    middleware: Function,
+    next: NextFunction,
+    middleware: MiddlewareFunction,
 ) {
     try {
         return await middleware(req, res, next);
@@ -32,7 +32,7 @@ export function wrapMiddlewares<iBody extends object, iQuery extends object>(mid
     if (middlewares.length === 0) return [];
     const wrappedMiddlewares: (RequestHandler | ErrorRequestHandler)[] = [];
     forEach(middlewares, (middleware) => {
-        wrappedMiddlewares.push((req: Request, res: Response, next: Function) => {
+        wrappedMiddlewares.push((req: Request, res: Response, next: NextFunction) => {
             middlewareHandler<iBody, iQuery>(req as DecodedExpressRequest<iBody, iQuery>, res, next, middleware);
         });
     });

@@ -34,7 +34,7 @@ export function handleError(res: Response, error: Error) {
             }
             break;
 
-        default:
+        default: {
             const properties = Object.getOwnPropertyNames(error);
             if (properties.includes('sql') && properties.includes('sqlMessage') && properties.includes('code')) {
                 if ((error as any)['code'] === 'ER_DUP_ENTRY')
@@ -43,6 +43,7 @@ export function handleError(res: Response, error: Error) {
                     });
             }
             break;
+        }
     }
 
     // Error outside of error boundries
