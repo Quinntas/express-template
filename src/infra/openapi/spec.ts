@@ -1,26 +1,25 @@
 import {OpenAPIV3} from "openapi-types";
-import {userCreatedOpenAPISpec} from "../../modules/user/useCases/userCreate/userCreatedOpenAPISpec";
 import * as fs from "node:fs";
 import {userOpenAPiTagSpec} from "../../modules/user/infra/openapi/userOpenAPiSpec";
-import {userLoginOpenAPISpec} from "../../modules/user/useCases/userLogin/userLoginOpenAPISpec";
+import {userEndpointsOpenapiSpec} from "../../modules/user/infra/openapi/userEndpointsOpenapiSpec";
 
-export const OpenAPISpec: OpenAPIV3.Document = {
+export const openapiSchema: OpenAPIV3.Document = {
     info: {
-        title: 'RevPay API',
-        description: 'This is the API documentation for the RevPay service',
+        title: 'Express template ',
+        description: 'This is the API documentation for the Express template project.',
         version: '1.0.0',
     },
     servers: [
         {
-            url: 'https://services.revpay.com.br/api/v1/',
+            url: 'http://localhost:3000/api/v1',
             description: 'Production server',
         },
         {
-            url: 'https://service-develop.revpay.com.br/api/v1/',
+            url: 'http://localhost:3000/api/v1',
             description: 'Development server',
         },
         {
-            url: 'https://service-staging.revpay.com.br/api/v1/',
+            url: 'http://localhost:3000/api/v1',
             description: 'Staging server',
         },
     ],
@@ -29,9 +28,8 @@ export const OpenAPISpec: OpenAPIV3.Document = {
         userOpenAPiTagSpec,
     ],
     paths: {
-        ...userCreatedOpenAPISpec,
-        ...userLoginOpenAPISpec
+        ...userEndpointsOpenapiSpec
     }
 }
 
-fs.createWriteStream('openapi.json').write(JSON.stringify(OpenAPISpec, null, 2));
+fs.createWriteStream('openapi.json').write(JSON.stringify(openapiSchema, null, 2));

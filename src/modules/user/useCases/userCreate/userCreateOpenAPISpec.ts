@@ -1,24 +1,32 @@
 import {OpenAPIV3} from "openapi-types";
 import {userOpenAPIPathSpec, userOpenAPiTagName} from "../../infra/openapi/userOpenAPiSpec";
-import {internalServerErrorSchema} from "../../../../infra/openapi/internalServerError";
+import {internalServerErrors} from "../../../../infra/openapi/internalServerErrors";
 import {baseOpenAPIJsonResponse, openAPIJsonResponse} from "../../../../infra/openapi/jsonResponse";
-import {guardErrorSchema} from "../../../../infra/openapi/guardError";
+import {guardErrors} from "../../../../infra/openapi/guardErrors";
+import {rateLimitErrors} from "../../../../infra/openapi/rateLimitErrors";
 
-export const userCreatedOpenAPISpec: OpenAPIV3.Document['paths'] = {
+export const userCreateOpenAPISpec: OpenAPIV3.Document['paths'] = {
     [userOpenAPIPathSpec('/create')]: {
         [OpenAPIV3.HttpMethods.POST]: {
             tags: [userOpenAPiTagName],
             description: "Creates a user",
             summary: "Creates a user",
             responses: {
-                ...internalServerErrorSchema,
-                ...guardErrorSchema,
+                ...internalServerErrors,
+                ...guardErrors,
+                ...rateLimitErrors,
                 200: {
                     description: "User was created successfully",
                     content: {
                         ...baseOpenAPIJsonResponse('User was created successfully')
                     }
-                }
+                },
+                409: {
+                    description: 'Email already registered',
+                    content: {
+                        ...baseOpenAPIJsonResponse(),
+                    },
+                },
             },
             requestBody: {
                 required: true,

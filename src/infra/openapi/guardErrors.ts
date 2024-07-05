@@ -1,7 +1,7 @@
 import {OpenAPIV3} from "openapi-types";
 import {openAPIJsonResponse} from "./jsonResponse";
 
-export const guardErrorSchema: OpenAPIV3.ResponsesObject = {
+export const guardErrors: OpenAPIV3.ResponsesObject = {
     422: {
         description: "Guard error",
         content: {

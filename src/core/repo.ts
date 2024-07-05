@@ -97,7 +97,7 @@ export abstract class Repo<Domain extends DomainType<any>> {
      * @return {Promise} - A promise that resolves when the insertion is successful.
      */
     insert(values: InferInsertModel<typeof this.table>) {
-        return this.db.insert(this.table).values(values).execute()
+        return this.db.insert(this.table).values(values).execute();
     }
 
     //@formatter:off

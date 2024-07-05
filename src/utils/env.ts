@@ -24,7 +24,6 @@ interface EnvVariables {
     PEPPER: string;
     REDIS_URL: string;
     JWT_SECRET: string;
-    DEFAULT_ROLE_ID: number;
 }
 
 export const env: EnvVariables = {
@@ -34,5 +33,4 @@ export const env: EnvVariables = {
     PEPPER: getEnv('PEPPER'),
     REDIS_URL: getEnv('REDIS_URL'),
     JWT_SECRET: getEnv('JWT_SECRET'),
-    DEFAULT_ROLE_ID: parseInt(getEnv('DEFAULT_ROLE_ID')),
 };
