@@ -23,6 +23,7 @@ export function handleError(res: Response, error: Error) {
                 message: error.message,
                 ...error.body,
             });
+
         case error instanceof InternalError:
             if (env.NODE_ENV === 'development') {
                 console.error(error);
@@ -32,6 +33,7 @@ export function handleError(res: Response, error: Error) {
                 });
             }
             break;
+
         default:
             const properties = Object.getOwnPropertyNames(error);
             if (properties.includes('sql') && properties.includes('sqlMessage') && properties.includes('code')) {
@@ -42,22 +44,18 @@ export function handleError(res: Response, error: Error) {
             }
             break;
     }
+
+    // Error outside of error boundries
     console.error(error);
     return jsonResponse(res, 500, {message: 'Internal server error'});
 }
 
-/**
- * Handles an HTTP request.
- *
- * @param {DecodedExpressRequest<object | null, object | null>} req - The decoded Express request object.
- * @param {Response} res - The response object.
- * @param {Function} handler - The request handler function.
- * @returns {Promise<any>} - A promise that resolves or rejects with the result of the request handler function.
- */
-export async function handleRequest<iBody extends object | null, iQuery extends object | null>(
+type UseCase = (req: DecodedExpressRequest<any, any>, res: Response) => Promise<any>;
+
+export async function httpController<iBody extends object | null, iQuery extends object | null>(
     req: DecodedExpressRequest<iBody, iQuery>,
     res: Response,
-    handler: Function,
+    useCase: UseCase,
 ) {
     switch (req.headers['content-type']) {
         case 'application/json;charset=utf-8':
@@ -69,32 +67,57 @@ export async function handleRequest<iBody extends object | null, iQuery extends 
     req.queryObject = parse(req.url.split('?')[1]) as iQuery;
 
     try {
-        return await handler(req, res);
+        return await useCase(req, res);
     } catch (error: any) {
         return handleError(res, error);
     }
 }
 
-/**
- * Adds a route to the express router with the specified method, path, and handler.
- *
- * @param {Router} router - The express router object.
- * @param {Method} method - The HTTP method for the route.
- * @param {string} path - The path for the route.
- * @param {Function} handler - The handler function for the route.
- * @param {MiddlewareFunction[]} [middlewares=[]] - An array of middleware functions to be executed before the handler.
- *
- * @return {void}
- */
 export function route<iBody extends object, iQuery extends object>(
     router: Router,
     method: Method,
     path: string,
-    handler: Function,
+    useCase: UseCase,
     middlewares: MiddlewareFunction[] = [],
 ) {
     const wrappedMiddlewares = wrapMiddlewares<iBody, iQuery>(middlewares);
     router[method](path, wrappedMiddlewares, (req: Request, res: Response) =>
-        handleRequest<iBody, iQuery>(req as DecodedExpressRequest<iBody, iQuery>, res, handler),
+        httpController<iBody, iQuery>(req as DecodedExpressRequest<iBody, iQuery>, res, useCase),
     );
+}
+
+export function post<iBody extends object, iQuery extends object>(
+    router: Router,
+    path: string,
+    useCase: UseCase,
+    middlewares: MiddlewareFunction[] = []
+) {
+    route<iBody, iQuery>(router, 'post', path, useCase, middlewares);
+}
+
+export function get<iBody extends object, iQuery extends object>(
+    router: Router,
+    path: string,
+    useCase: UseCase,
+    middlewares: MiddlewareFunction[] = []
+) {
+    route<iBody, iQuery>(router, 'get', path, useCase, middlewares);
+}
+
+export function put<iBody extends object, iQuery extends object>(
+    router: Router,
+    path: string,
+    useCase: UseCase,
+    middlewares: MiddlewareFunction[] = []
+) {
+    route<iBody, iQuery>(router, 'put', path, useCase, middlewares);
+}
+
+export function patch<iBody extends object, iQuery extends object>(
+    router: Router,
+    path: string,
+    useCase: UseCase,
+    middlewares: MiddlewareFunction[] = []
+) {
+    route<iBody, iQuery>(router, 'patch', path, useCase, middlewares);
 }

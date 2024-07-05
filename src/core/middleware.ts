@@ -1,6 +1,6 @@
 import {ErrorRequestHandler, NextFunction, Request, RequestHandler, Response} from 'express';
 import {forEach} from '../utils/iterators';
-import {handleError} from './handleRequest';
+import {handleError} from './handler';
 import {DecodedExpressRequest} from './types/decodedExpressRequest';
 
 /**

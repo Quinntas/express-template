@@ -1,10 +1,10 @@
 import {Router} from 'express';
-import {route} from '../../../../../core/handleRequest';
+import {post} from '../../../../../core/handler';
 import {userCreateUseCase} from '../../../useCases/userCreate/userCreateUseCase';
 import {userLoginUseCase} from '../../../useCases/userLogin/userLoginUseCase';
 
 export const userRouter: Router = Router();
 
-route(userRouter, 'post', '/create', userCreateUseCase);
+post(userRouter, '/create', userCreateUseCase);
 
-route(userRouter, 'post', '/login', userLoginUseCase);
+post(userRouter, '/login', userLoginUseCase);

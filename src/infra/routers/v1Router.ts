@@ -1,5 +1,5 @@
 import {NextFunction, Request, Response, Router} from 'express';
-import {route} from '../../core/handleRequest';
+import {get} from '../../core/handler';
 import {handleMiddleware} from '../../core/middleware';
 import {DecodedExpressRequest} from '../../core/types/decodedExpressRequest';
 import {performanceMiddleware} from '../../modules/shared/infra/http/middlewares/performanceMiddleware';
@@ -18,7 +18,7 @@ v1Router.use((req: Request, res: Response, next: NextFunction) =>
     handleMiddleware<null, null>(req as DecodedExpressRequest<null, null>, res, next, rateLimitMiddleware),
 );
 
-route(v1Router, 'get', '/', healthCheckUseCase);
-route(v1Router, 'get', '/openapi', openapiSchemaUseCase);
+get(v1Router, '/', healthCheckUseCase);
+get(v1Router, '/openapi', openapiSchemaUseCase);
 
 v1Router.use('/users', userRouter);

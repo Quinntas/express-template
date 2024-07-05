@@ -24,7 +24,7 @@ export const userCreateOpenAPISpec: OpenAPIV3.Document['paths'] = {
                 409: {
                     description: 'Email already registered',
                     content: {
-                        ...baseOpenAPIJsonResponse(),
+                        ...baseOpenAPIJsonResponse("Email already registered"),
                     },
                 },
             },
