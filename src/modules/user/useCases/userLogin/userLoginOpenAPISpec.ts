@@ -1,9 +1,7 @@
 import {OpenAPIV3} from 'openapi-types';
-import {guardErrors} from '../../../../infra/openapi/guardErrors';
-import {internalServerErrors} from '../../../../infra/openapi/internalServerErrors';
 import {baseOpenAPIJsonResponse, openAPIJsonResponse} from '../../../../infra/openapi/jsonResponse';
-import {rateLimitErrors} from '../../../../infra/openapi/rateLimitErrors';
 import {userOpenAPIPathSpec, userOpenAPiTagName} from '../../infra/openapi/userOpenAPiSpec';
+import {baseHttpErrors} from "../../../../infra/openapi/baseHttpErrors";
 
 export const userLoginOpenAPISpec: OpenAPIV3.Document['paths'] = {
     [userOpenAPIPathSpec('/login')]: {
@@ -12,9 +10,7 @@ export const userLoginOpenAPISpec: OpenAPIV3.Document['paths'] = {
             description: 'Login a user',
             summary: 'Login a user',
             responses: {
-                ...internalServerErrors,
-                ...guardErrors,
-                ...rateLimitErrors,
+                ...baseHttpErrors,
                 200: {
                     description: 'Login was made successfully',
                     content: {
