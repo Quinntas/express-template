@@ -5,13 +5,13 @@ export const rateLimitErrors: OpenAPIV3.ResponsesObject = {
     401: {
         description: 'Could not get client IP',
         content: {
-            ...baseOpenAPIJsonResponse('Could not get client IP')
+            ...baseOpenAPIJsonResponse('Could not get client IP'),
         },
     },
     429: {
         description: 'Rate limit exceeded',
         content: {
-            ...baseOpenAPIJsonResponse('Rate limit exceeded')
+            ...baseOpenAPIJsonResponse('Rate limit exceeded'),
         },
     },
 };

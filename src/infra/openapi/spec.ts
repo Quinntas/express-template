@@ -1,7 +1,7 @@
-import {OpenAPIV3} from "openapi-types";
-import * as fs from "node:fs";
-import {userOpenAPiTagSpec} from "../../modules/user/infra/openapi/userOpenAPiSpec";
-import {userEndpointsOpenapiSpec} from "../../modules/user/infra/openapi/userEndpointsOpenapiSpec";
+import * as fs from 'node:fs';
+import {OpenAPIV3} from 'openapi-types';
+import {userEndpointsOpenapiSpec} from '../../modules/user/infra/openapi/userEndpointsOpenapiSpec';
+import {userOpenAPiTagSpec} from '../../modules/user/infra/openapi/userOpenAPiSpec';
 
 export const openapiSchema: OpenAPIV3.Document = {
     info: {
@@ -24,12 +24,10 @@ export const openapiSchema: OpenAPIV3.Document = {
         },
     ],
     openapi: '3.0.0',
-    tags: [
-        userOpenAPiTagSpec,
-    ],
+    tags: [userOpenAPiTagSpec],
     paths: {
-        ...userEndpointsOpenapiSpec
-    }
-}
+        ...userEndpointsOpenapiSpec,
+    },
+};
 
 fs.createWriteStream('openapi.json').write(JSON.stringify(openapiSchema, null, 2));

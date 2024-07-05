@@ -20,7 +20,7 @@ export class UserMapper extends Mapper<User> {
             createdAt: raw.createdAt,
             updatedAt: raw.updatedAt,
             id: raw.id,
-        }
+        };
     }
 }
 

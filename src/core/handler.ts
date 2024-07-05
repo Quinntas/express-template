@@ -86,38 +86,18 @@ export function route<iBody extends object, iQuery extends object>(
     );
 }
 
-export function post<iBody extends object, iQuery extends object>(
-    router: Router,
-    path: string,
-    useCase: UseCase,
-    middlewares: MiddlewareFunction[] = []
-) {
+export function post<iBody extends object, iQuery extends object>(router: Router, path: string, useCase: UseCase, middlewares: MiddlewareFunction[] = []) {
     route<iBody, iQuery>(router, 'post', path, useCase, middlewares);
 }
 
-export function get<iBody extends object, iQuery extends object>(
-    router: Router,
-    path: string,
-    useCase: UseCase,
-    middlewares: MiddlewareFunction[] = []
-) {
+export function get<iBody extends object, iQuery extends object>(router: Router, path: string, useCase: UseCase, middlewares: MiddlewareFunction[] = []) {
     route<iBody, iQuery>(router, 'get', path, useCase, middlewares);
 }
 
-export function put<iBody extends object, iQuery extends object>(
-    router: Router,
-    path: string,
-    useCase: UseCase,
-    middlewares: MiddlewareFunction[] = []
-) {
+export function put<iBody extends object, iQuery extends object>(router: Router, path: string, useCase: UseCase, middlewares: MiddlewareFunction[] = []) {
     route<iBody, iQuery>(router, 'put', path, useCase, middlewares);
 }
 
-export function patch<iBody extends object, iQuery extends object>(
-    router: Router,
-    path: string,
-    useCase: UseCase,
-    middlewares: MiddlewareFunction[] = []
-) {
+export function patch<iBody extends object, iQuery extends object>(router: Router, path: string, useCase: UseCase, middlewares: MiddlewareFunction[] = []) {
     route<iBody, iQuery>(router, 'patch', path, useCase, middlewares);
 }

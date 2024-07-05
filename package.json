@@ -9,7 +9,6 @@
     "build": "rimraf dist && tsc && pnpm openapi:generate",
     "start": "node ./dist/src/infra/index.js",
     "test": "echo \"Error: no test specified\" && exit 0",
-    "test:coverage": "vitest run --coverage",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
     "cli": "tsx src/utils/cli/cli.ts",
@@ -38,6 +37,7 @@
     "ws": "^8.16.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.6.0",
     "@total-typescript/ts-reset": "^0.5.1",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@types/body-parser": "^1.19.5",
@@ -51,11 +51,14 @@
     "@types/uuid": "^9.0.8",
     "@types/ws": "^8.5.10",
     "drizzle-kit": "^0.20.14",
+    "eslint": "9.x",
+    "globals": "^15.8.0",
     "husky": "^9.0.11",
     "openapi-types": "^12.1.3",
     "prettier": "^3.2.5",
     "rimraf": "^5.0.5",
     "tsx": "^4.10.5",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "typescript-eslint": "^7.15.0"
   }
 }
