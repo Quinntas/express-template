@@ -6,5 +6,5 @@ export const userTable = dbSchema.table('Users', {
     ...baseColumns,
     email: varchar('email', {length: 191}).notNull(),
     password: varchar('password', {length: 191}).notNull(),
-    role: varchar('password', {length: 191}).notNull(),
+    role: varchar('role', {length: 191}).notNull(),
 });
