@@ -3,14 +3,43 @@ import {Redis} from 'ioredis';
 type RedisTypes = string | number | Buffer | null;
 
 /**
+ * Represents the configuration for caching a value in the Redis store.
+ * @template T - The type of the value to cache.
+ */
+export interface CacheItConfig<T> {
+    expires?: number;
+    key: string;
+    generator: () => Promise<T> | T;
+    serialize: (value: T) => string;
+    deserialize: (value: string) => T;
+}
+
+/**
  * Represents a Redis client for interacting with a Redis store.
  */
 export class RedisClient {
     private client: Redis;
-    private readonly defaultTokenExpiryTime: number = 3600;
+    private readonly defaultTokenExpiryTime: number = 3600; // 1 hour
 
     constructor(url: string) {
         this.client = new Redis(url);
+    }
+
+    /**
+     * Caches a value in the Redis store based on the provided configuration.
+     *
+     * @template T - The type of the value to cache.
+     * @param {CacheItConfig<T>} config - The configuration for caching the value.
+     * @return {Promise<T>} A promise that resolves to the cached value.
+     */
+    public async cacheIt<T>(config: CacheItConfig<T>): Promise<T> {
+        const cacheRes = await this.client.get(config.key);
+        if (!cacheRes) {
+            const res = await config.generator();
+            await this.set(config.key, config.serialize(res), config.expires);
+            return res;
+        }
+        return config.deserialize(cacheRes);
     }
 
     /**

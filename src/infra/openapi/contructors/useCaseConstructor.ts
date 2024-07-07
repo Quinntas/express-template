@@ -51,16 +51,16 @@ export function constructOpenapiUseCaseSchema(config: OpenapiUseCaseSchemaConfig
                         }),
                         requestBody: pattern.requestBody
                             ? {
-                                required: true,
-                                content: {
-                                    'application/json': {
-                                        schema: {
-                                            type: 'object',
-                                            properties: pattern.requestBody.schema,
-                                        },
-                                    },
-                                },
-                            }
+                                  required: true,
+                                  content: {
+                                      'application/json': {
+                                          schema: {
+                                              type: 'object',
+                                              properties: pattern.requestBody.schema,
+                                          },
+                                      },
+                                  },
+                              }
                             : undefined,
                     },
                 };
