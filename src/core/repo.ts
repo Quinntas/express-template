@@ -37,8 +37,6 @@ export abstract class Repo<Domain extends DomainType<any>> {
         this.writeConn = writeConn;
         this.mapper = mapper;
         this.redisClient = redisClient;
-
-        console.log(this.redisClient);
     }
 
     async selectOne<T = typeof this.table>(config: SelectOptions<T>): Promise<Result<Required<Domain>, RepoError | MapperError>> {
@@ -60,19 +58,30 @@ export abstract class Repo<Domain extends DomainType<any>> {
     }
 
     async select<T = typeof this.table>(config: SelectOptions<T>): Promise<Result<UnknownObject[], RepoError>> {
-        let query;
+        if (config.cachingOptions) {
+            const cacheRes = await this.redisClient.get(config.cachingOptions.key);
+            if (cacheRes.ok) return Ok<UnknownObject[]>(JSON.parse(cacheRes.val) as UnknownObject[]);
+        }
 
+        let query;
         if (config.select) query = this.readConn.select(config.select);
         else query = this.readConn.select();
-
         query = query.from(this.table).where(config.where);
 
+        let res
+
         try {
-            return Ok<UnknownObject[]>(await query.execute());
+            res = await query.execute()
         } catch (e: unknown) {
             return Err(new RepoError('Error selecting records.', e as RepoErrorBody));
         }
+
+        if (config.cachingOptions)
+            await this.redisClient.set(config.cachingOptions.key, JSON.stringify(res), config.cachingOptions.expires);
+
+        return Ok(res);
     }
+
 
     /**
      * Inserts a new record into the database table.
