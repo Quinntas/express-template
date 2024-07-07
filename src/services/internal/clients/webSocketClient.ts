@@ -1,5 +1,5 @@
+import {Err, Ok} from 'ts-results';
 import {WebSocket} from 'ws';
-import {InternalError} from '../../../core/errors';
 
 /**
  * A WebSocket service class for establishing and managing WebSocket connections.
@@ -27,10 +27,11 @@ export class WebSocketService {
      * @throws {InternalError} Throws an InternalError if the WebSocket is not open.
      */
     public sendMessage<T>(message: T) {
-        if (this.socket.readyState !== WebSocket.OPEN) throw new InternalError('WebSocket is not open');
+        if (this.socket.readyState !== WebSocket.OPEN) return Err('WebSocket is not open');
         this.socket.send(JSON.stringify(message), (err: any) => {
             if (err) console.log('[WS] Error sending message', err);
         });
+        return Ok.EMPTY;
     }
 
     /**

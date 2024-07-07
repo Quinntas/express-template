@@ -1,5 +1,4 @@
 import winston from 'winston';
-import {env} from '../common/env';
 
 const levels = {
     error: 0,
@@ -28,7 +27,7 @@ const format = winston.format.combine(
 const transports = [new winston.transports.Console()];
 
 const Winston = winston.createLogger({
-    level: env.NODE_ENV === 'development' ? 'debug' : 'warn',
+    level: 'debug',
     levels,
     format,
     transports,

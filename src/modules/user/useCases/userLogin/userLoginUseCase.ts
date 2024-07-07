@@ -1,4 +1,6 @@
+import {Err, Ok} from 'ts-results';
 import {env} from '../../../../common/env';
+import {RepoError, RepoErrorCodes} from '../../../../core/errors';
 import {HttpResponse} from '../../../../core/responses';
 import {DecodedExpressRequest} from '../../../../core/types/decodedExpressRequest';
 import {redisClient} from '../../../../infra/database/redis';
@@ -9,8 +11,7 @@ import {validateUserPassword} from '../../domain/valueObjects/userPassword';
 import {userRepo} from '../../repo';
 import {loginRedisKeyPrefix, loginTokenExpiration} from './userLoginConstants';
 import {PrivateLoginToken, PublicLoginToken, UserLoginDTO, UserLoginResponseDTO} from './userLoginDTO';
-import {invalidEmailOrPassword, userNotFound} from './userLoginErrors';
-import {Err, Ok} from "ts-results";
+import {invalidEmailOrPassword} from './userLoginErrors';
 
 export async function userLoginUseCase(request: DecodedExpressRequest<UserLoginDTO, null>) {
     const email = validateUserEmail(request.bodyObject.email!);
@@ -18,7 +19,10 @@ export async function userLoginUseCase(request: DecodedExpressRequest<UserLoginD
 
     const result = await userRepo.selectByEmail(email);
 
-    if (!result.ok) return Err(userNotFound);
+    if (result.err) {
+        if (result.val instanceof RepoError) if (result.val.errorCode === RepoErrorCodes.ER_NO_RECORD) return Err(invalidEmailOrPassword);
+        return Err(result.val);
+    }
 
     const user = result.unwrap();
 

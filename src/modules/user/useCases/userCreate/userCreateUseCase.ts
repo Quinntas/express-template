@@ -1,4 +1,6 @@
+import {Err, Ok} from 'ts-results';
 import {env} from '../../../../common/env';
+import {RepoErrorCodes} from '../../../../core/errors';
 import {HttpResponse} from '../../../../core/responses';
 import {DecodedExpressRequest} from '../../../../core/types/decodedExpressRequest';
 import {Encryption} from '../../../../utils/encryption';
@@ -8,7 +10,6 @@ import {validateUserPassword} from '../../domain/valueObjects/userPassword';
 import {userRepo} from '../../repo';
 import {UserCreateDTO, UserCreateResponseDTO} from './userCreateDTO';
 import {emailAlreadyExists} from './userCreateErrors';
-import {Err, Ok} from "ts-results";
 
 export async function userCreateUseCase(request: DecodedExpressRequest<UserCreateDTO, null>) {
     const email = validateUserEmail(request.bodyObject.email!);
@@ -18,9 +19,12 @@ export async function userCreateUseCase(request: DecodedExpressRequest<UserCreat
         email,
         password: Encryption.encrypt(password, env.PEPPER),
         role: UserRolesEnum.CLIENT,
-    })
+    });
 
-    if (!res.ok) return Err(emailAlreadyExists);
+    if (!res.ok) {
+        if (res.val.errorCode === RepoErrorCodes.ER_DUP_ENTRY) return Err(emailAlreadyExists);
+        return Err(res.val);
+    }
 
     return Ok<HttpResponse<UserCreateResponseDTO>>({
         statusCode: 201,

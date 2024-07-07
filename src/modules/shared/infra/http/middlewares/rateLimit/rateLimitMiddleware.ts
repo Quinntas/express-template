@@ -14,12 +14,12 @@ export async function rateLimitMiddleware(req: DecodedExpressRequest<null, null>
 
     const redisResult = await redisClient.get(key);
 
-    if (!redisResult) {
+    if (!redisResult.ok) {
         await redisClient.set(key, 1, 60);
         return next();
     }
 
-    const result = parseInt(redisResult);
+    const result = parseInt(redisResult.val);
 
     if (result >= maxRequestsPerMinute) throw new HttpError(429, 'Rate limit exceeded');
 

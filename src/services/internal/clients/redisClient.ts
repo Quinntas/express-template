@@ -1,4 +1,5 @@
 import {Redis} from 'ioredis';
+import {Err, Ok} from 'ts-results';
 
 type RedisTypes = string | number | Buffer | null;
 
@@ -48,35 +49,23 @@ export class RedisClient {
      * @param {string} key - The key of the value to delete.
      * @return {Promise<number>} A promise that resolves to the number of deleted values.
      */
-    public async delete(key: string): Promise<number> {
-        return this.client.del(key);
+    public async delete(key: string) {
+        const res = this.client.del(key);
+        if (!res) return Err.EMPTY;
+        return Ok(res);
     }
 
-    /**
-     * Set a key-value pair in the Redis store with an optional expiry time.
-     * @param {string} key - The key to set in the Redis store.
-     * @param {RedisTypes} value - The value to set in the Redis store.
-     * @param {number} tokenExpiryTime - The optional expiry time for the key, in seconds. Defaults to the default token expiry time.
-     * @throws {Error} Throws an error if the value is null or undefined.
-     * @return {Promise<boolean>} Returns a promise that resolves to true if the key-value pair was set successfully, false otherwise.
-     */
-    public async set(key: string, value: RedisTypes, tokenExpiryTime: number = this.defaultTokenExpiryTime): Promise<boolean> {
+    public async set(key: string, value: RedisTypes, tokenExpiryTime: number = this.defaultTokenExpiryTime) {
         if (!value) throw new Error('Value cannot be null or undefined');
         const reply = await this.client.set(key, value);
-        const ok = reply === 'OK';
-        if (!ok) return false;
+        if (reply === 'OK') return Err.EMPTY;
         await this.client.expire(key, tokenExpiryTime);
-        return ok;
+        return Ok.EMPTY;
     }
 
-    /**
-     * Retrieves the value associated with the specified key from the client.
-     *
-     * @param {string} key - The key for which the value needs to be retrieved.
-     * @returns {Promise<string|null>} - A promise that resolves with the value associated with the key,
-     *                                  or null if the key is not found.
-     */
-    public async get(key: string): Promise<string | null> {
-        return this.client.get(key);
+    public async get(key: string) {
+        const res = await this.client.get(key);
+        if (!res) return Err.EMPTY;
+        return Ok(res);
     }
 }

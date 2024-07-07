@@ -29,17 +29,6 @@ export const userLoginOpenAPISpec = constructOpenapiUseCaseSchema({
                     },
                 },
                 {
-                    code: 404,
-                    description: 'User was not found',
-                    schema: {
-                        message: {
-                            type: 'string',
-                            example: 'User was not found',
-                            default: 'User was not found',
-                        },
-                    },
-                },
-                {
                     code: 401,
                     description: 'Invalid email or password',
                     schema: {

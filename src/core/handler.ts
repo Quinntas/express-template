@@ -1,11 +1,11 @@
 import {Request, Response, Router} from 'express';
 import {parse} from 'querystring';
+import {Result} from 'ts-results';
 import {HttpError, httpErrorHandler} from './errors';
 import {MiddlewareFunction, wrapMiddlewares} from './middleware';
-import {htmlResponse, HttpResponse, jsonResponse, textResponse} from './responses';
+import {HttpResponse, htmlResponse, jsonResponse, textResponse} from './responses';
 import {DecodedExpressRequest} from './types/decodedExpressRequest';
 import {Method} from './types/methods';
-import {Result} from "ts-results";
 
 type UseCaseFunction = (req: DecodedExpressRequest<any, any>, res: Response) => Promise<Result<HttpResponse<any>, HttpError>>;
 
@@ -27,12 +27,11 @@ export async function httpController<iBody extends object | null, iQuery extends
 
     try {
         result = await useCase(req, res);
-    } catch (error: any) {
-        return httpErrorHandler(res, error);
+    } catch (error: unknown) {
+        return httpErrorHandler(res, error as Error);
     }
 
-    if (!result.ok)
-        return httpErrorHandler(res, result.val);
+    if (!result.ok) return httpErrorHandler(res, result.val);
 
     const statusCode = result.val.statusCode ?? 200;
     const contentType = result.val.contentType ?? 'json';

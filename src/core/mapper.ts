@@ -1,4 +1,6 @@
+import {Ok, Result} from 'ts-results';
 import {map} from '../utils/iterators';
+import {MapperError} from './errors';
 import {Domain as DomainType} from './types/domain';
 import {UnknownObject} from './types/json';
 
@@ -8,13 +10,7 @@ import {UnknownObject} from './types/json';
  * @typeparam Domain - The domain object type that this mapper will be converting to/from.
  */
 export abstract class Mapper<Domain extends DomainType<any>> implements Mapper<Domain> {
-    /**
-     * Converts a raw object into a required domain object.
-     *
-     * @param {object} raw - The raw object to convert into a domain object.
-     * @return {Required<Domain>} - The required domain object converted from the raw object.
-     */
-    abstract toDomain(raw: object): Required<Domain>;
+    abstract toDomain(raw: object): Result<Required<Domain>, MapperError>;
 
     /**
      * Converts the provided data to public domain format.
@@ -22,7 +18,7 @@ export abstract class Mapper<Domain extends DomainType<any>> implements Mapper<D
      * @param {Domain} data - The original data to be converted to public domain.
      * @return {Partial<Domain>} - The converted data in public domain format.
      */
-    abstract toPublicDomain(data: Domain): Partial<Domain>;
+    abstract toPublicDomain(data: Domain): Result<Partial<Domain>, MapperError>;
 
     /**
      * Converts an array of raw data objects to an array of Domain objects.
@@ -30,10 +26,12 @@ export abstract class Mapper<Domain extends DomainType<any>> implements Mapper<D
      * @param {any[]} data - The array of raw data objects to be converted.
      * @return {Domain[]} - The array of converted Domain objects.
      */
-    rawToDomainList<T extends UnknownObject[]>(data: T): Domain[] {
-        return map(data, (raw) => {
-            return this.toDomain(raw);
-        });
+    rawToDomainList<T extends UnknownObject[]>(data: T): Result<Domain[], MapperError> {
+        return Ok(
+            map(data, (raw) => {
+                return this.toDomain(raw).unwrap();
+            }),
+        );
     }
 
     /**
@@ -42,10 +40,12 @@ export abstract class Mapper<Domain extends DomainType<any>> implements Mapper<D
      * @param {Domain[]} data - The array of raw data objects to be converted.
      * @return {Domain[]} - The array of domain objects.
      */
-    toDomainList(data: Domain[]): Domain[] {
-        return map(data, (raw) => {
-            return this.toDomain(raw);
-        });
+    toDomainList(data: Domain[]): Result<Domain[], MapperError> {
+        return Ok(
+            map(data, (raw) => {
+                return this.toDomain(raw).unwrap();
+            }),
+        );
     }
 
     /**
@@ -55,9 +55,11 @@ export abstract class Mapper<Domain extends DomainType<any>> implements Mapper<D
      *
      * @return {Partial<Domain>[]} - The converted array of Partial<Domain> objects.
      */
-    toPublicDomainList(data: Domain[]): Partial<Domain>[] {
-        return map(data, (raw) => {
-            return this.toPublicDomain(raw);
-        });
+    toPublicDomainList(data: Domain[]): Result<Partial<Domain>[], MapperError> {
+        return Ok(
+            map(data, (raw) => {
+                return this.toPublicDomain(raw).unwrap();
+            }),
+        );
     }
 }
