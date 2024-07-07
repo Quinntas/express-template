@@ -21,7 +21,8 @@
     "skipLibCheck": true
   },
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "openapi.json"
   ],
   "exclude": [
     "node_modules"

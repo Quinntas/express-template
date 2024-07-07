@@ -1,42 +1,51 @@
 import {OpenAPIV3} from 'openapi-types';
-import {baseHttpErrors} from '../../../../infra/openapi/baseHttpErrors';
-import {baseOpenAPIJsonResponse, openAPIJsonResponse} from '../../../../infra/openapi/jsonResponse';
-import {userOpenAPIPathSpec, userOpenAPiTagName} from '../../infra/openapi/userOpenAPiSpec';
+import {constructOpenapiUseCaseSchema} from '../../../../infra/openapi/contructors/useCaseConstructor';
+import {openapiAppServiceHttpErrorResponses} from '../../../../infra/openapi/defaults/errors/openapiAppServiceHttpErrorResponses';
+import {constructUserOpenapiPath, userOpenAPiTagName} from '../../infra/openapi/userOpenapiSchema';
 
-export const userCreateOpenAPISpec: OpenAPIV3.Document['paths'] = {
-    [userOpenAPIPathSpec('/create')]: {
-        [OpenAPIV3.HttpMethods.POST]: {
+export const userCreateOpenAPISpec = constructOpenapiUseCaseSchema({
+    pathSpec: constructUserOpenapiPath('/create'),
+    patterns: [
+        {
+            method: OpenAPIV3.HttpMethods.POST,
             tags: [userOpenAPiTagName],
             description: 'Creates a user',
             summary: 'Creates a user',
-            responses: {
-                ...baseHttpErrors,
-                200: {
+            responses: [
+                ...openapiAppServiceHttpErrorResponses,
+                {
+                    code: 200,
                     description: 'User was created successfully',
-                    content: {
-                        ...baseOpenAPIJsonResponse('User was created successfully'),
+                    schema: {
+                        message: {
+                            type: 'string',
+                            example: 'User was created successfully',
+                            default: 'User was created successfully',
+                        },
                     },
                 },
-                409: {
+                {
+                    code: 409,
                     description: 'Email already registered',
-                    content: {
-                        ...baseOpenAPIJsonResponse('Email already registered'),
+                    schema: {
+                        message: {
+                            type: 'string',
+                            example: 'Email already registered',
+                            default: 'Email already registered',
+                        },
                     },
                 },
-            },
+            ],
             requestBody: {
-                required: true,
-                content: {
-                    ...openAPIJsonResponse({
-                        email: {
-                            type: 'string',
-                        },
-                        password: {
-                            type: 'string',
-                        },
-                    }),
+                schema: {
+                    email: {
+                        type: 'string',
+                    },
+                    password: {
+                        type: 'string',
+                    },
                 },
             },
         },
-    },
-};
+    ],
+});

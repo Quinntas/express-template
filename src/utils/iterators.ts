@@ -59,6 +59,15 @@ export function find<TElement>(array: TElement[], callback: (value: TElement, in
     return foundElement;
 }
 
+export function mapToObject<T>(arr: T[], fn: (item: T) => any) {
+    return arr.reduce((acc, item) => {
+        return {
+            ...acc,
+            ...fn(item),
+        };
+    }, {});
+}
+
 /**
  * Finds the index of the first element in the array that satisfies the provided testing function.
  *

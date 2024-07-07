@@ -1,9 +1,8 @@
-import * as fs from 'node:fs';
 import {OpenAPIV3} from 'openapi-types';
 import {userEndpointsOpenapiSpec} from '../../modules/user/infra/openapi/userEndpointsOpenapiSpec';
-import {userOpenAPiTagSpec} from '../../modules/user/infra/openapi/userOpenAPiSpec';
+import {userOpenAPiTagObject} from '../../modules/user/infra/openapi/userOpenapiSchema';
 
-export const openapiSchema: OpenAPIV3.Document = {
+export const openapiAppSchema: OpenAPIV3.Document = {
     info: {
         title: 'Express template ',
         description: 'This is the API documentation for the Express template project.',
@@ -24,10 +23,8 @@ export const openapiSchema: OpenAPIV3.Document = {
         },
     ],
     openapi: '3.0.0',
-    tags: [userOpenAPiTagSpec],
+    tags: [userOpenAPiTagObject],
     paths: {
         ...userEndpointsOpenapiSpec,
     },
 };
-
-fs.createWriteStream('openapi.json').write(JSON.stringify(openapiSchema, null, 2));

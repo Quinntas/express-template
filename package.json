@@ -5,7 +5,8 @@
   "main": "src/infra/index.ts",
   "scripts": {
     "dev": "cross-env NODE_ENV=development tsx watch src/infra/index.ts",
-    "build": "rimraf dist && tsc",
+    "build": "pnpm openapi:generate && rimraf dist && tsc",
+    "openapi:generate": "tsx src/infra/openapi/generate.ts",
     "start": "node ./dist/src/infra/index.js",
     "test": "jest ./tests --coverage",
     "db:push": "drizzle-kit push",

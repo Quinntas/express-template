@@ -1,58 +1,66 @@
 import {OpenAPIV3} from 'openapi-types';
-import {baseHttpErrors} from '../../../../infra/openapi/baseHttpErrors';
-import {baseOpenAPIJsonResponse, openAPIJsonResponse} from '../../../../infra/openapi/jsonResponse';
-import {userOpenAPIPathSpec, userOpenAPiTagName} from '../../infra/openapi/userOpenAPiSpec';
+import {constructOpenapiUseCaseSchema} from '../../../../infra/openapi/contructors/useCaseConstructor';
+import {openapiAppServiceHttpErrorResponses} from '../../../../infra/openapi/defaults/errors/openapiAppServiceHttpErrorResponses';
+import {constructUserOpenapiPath, userOpenAPiTagName} from '../../infra/openapi/userOpenapiSchema';
 
-export const userLoginOpenAPISpec: OpenAPIV3.Document['paths'] = {
-    [userOpenAPIPathSpec('/login')]: {
-        [OpenAPIV3.HttpMethods.POST]: {
+export const userLoginOpenAPISpec = constructOpenapiUseCaseSchema({
+    pathSpec: constructUserOpenapiPath('/login'),
+    patterns: [
+        {
+            method: OpenAPIV3.HttpMethods.POST,
             tags: [userOpenAPiTagName],
             description: 'Login a user',
             summary: 'Login a user',
-            responses: {
-                ...baseHttpErrors,
-                200: {
+            responses: [
+                ...openapiAppServiceHttpErrorResponses,
+                {
+                    code: 200,
                     description: 'Login was made successfully',
-                    content: {
-                        ...openAPIJsonResponse({
-                            token: {
-                                type: 'string',
-                            },
-                            expiresIn: {
-                                type: 'number',
-                            },
-                            expireDate: {
-                                type: 'string',
-                            },
-                        }),
+                    schema: {
+                        token: {
+                            type: 'string',
+                        },
+                        expiresIn: {
+                            type: 'number',
+                        },
+                        expireDate: {
+                            type: 'string',
+                        },
                     },
                 },
-                404: {
+                {
+                    code: 404,
                     description: 'User was not found',
-                    content: {
-                        ...baseOpenAPIJsonResponse('User was not found'),
+                    schema: {
+                        message: {
+                            type: 'string',
+                            example: 'User was not found',
+                            default: 'User was not found',
+                        },
                     },
                 },
-                401: {
+                {
+                    code: 401,
                     description: 'Invalid email or password',
-                    content: {
-                        ...baseOpenAPIJsonResponse('Invalid email or password'),
+                    schema: {
+                        message: {
+                            type: 'string',
+                            example: 'Invalid email or password',
+                            default: 'Invalid email or password',
+                        },
                     },
                 },
-            },
+            ],
             requestBody: {
-                required: true,
-                content: {
-                    ...openAPIJsonResponse({
-                        email: {
-                            type: 'string',
-                        },
-                        password: {
-                            type: 'string',
-                        },
-                    }),
+                schema: {
+                    email: {
+                        type: 'string',
+                    },
+                    password: {
+                        type: 'string',
+                    },
                 },
             },
         },
-    },
-};
+    ],
+});
