@@ -1,7 +1,5 @@
-import {Response} from 'express';
 import {env} from '../../../../common/env';
-import {HttpError} from '../../../../core/errors';
-import {jsonResponse} from '../../../../core/responses';
+import {HttpResponse} from '../../../../core/responses';
 import {DecodedExpressRequest} from '../../../../core/types/decodedExpressRequest';
 import {redisClient} from '../../../../infra/database/redis';
 import {Encryption} from '../../../../utils/encryption';
@@ -11,25 +9,29 @@ import {validateUserPassword} from '../../domain/valueObjects/userPassword';
 import {userRepo} from '../../repo';
 import {loginRedisKeyPrefix, loginTokenExpiration} from './userLoginConstants';
 import {PrivateLoginToken, PublicLoginToken, UserLoginDTO, UserLoginResponseDTO} from './userLoginDTO';
+import {invalidEmailOrPassword, userNotFound} from './userLoginErrors';
+import {Err, Ok} from "ts-results";
 
-export async function userLoginUseCase(request: DecodedExpressRequest<UserLoginDTO, null>, response: Response) {
+export async function userLoginUseCase(request: DecodedExpressRequest<UserLoginDTO, null>) {
     const email = validateUserEmail(request.bodyObject.email!);
     const password = validateUserPassword(request.bodyObject.password!);
 
     const result = await userRepo.selectByEmail(email);
 
-    if (!result) throw new HttpError(404, 'User not found');
+    if (!result.ok) return Err(userNotFound);
 
-    const parsedPassword = Encryption.parseEncryptedString(result.password);
+    const user = result.unwrap();
 
-    if (!Encryption.compare(Encryption.encrypt(password, env.PEPPER, parsedPassword.iterations, parsedPassword.salt), result.password))
-        throw new HttpError(401, 'Invalid email or password');
+    const parsedPassword = Encryption.parseEncryptedString(user.password);
+
+    if (!Encryption.compare(Encryption.encrypt(password, env.PEPPER, parsedPassword.iterations, parsedPassword.salt), user.password))
+        return Err(invalidEmailOrPassword);
 
     const expireDate = Math.floor(Date.now() / 1000) + loginTokenExpiration;
 
     const publicTokenObject: PublicLoginToken = {
         user: {
-            pid: result.pid,
+            pid: user.pid,
         },
     };
     const publicToken: string = JWT.sign(publicTokenObject, {
@@ -37,17 +39,19 @@ export async function userLoginUseCase(request: DecodedExpressRequest<UserLoginD
     });
 
     const privateTokenObject: PrivateLoginToken = {
-        user: result,
+        user,
     };
     const privateToken: string = JWT.sign(privateTokenObject, {
         expiresIn: expireDate,
     });
 
-    await redisClient.set(loginRedisKeyPrefix + result.pid, privateToken, loginTokenExpiration);
+    await redisClient.set(loginRedisKeyPrefix + user.pid, privateToken, loginTokenExpiration);
 
-    return jsonResponse<UserLoginResponseDTO>(response, 200, {
-        token: publicToken,
-        expiresIn: loginTokenExpiration,
-        expireDate,
+    return Ok<HttpResponse<UserLoginResponseDTO>>({
+        data: {
+            token: publicToken,
+            expiresIn: loginTokenExpiration,
+            expireDate,
+        },
     });
 }

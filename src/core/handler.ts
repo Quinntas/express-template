@@ -1,11 +1,13 @@
 import {Request, Response, Router} from 'express';
 import {parse} from 'querystring';
-import {httpErrorHandler} from './errors';
+import {HttpError, httpErrorHandler} from './errors';
 import {MiddlewareFunction, wrapMiddlewares} from './middleware';
+import {htmlResponse, HttpResponse, jsonResponse, textResponse} from './responses';
 import {DecodedExpressRequest} from './types/decodedExpressRequest';
 import {Method} from './types/methods';
+import {Result} from "ts-results";
 
-type UseCaseFunction = (req: DecodedExpressRequest<any, any>, res: Response) => Promise<any>;
+type UseCaseFunction = (req: DecodedExpressRequest<any, any>, res: Response) => Promise<Result<HttpResponse<any>, HttpError>>;
 
 export async function httpController<iBody extends object | null, iQuery extends object | null>(
     req: DecodedExpressRequest<iBody, iQuery>,
@@ -21,10 +23,27 @@ export async function httpController<iBody extends object | null, iQuery extends
 
     req.queryObject = parse(req.url.split('?')[1]) as iQuery;
 
+    let result: Result<HttpResponse<any>, HttpError>;
+
     try {
-        return await useCase(req, res);
+        result = await useCase(req, res);
     } catch (error: any) {
         return httpErrorHandler(res, error);
+    }
+
+    if (!result.ok)
+        return httpErrorHandler(res, result.val);
+
+    const statusCode = result.val.statusCode ?? 200;
+    const contentType = result.val.contentType ?? 'json';
+
+    switch (contentType) {
+        case 'json':
+            return jsonResponse(res, statusCode, result.val.data);
+        case 'html':
+            return htmlResponse(res, statusCode, result.val.data);
+        case 'text':
+            return textResponse(res, statusCode, result.val.data);
     }
 }
 

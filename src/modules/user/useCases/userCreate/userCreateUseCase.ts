@@ -1,26 +1,31 @@
-import {Response} from 'express';
 import {env} from '../../../../common/env';
-import {HttpError} from '../../../../core/errors';
-import {jsonResponse} from '../../../../core/responses';
+import {HttpResponse} from '../../../../core/responses';
 import {DecodedExpressRequest} from '../../../../core/types/decodedExpressRequest';
 import {Encryption} from '../../../../utils/encryption';
 import {UserRolesEnum} from '../../domain/user';
 import {validateUserEmail} from '../../domain/valueObjects/userEmail';
 import {validateUserPassword} from '../../domain/valueObjects/userPassword';
 import {userRepo} from '../../repo';
-import {UserCreateDTO} from './userCreateDTO';
+import {UserCreateDTO, UserCreateResponseDTO} from './userCreateDTO';
+import {emailAlreadyExists} from './userCreateErrors';
+import {Err, Ok} from "ts-results";
 
-export async function userCreateUseCase(request: DecodedExpressRequest<UserCreateDTO, null>, response: Response) {
+export async function userCreateUseCase(request: DecodedExpressRequest<UserCreateDTO, null>) {
     const email = validateUserEmail(request.bodyObject.email!);
     const password = validateUserPassword(request.bodyObject.password!);
 
-    const result = await userRepo.insert({
+    const res = await userRepo.insert({
         email,
         password: Encryption.encrypt(password, env.PEPPER),
         role: UserRolesEnum.CLIENT,
+    })
+
+    if (!res.ok) return Err(emailAlreadyExists);
+
+    return Ok<HttpResponse<UserCreateResponseDTO>>({
+        statusCode: 201,
+        data: {
+            message: 'User created successfully',
+        },
     });
-
-    if (!result) throw new HttpError(500, 'Error creating user');
-
-    return jsonResponse(response, 201, {message: 'User created successfully'});
 }

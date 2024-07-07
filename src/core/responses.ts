@@ -1,6 +1,18 @@
 import {Response} from 'express';
 
 /**
+ * The HttpResponse type is a generic type that is used to define the structure of the response object.
+ * Status code defaults to 200, and content type defaults to 'json'.
+ *
+ * @template T - The type of the data object in the response.
+ */
+export interface HttpResponse<T> {
+    data: T;
+    statusCode?: number;
+    contentType?: 'json' | 'text' | 'html';
+}
+
+/**
  * Returns the provided object as is.
  *
  * @template T - The type of the object.

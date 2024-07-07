@@ -1,21 +1,31 @@
-import {Response} from 'express';
-import {readFile} from 'node:fs';
-import {HttpError} from '../../../../core/errors';
-import {jsonResponse} from '../../../../core/responses';
-import {DecodedExpressRequest} from '../../../../core/types/decodedExpressRequest';
+import {existsSync, readFileSync} from 'node:fs';
+import {HttpResponse} from '../../../../core/responses';
+import {errorParsingFile, errorReadingFile} from './openapiSchemaErrors';
+import {UnknownObject} from "../../../../core/types/json";
+import {Err, Ok, Result} from "ts-results";
 
-export async function openapiSchemaUseCase(_req: DecodedExpressRequest<null, null>, res: Response) {
-    let openapiSchema: unknown | null = null;
+function readFile(path: string): Result<string, 'Invalid path'> {
+    if (existsSync(path)) {
+        return Ok(readFileSync(path).toString());
+    } else {
+        return Err('Invalid path');
+    }
+}
 
-    readFile('openapi.json', 'utf8', (err, data) => {
-        if (err) {
-            console.error(err);
-            throw new HttpError(500, 'Error reading openapi.json file');
-        }
-        openapiSchema = JSON.parse(data);
+export async function openapiSchemaUseCase() {
+    const result = readFile('openapi.json');
+
+    if (!result.ok)
+        return Err(errorReadingFile);
+
+    let openapiSchema: UnknownObject;
+    try {
+        openapiSchema = JSON.parse(result.unwrap()) as UnknownObject;
+    } catch (error) {
+        return Err(errorParsingFile);
+    }
+
+    return Ok<HttpResponse<typeof openapiSchema>>({
+        data: openapiSchema,
     });
-
-    if (!openapiSchema) throw new HttpError(500, 'Error reading openapi.json file');
-
-    return jsonResponse(res, 200, openapiSchema);
 }

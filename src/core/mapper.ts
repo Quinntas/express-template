@@ -1,5 +1,6 @@
 import {map} from '../utils/iterators';
 import {Domain as DomainType} from './types/domain';
+import {UnknownObject} from './types/json';
 
 /**
  * BaseMapper class is an abstract class that provides basic mapping functionality for converting
@@ -29,7 +30,7 @@ export abstract class Mapper<Domain extends DomainType<any>> implements Mapper<D
      * @param {any[]} data - The array of raw data objects to be converted.
      * @return {Domain[]} - The array of converted Domain objects.
      */
-    rawToDomainList(data: any[]): Domain[] {
+    rawToDomainList<T extends UnknownObject[]>(data: T): Domain[] {
         return map(data, (raw) => {
             return this.toDomain(raw);
         });

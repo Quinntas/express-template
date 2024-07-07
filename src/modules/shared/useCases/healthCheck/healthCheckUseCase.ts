@@ -1,7 +1,11 @@
-import {Response} from 'express';
-import {jsonResponse} from '../../../../core/responses';
-import {DecodedExpressRequest} from '../../../../core/types/decodedExpressRequest';
+import {HttpResponse} from '../../../../core/responses';
+import {HealthCheckResponseDTO} from './healthCheckDTO';
+import {Ok} from "ts-results";
 
-export async function healthCheckUseCase(_req: DecodedExpressRequest<null, null>, res: Response) {
-    return jsonResponse(res, 200, {message: 'ok'});
+export async function healthCheckUseCase() {
+    return Ok<HttpResponse<HealthCheckResponseDTO>>({
+        data: {
+            message: 'ok',
+        },
+    });
 }
