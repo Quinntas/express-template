@@ -1,3 +1,3 @@
-import {UserMapper} from "./userMapper";
+import {UserMapper} from './userMapper';
 
 export const userMapper = new UserMapper();

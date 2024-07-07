@@ -1,3 +1,7 @@
+import {Response} from 'express';
+import {env} from '../common/env';
+import {jsonResponse} from './responses';
+
 /**
  * Represents an HTTP error.
  * @extends Error
@@ -52,4 +56,40 @@ export class GuardError extends HttpError {
         this.message = message;
         this.name = 'GuardError';
     }
+}
+
+export function httpErrorHandler(res: Response, error: Error) {
+    switch (true) {
+        case error instanceof HttpError:
+            console.error(error);
+            return jsonResponse(res, error.code, {
+                message: error.message,
+                ...error.body,
+            });
+
+        case error instanceof InternalError:
+            if (env.NODE_ENV === 'development') {
+                console.error(error);
+                return jsonResponse(res, 500, {
+                    message: error.message,
+                    ...error.body,
+                });
+            }
+            break;
+
+        default: {
+            const properties = Object.getOwnPropertyNames(error);
+            if (properties.includes('sql') && properties.includes('sqlMessage') && properties.includes('code')) {
+                if ((error as any)['code'] === 'ER_DUP_ENTRY')
+                    return jsonResponse(res, 409, {
+                        message: error.message,
+                    });
+            }
+            break;
+        }
+    }
+
+    // Error outside of error boundries
+    console.error(error);
+    return jsonResponse(res, 500, {message: 'Internal server error'});
 }

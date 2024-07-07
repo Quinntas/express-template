@@ -1,6 +1,6 @@
 import {ErrorRequestHandler, NextFunction, Request, RequestHandler, Response} from 'express';
 import {forEach} from '../utils/iterators';
-import {handleError} from './handler';
+import {httpErrorHandler} from './errors';
 import {DecodedExpressRequest} from './types/decodedExpressRequest';
 
 /**
@@ -24,7 +24,7 @@ export async function middlewareHandler<iBody extends object | null, iQuery exte
     try {
         return await middleware(req, res, next);
     } catch (error: any) {
-        return handleError(res, error);
+        return httpErrorHandler(res, error);
     }
 }
 

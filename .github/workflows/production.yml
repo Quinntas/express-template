@@ -1,37 +1,41 @@
 name: Production Deployment
 
 on:
-    push:
-        branches:
-            - main
+  push:
+    branches:
+      - main
 
 jobs:
-    build-and-test:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v2
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-            - name: Cache pnpm
-              uses: actions/cache@v2
-              with:
-                  path: ~/.npm
-                  key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
-                  restore-keys: |
-                      ${{ runner.os }}-node-
+      - name: Cache pnpm
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
-            - name: Install dependencies
-              run: |
-                  if ! command -v pnpm &> /dev/null; then
-                    echo "Installing pnpm globally..."
-                    npm install -g pnpm
-                  fi
-                  pnpm install --no-frozen-lockfile
+      - name: Install dependencies
+        run: |
+          if ! command -v pnpm &> /dev/null; then
+            echo "Installing pnpm globally..."
+            npm install -g pnpm
+          fi
+          pnpm install --no-frozen-lockfile 
 
-            - name: Build Service
-              run: |
-                  pnpm build
+      - name: Lint Service
+        run: |
+          pnpm lint
 
-            - name: Test Service
-              run: |
-                  pnpm test
+      - name: Build Service
+        run: |
+          pnpm build
+
+      - name: Test Service
+        run: |
+          pnpm test

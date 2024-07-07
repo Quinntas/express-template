@@ -1,7 +1,7 @@
 import {InferInsertModel, SQL} from 'drizzle-orm';
 import {MySql2Database} from 'drizzle-orm/mysql2';
 import {MySqlTable} from 'drizzle-orm/mysql-core';
-import {RedisClient} from '../utils/redisClient';
+import {RedisClient} from '../services/internal/clients/redisClient';
 import {Mapper} from './mapper';
 import {Domain as DomainType} from './types/domain';
 

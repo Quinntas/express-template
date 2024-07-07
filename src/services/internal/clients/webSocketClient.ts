@@ -1,5 +1,5 @@
 import {WebSocket} from 'ws';
-import {InternalError} from '../core/errors';
+import {InternalError} from '../../../core/errors';
 
 /**
  * A WebSocket service class for establishing and managing WebSocket connections.

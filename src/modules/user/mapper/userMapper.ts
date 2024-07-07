@@ -23,4 +23,3 @@ export class UserMapper extends Mapper<User> {
         };
     }
 }
-

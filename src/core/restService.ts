@@ -1,7 +1,7 @@
 /**
  * BaseHttpService is an abstract class that provides common functionality for making HTTP requests.
  */
-export abstract class BaseHttpService {
+export abstract class RestService {
     public url: string;
 
     protected constructor(url: string) {

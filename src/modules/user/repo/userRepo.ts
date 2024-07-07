@@ -4,7 +4,7 @@ import {db} from '../../../infra/database/mysql';
 import {redisClient} from '../../../infra/database/redis';
 import {User} from '../domain/user';
 import {userTable} from '../infra/database/userTable';
-import {userMapper} from "../mapper";
+import {userMapper} from '../mapper';
 
 export class UserRepo extends Repo<User> {
     constructor() {
@@ -15,4 +15,3 @@ export class UserRepo extends Repo<User> {
         return this.selectOne(eq(userTable.email, email));
     }
 }
-

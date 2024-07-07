@@ -3,7 +3,7 @@ import compression from 'compression';
 import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet';
-import {env} from '../../utils/env';
+import {env} from '../../common/env';
 import {morganMiddleware} from '../../utils/morgan';
 import {v1Router} from '../routers/v1Router';
 import {compressionOptions, corsOptions} from './config';

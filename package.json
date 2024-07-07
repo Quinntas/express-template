@@ -7,7 +7,7 @@
     "dev": "cross-env NODE_ENV=development tsx watch src/infra/index.ts",
     "build": "rimraf dist && tsc",
     "start": "node ./dist/src/infra/index.js",
-    "test": "jest ./tests",
+    "test": "jest ./tests --coverage",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
     "cli": "tsx src/utils/cli/cli.ts",

@@ -28,7 +28,7 @@ export function forEach<TElement>(array: TElement[], callback: (value: TElement,
  * @return {TResult[]} - A new array with the mapped elements.
  */
 export function map<TElement, TResult>(array: TElement[], callback: (value: TElement, index: number) => TResult): TResult[] {
-    let result: TResult[] = [];
+    const result: TResult[] = [];
     forEach(array, (value, index) => {
         const callRes = callback(value, index);
         if (callRes !== undefined && callRes !== null) result.push(callRes);

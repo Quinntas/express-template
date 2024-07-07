@@ -1,16 +1,16 @@
 import {Response} from 'express';
+import {env} from '../../../../common/env';
 import {HttpError} from '../../../../core/errors';
 import {jsonResponse} from '../../../../core/responses';
 import {DecodedExpressRequest} from '../../../../core/types/decodedExpressRequest';
 import {redisClient} from '../../../../infra/database/redis';
 import {Encryption} from '../../../../utils/encryption';
-import {env} from '../../../../utils/env';
 import {JWT} from '../../../../utils/jsonWebToken';
 import {validateUserEmail} from '../../domain/valueObjects/userEmail';
 import {validateUserPassword} from '../../domain/valueObjects/userPassword';
+import {userRepo} from '../../repo';
 import {loginRedisKeyPrefix, loginTokenExpiration} from './userLoginConstants';
 import {PrivateLoginToken, PublicLoginToken, UserLoginDTO, UserLoginResponseDTO} from './userLoginDTO';
-import {userRepo} from "../../repo";
 
 export async function userLoginUseCase(request: DecodedExpressRequest<UserLoginDTO, null>, response: Response) {
     const email = validateUserEmail(request.bodyObject.email!);

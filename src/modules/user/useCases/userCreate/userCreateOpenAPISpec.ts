@@ -1,7 +1,7 @@
 import {OpenAPIV3} from 'openapi-types';
+import {baseHttpErrors} from '../../../../infra/openapi/baseHttpErrors';
 import {baseOpenAPIJsonResponse, openAPIJsonResponse} from '../../../../infra/openapi/jsonResponse';
 import {userOpenAPIPathSpec, userOpenAPiTagName} from '../../infra/openapi/userOpenAPiSpec';
-import {baseHttpErrors} from "../../../../infra/openapi/baseHttpErrors";
 
 export const userCreateOpenAPISpec: OpenAPIV3.Document['paths'] = {
     [userOpenAPIPathSpec('/create')]: {
@@ -20,7 +20,7 @@ export const userCreateOpenAPISpec: OpenAPIV3.Document['paths'] = {
                 409: {
                     description: 'Email already registered',
                     content: {
-                        ...baseOpenAPIJsonResponse('Email already registered')
+                        ...baseOpenAPIJsonResponse('Email already registered'),
                     },
                 },
             },

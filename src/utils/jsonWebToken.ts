@@ -1,6 +1,6 @@
 import jwt, {DecodeOptions, SignOptions} from 'jsonwebtoken';
+import {env} from '../common/env';
 import {InternalError} from '../core/errors';
-import {env} from './env';
 
 export namespace JWT {
     /**
