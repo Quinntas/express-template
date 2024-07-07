@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Default",
   "compilerOptions": {
-    "outDir": "./dist",
+    "outDir": "./dist/src",
     "lib": [
       "ES2023"
     ],
@@ -20,6 +20,9 @@
     "noImplicitReturns": true,
     "skipLibCheck": true
   },
+  "include": [
+    "src/**/*.ts"
+  ],
   "exclude": [
     "node_modules"
   ]
