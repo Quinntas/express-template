@@ -1,10 +1,12 @@
 import {OpenAPIV3} from 'openapi-types';
 import {constructOpenapiUseCaseSchema} from '../../../../infra/openapi/contructors/useCaseConstructor';
-import {openapiAppServiceHttpErrorResponses} from '../../../../infra/openapi/defaults/errors/openapiAppServiceHttpErrorResponses';
+import {
+    openapiAppServiceHttpErrorResponses
+} from '../../../../infra/openapi/defaults/errors/openapiAppServiceHttpErrorResponses';
 import {constructUserOpenapiPath, userOpenAPiTagName} from '../../infra/openapi/userOpenapiSchema';
 
 export const userCreateOpenAPISpec = constructOpenapiUseCaseSchema({
-    pathSpec: constructUserOpenapiPath('/create'),
+    path: constructUserOpenapiPath('/create'),
     patterns: [
         {
             method: OpenAPIV3.HttpMethods.POST,

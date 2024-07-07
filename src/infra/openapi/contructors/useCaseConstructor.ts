@@ -10,7 +10,7 @@ export interface OpenapiUseCaseSchemaConfigResponse {
 }
 
 export type OpenapiUseCaseSchemaConfig = {
-    pathSpec: string;
+    path: string;
     patterns: {
         method: OpenAPIV3.HttpMethods;
         tags: string[];
@@ -27,7 +27,7 @@ export type OpenapiUseCaseSchemaConfig = {
 
 export function constructOpenapiUseCaseSchema(config: OpenapiUseCaseSchemaConfig) {
     return {
-        [config.pathSpec]: {
+        [config.path]: {
             ...mapToObject(config.patterns, (pattern) => {
                 return {
                     [pattern.method]: {
@@ -51,16 +51,16 @@ export function constructOpenapiUseCaseSchema(config: OpenapiUseCaseSchemaConfig
                         }),
                         requestBody: pattern.requestBody
                             ? {
-                                  required: true,
-                                  content: {
-                                      'application/json': {
-                                          schema: {
-                                              type: 'object',
-                                              properties: pattern.requestBody.schema,
-                                          },
-                                      },
-                                  },
-                              }
+                                required: true,
+                                content: {
+                                    'application/json': {
+                                        schema: {
+                                            type: 'object',
+                                            properties: pattern.requestBody.schema,
+                                        },
+                                    },
+                                },
+                            }
                             : undefined,
                     },
                 };
