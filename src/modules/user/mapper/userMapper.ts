@@ -24,4 +24,3 @@ export class UserMapper extends Mapper<User> {
     }
 }
 
-export const userMapper = new UserMapper();

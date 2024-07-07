@@ -8,9 +8,9 @@ import {env} from '../../../../utils/env';
 import {JWT} from '../../../../utils/jsonWebToken';
 import {validateUserEmail} from '../../domain/valueObjects/userEmail';
 import {validateUserPassword} from '../../domain/valueObjects/userPassword';
-import {userRepo} from '../../repo/userRepo';
 import {loginRedisKeyPrefix, loginTokenExpiration} from './userLoginConstants';
 import {PrivateLoginToken, PublicLoginToken, UserLoginDTO, UserLoginResponseDTO} from './userLoginDTO';
+import {userRepo} from "../../repo";
 
 export async function userLoginUseCase(request: DecodedExpressRequest<UserLoginDTO, null>, response: Response) {
     const email = validateUserEmail(request.bodyObject.email!);

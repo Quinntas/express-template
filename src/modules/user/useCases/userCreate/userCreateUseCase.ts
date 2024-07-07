@@ -7,8 +7,8 @@ import {env} from '../../../../utils/env';
 import {UserRolesEnum} from '../../domain/user';
 import {validateUserEmail} from '../../domain/valueObjects/userEmail';
 import {validateUserPassword} from '../../domain/valueObjects/userPassword';
-import {userRepo} from '../../repo/userRepo';
 import {UserCreateDTO} from './userCreateDTO';
+import {userRepo} from "../../repo";
 
 export async function userCreateUseCase(request: DecodedExpressRequest<UserCreateDTO, null>, response: Response) {
     const email = validateUserEmail(request.bodyObject.email!);
