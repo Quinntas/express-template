@@ -3,7 +3,7 @@ import {parse} from 'querystring';
 import {Result} from 'ts-results';
 import {HttpError, httpErrorHandler} from './errors';
 import {MiddlewareFunction, wrapMiddlewares} from './middleware';
-import {HttpResponse, htmlResponse, jsonResponse, textResponse} from './responses';
+import {htmlResponse, HttpResponse, jsonResponse, textResponse} from './responses';
 import {DecodedExpressRequest} from './types/decodedExpressRequest';
 import {Method} from './types/methods';
 
@@ -28,7 +28,7 @@ export async function httpController<iBody extends object | null, iQuery extends
     try {
         result = await useCase(req, res);
     } catch (error: unknown) {
-        return httpErrorHandler(res, error as Error);
+        return httpErrorHandler(res, error);
     }
 
     if (!result.ok) return httpErrorHandler(res, result.val);

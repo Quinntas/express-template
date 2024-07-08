@@ -23,7 +23,7 @@ export async function middlewareHandler<iBody extends object | null, iQuery exte
 ) {
     try {
         return await middleware(req, res, next);
-    } catch (error: any) {
+    } catch (error: unknown) {
         return httpErrorHandler(res, error);
     }
 }

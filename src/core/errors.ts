@@ -95,7 +95,7 @@ export class RepoError extends InternalError {
     }
 }
 
-export function httpErrorHandler<T extends Error>(res: Response, error: T) {
+export function httpErrorHandler(res: Response, error: unknown) {
     if (env.NODE_ENV === 'development') console.error(error);
 
     switch (true) {
