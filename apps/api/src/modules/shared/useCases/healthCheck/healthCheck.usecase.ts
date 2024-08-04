@@ -1,5 +1,5 @@
 import {Ok} from 'ts-results';
-import {HttpResponse} from '../../../../lib/responses';
+import {HttpResponse} from '../../../../lib/web/responses';
 import {HealthCheckResponseDTO} from './healthCheck.dto';
 
 export async function healthCheckUsecase() {

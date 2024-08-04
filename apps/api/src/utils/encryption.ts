@@ -1,6 +1,6 @@
 import {createHash, pbkdf2Sync, randomBytes, timingSafeEqual} from 'crypto';
 import {Err, Ok} from 'ts-results';
-import {InternalError} from '../lib/errors';
+import {InternalError} from '../lib/web/errors';
 
 export namespace Encryption {
     export function parseEncryptedString(password: string) {

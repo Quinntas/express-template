@@ -1,7 +1,6 @@
 import {Redis} from 'ioredis';
 import {Err, Ok} from 'ts-results';
-
-type RedisTypes = string | number | Buffer | null;
+import {CacheService, CacheTypes} from '../../../lib/services/cacheService';
 
 /**
  * Represents the configuration for caching a value in the Redis store.
@@ -18,11 +17,12 @@ export interface CacheItConfig<T> {
 /**
  * Represents a Redis client for interacting with a Redis store.
  */
-export class RedisClient {
+export class RedisClient extends CacheService {
     public client: Redis;
     private readonly defaultTokenExpiryTime: number = 3600; // 1 hour
 
     constructor(url: string) {
+        super();
         this.client = new Redis(url);
     }
 
@@ -50,12 +50,12 @@ export class RedisClient {
      * @return {Promise<number>} A promise that resolves to the number of deleted values.
      */
     public async delete(key: string) {
-        const res = this.client.del(key);
+        const res = await this.client.del(key);
         if (!res) return Err.EMPTY;
         return Ok(res);
     }
 
-    public async set(key: string, value: RedisTypes, tokenExpiryTime: number = this.defaultTokenExpiryTime) {
+    public async set(key: string, value: CacheTypes, tokenExpiryTime: number = this.defaultTokenExpiryTime) {
         if (!value) throw new Error('Value cannot be null or undefined');
         const reply = await this.client.set(key, value);
         if (reply === 'OK') return Err.EMPTY;

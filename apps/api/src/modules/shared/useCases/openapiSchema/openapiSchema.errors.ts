@@ -1,4 +1,4 @@
-import {HttpError} from '../../../../lib/errors';
+import {HttpError} from '../../../../lib/web/errors';
 
 export const errorReadingFile = new HttpError(500, 'Error reading file');
 

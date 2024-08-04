@@ -1,4 +1,4 @@
-import {Domain} from '../../../../lib/types/domain';
+import {Domain} from '../../../../lib/ddd/domain';
 import {userTable} from '../infra/database/user.table';
 
 export enum UserRolesEnum {

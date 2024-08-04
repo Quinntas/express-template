@@ -1,19 +1,22 @@
 import {Err, Ok, Result} from 'ts-results';
 import {env} from '../../../../../common/env';
-import {redisClient} from '../../../../../infra/connections/redis';
-import {GuardError, HttpError, RepoError, RepoErrorCodes} from '../../../../../lib/errors';
-import {DTO} from '../../../../../lib/types/dto';
+import {DTO} from '../../../../../lib/ddd/dto';
+import {CacheService} from '../../../../../lib/services/cacheService';
+import {GuardError, HttpError, RepoError, RepoErrorCodes} from '../../../../../lib/web/errors';
 import {Encryption} from '../../../../../utils/encryption';
 import {JWT} from '../../../../../utils/jsonWebToken';
-import {validateUserEmail} from '../../domain/valueObjects/user.email.valueObject';
-import {validateUserPassword} from '../../domain/valueObjects/user.password.valueObject';
+import {UserEmail} from '../../domain/valueObjects/user.email.valueObject';
+import {UserPassword} from '../../domain/valueObjects/user.password.valueObject';
 import {userRepo} from '../../repo';
 import {loginRedisKeyPrefix, loginTokenExpiration} from './userLogin.constants';
 import {PrivateLoginToken, PublicLoginToken, UserLoginDto, UserLoginResponseDTO} from './userLogin.dto';
 import {invalidEmailOrPassword} from './userLogin.errors';
 
-export async function userLoginUsecase(request: DTO<UserLoginDto>): Promise<Result<UserLoginResponseDTO, HttpError | GuardError | RepoError>> {
-    const guardRes = Result.all(validateUserEmail(request.data.email), validateUserPassword(request.data.password));
+export async function userLoginUsecase(
+    request: DTO<UserLoginDto>,
+    cacheService: CacheService,
+): Promise<Result<UserLoginResponseDTO, HttpError | GuardError | RepoError>> {
+    const guardRes = Result.all(UserEmail.validate(request.data.email), UserPassword.validate(request.data.password));
     if (!guardRes.ok) return Err(guardRes.val);
 
     const result = await userRepo.selectByEmail(guardRes.val[0]);
@@ -48,7 +51,7 @@ export async function userLoginUsecase(request: DTO<UserLoginDto>): Promise<Resu
         expiresIn: expireDate,
     });
 
-    await redisClient.set(loginRedisKeyPrefix + user.pid, privateToken, loginTokenExpiration);
+    await cacheService.set(loginRedisKeyPrefix + user.pid, privateToken, loginTokenExpiration);
 
     return Ok<UserLoginResponseDTO>({
         token: publicToken,

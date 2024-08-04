@@ -1,5 +1,5 @@
 import {eq} from 'drizzle-orm';
-import {Repo, RepoConfig} from '../../../../lib/repo';
+import {Repo, RepoConfig} from '../../../../lib/ddd/repo';
 import {User} from '../domain/user';
 import {userTable} from '../infra/database/user.table';
 

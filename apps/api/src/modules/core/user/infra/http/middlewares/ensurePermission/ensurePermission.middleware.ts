@@ -1,7 +1,7 @@
 import {NextFunction, Response} from 'express';
 import {Err, Ok} from 'ts-results';
 import {forEach} from 'typescript-utils/src/iterators';
-import {HttpError} from '../../../../../../../lib/errors';
+import {HttpError} from '../../../../../../../lib/web/errors';
 import {UserRolesEnum} from '../../../../domain/user';
 import {UserDecodedExpressRequest} from '../../user.decodedExpressRequest';
 

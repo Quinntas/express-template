@@ -1,5 +1,5 @@
 import {Ok} from 'ts-results';
-import {EventDTO} from '../../../../../lib/types/event';
+import {EventDTO} from '../../../../../lib/event';
 import {log} from '../../../../shared/infra/log';
 import {UserCreatedEventDto} from './userCreated.event.dto';
 

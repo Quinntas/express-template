@@ -1,32 +1,21 @@
 import {Ok} from 'ts-results';
-import {againstBadFormat, againstNotBetween, againstNotString, againstNullOrUndefined} from '../../../../../lib/guard';
-import {pipe} from '../../../../../utils/pipe';
+import {pipe} from 'typescript-utils/src/pipe';
+import {againstBadFormat} from '../../../../../lib/ddd/guard';
+import {stringGuardPipeline} from '../../../../../lib/pipelines/string.guard.pipeline';
 
-// caio@gmail.com - valid
-// caio@gmail - valid
-// caio - invalid
+export namespace UserEmail {
+    export const emailRegex = /^\S+@\S+\.\S+$/;
+    export const key = 'email';
 
-const emailRegex = /^\S+@\S+\.\S+$/;
-
-export function validateUserEmail(email?: string) {
-    return pipe(
-        email,
-        (email) => againstNullOrUndefined('email', email),
-        (res) => {
-            if (!res.ok) return res;
-            return againstNotString('email', email);
-        },
-        (res) => {
-            if (!res.ok) return res;
-            return againstNotBetween('email', res.val, 1, 191);
-        },
-        (res) => {
-            if (!res.ok) return res;
-            return againstBadFormat('email', res.val, emailRegex);
-        },
-        (res) => {
-            if (!res.ok) return res;
-            return Ok<string>(res.val);
-        },
-    );
+    export function validate(value: unknown) {
+        return pipe(stringGuardPipeline(key, 1, 191))
+            .pipe((res) => {
+                if (!res.ok) return res;
+                return againstBadFormat(key, res.val, emailRegex);
+            })
+            .pipe((res) => {
+                if (!res.ok) return res;
+                return Ok(res.val);
+            })(value);
+    }
 }

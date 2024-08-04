@@ -34,7 +34,7 @@ By default, usecases are **not** routes, they are just a piece of the domain.
 `xxxx.controller.ts`
 
 - If the useCase will be used as a route, it should have a controller, must obey the following type:
-    - [Controller](../src/lib/types/controller.ts)
+    - [Controller](../src/lib/web/controller.ts)
     - Example: [User Login](../src/modules/user/useCases/userLogin/userLogin.controller.ts)
 
 #### Usecase
@@ -42,5 +42,5 @@ By default, usecases are **not** routes, they are just a piece of the domain.
 `xxxx.usecase.ts`
 
 - The useCase itself, must obey the following type:
-    - [UseCaseType](../src/lib/types/useCase.ts)
+    - [UseCaseType](../src/lib/ddd/useCase.ts)
     - Example: [User Login](../src/modules/user/useCases/userLogin/userLogin.usecase.ts)

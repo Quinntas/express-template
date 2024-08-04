@@ -1,4 +1,4 @@
-import {Domain} from '../../../../lib/types/domain';
+import {Domain} from '../../../../lib/ddd/domain';
 import {logTable} from '../infra/database/log.table';
 
 export enum LogLevels {

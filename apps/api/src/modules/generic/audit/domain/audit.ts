@@ -1,4 +1,4 @@
-import {Domain} from '../../../../lib/types/domain';
+import {Domain} from '../../../../lib/ddd/domain';
 import {auditTable} from '../infra/database/audit.table';
 
 export interface AuditData<T> {

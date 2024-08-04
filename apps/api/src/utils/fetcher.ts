@@ -1,6 +1,6 @@
 import {Err, Ok, Result} from 'ts-results';
 import {map} from 'typescript-utils/src/iterators';
-import {Method} from '../lib/types/methods';
+import {Method} from '../lib/web/methods';
 
 interface RequestRetryDTO {
     count: number;

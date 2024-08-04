@@ -1,7 +1,7 @@
 import {existsSync, readFileSync} from 'node:fs';
 import {Err, Ok, Result} from 'ts-results';
-import {HttpResponse} from '../../../../lib/responses';
-import {UnknownObject} from '../../../../lib/types/json';
+import {UnknownObject} from '../../../../lib/web/json';
+import {HttpResponse} from '../../../../lib/web/responses';
 import {errorParsingFile, errorReadingFile} from './openapiSchema.errors';
 
 function readFile(path: string): Result<string, 'Invalid path'> {

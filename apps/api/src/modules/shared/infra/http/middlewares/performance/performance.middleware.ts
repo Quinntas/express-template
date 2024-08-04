@@ -1,6 +1,6 @@
 import {NextFunction, Response} from 'express';
 import {Ok} from 'ts-results';
-import {DecodedExpressRequest} from '../../../../../../lib/types/decodedExpressRequest';
+import {DecodedExpressRequest} from '../../../../../../lib/web/decodedExpressRequest';
 
 export async function performanceMiddleware(_req: DecodedExpressRequest<null>, res: Response, next: NextFunction) {
     const t0 = performance.now();

@@ -1,7 +1,7 @@
 import {NextFunction, Response} from 'express';
 import {Err, Ok} from 'ts-results';
-import {redisClient} from '../../../../../../../infra/connections/redis';
-import {HttpError, InternalError} from '../../../../../../../lib/errors';
+import {cacheService} from '../../../../../../../infra/connections/cache';
+import {HttpError, InternalError} from '../../../../../../../lib/web/errors';
 import {JWT} from '../../../../../../../utils/jsonWebToken';
 import {loginRedisKeyPrefix} from '../../../../useCases/userLogin/userLogin.constants';
 import {PrivateLoginToken, PublicLoginToken} from '../../../../useCases/userLogin/userLogin.dto';
@@ -20,7 +20,7 @@ export async function ensureUserAuthenticatedMiddleware(req: UserDecodedExpressR
 
     if (!publicDecoded) return Err(new HttpError(401, 'Invalid token'));
 
-    const privateToken = await redisClient.get(loginRedisKeyPrefix + publicDecoded.user.pid);
+    const privateToken = await cacheService.get(loginRedisKeyPrefix + publicDecoded.user.pid);
 
     if (!privateToken.ok) return Err(new InternalError('Could not retrieve token from redis'));
 

@@ -1,15 +1,15 @@
 import client, {Channel} from 'amqplib';
 import {ConsumeMessage} from 'amqplib/properties';
 import {Err, Ok} from 'ts-results';
+import {EventService, OnMessageFunction} from '../../../lib/services/eventService';
 
-type OnMessageFunction = (msg: ConsumeMessage | null) => any;
-
-export class RabbitMQClient {
+export class RabbitMQClient extends EventService {
     private channel!: Channel;
     private connected: boolean = false;
     private readonly mqUrl: string;
 
     constructor(uri: string) {
+        super();
         this.mqUrl = uri;
         this.connected = false;
     }

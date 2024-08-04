@@ -1,6 +1,6 @@
 import {Err, Ok} from 'ts-results';
-import {MapperError} from '../../../../lib/errors';
-import {Mapper} from '../../../../lib/mapper';
+import {Mapper} from '../../../../lib/ddd/mapper';
+import {MapperError} from '../../../../lib/web/errors';
 import {User} from '../domain/user';
 
 export class UserMapper extends Mapper<User> {

@@ -1,9 +1,9 @@
 import {NextFunction, Response} from 'express';
 import {getClientIp} from 'request-ip';
 import {Err, Ok} from 'ts-results';
-import {redisClient} from '../../../../../../infra/connections/redis';
-import {HttpError} from '../../../../../../lib/errors';
-import {DecodedExpressRequest} from '../../../../../../lib/types/decodedExpressRequest';
+import {cacheService} from '../../../../../../infra/connections/cache';
+import {DecodedExpressRequest} from '../../../../../../lib/web/decodedExpressRequest';
+import {HttpError} from '../../../../../../lib/web/errors';
 import {maxRequestsPerMinute, redisRateLimitKeyPrefix} from './rateLimit.constants';
 
 export async function rateLimitMiddleware(req: DecodedExpressRequest<null>, _res: Response, next: NextFunction) {
@@ -13,10 +13,10 @@ export async function rateLimitMiddleware(req: DecodedExpressRequest<null>, _res
 
     const key = `${redisRateLimitKeyPrefix}:${ip}`;
 
-    const redisResult = await redisClient.get(key);
+    const redisResult = await cacheService.get(key);
 
     if (!redisResult.ok) {
-        await redisClient.set(key, 1, 60);
+        await cacheService.set(key, 1, 60);
         return Ok(next());
     }
 
@@ -24,7 +24,7 @@ export async function rateLimitMiddleware(req: DecodedExpressRequest<null>, _res
 
     if (result >= maxRequestsPerMinute) return Err(new HttpError(429, 'Rate limit exceeded'));
 
-    await redisClient.set(key, result + 1, 60);
+    await cacheService.set(key, result + 1, 60);
 
     return Ok(next());
 }
