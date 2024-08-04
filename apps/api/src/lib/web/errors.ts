@@ -86,7 +86,11 @@ export class RepoError extends InternalError {
     public declare body: RepoErrorBody;
     public errorCode: RepoErrorCodes;
 
-    constructor(message: string, body?: RepoErrorBody, errorCode: RepoErrorCodes = RepoErrorCodes.ER_UNKNOWN) {
+    constructor(
+        message: string,
+        body?: RepoErrorBody,
+        errorCode: RepoErrorCodes = RepoErrorCodes.ER_UNKNOWN,
+    ) {
         super(message, {
             message,
             ...body,

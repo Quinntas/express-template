@@ -1,23 +1,28 @@
-import {ErrorRequestHandler, NextFunction, Request, RequestHandler, Response} from 'express';
+import {
+    ErrorRequestHandler,
+    NextFunction,
+    Request,
+    RequestHandler,
+    Response,
+} from 'express';
 import {Err, Result} from 'ts-results';
 import {forEach} from 'typescript-utils/src/iterators';
 import {DecodedExpressRequest} from './decodedExpressRequest';
 import {HttpError, httpErrorHandler} from './errors';
 import {decodeRequest} from './handler';
 
-/**
- * MiddlewareFunction is a type definition for a middleware function that is used in Express.js applications.
- * It takes three parameters: req, res, and next, and returns a Promise<void>.
- *
- * @param {DecodedExpressRequest<any, any>} req - The request object.
- * @param {Response} res - The response object.
- * @param {NextFunction} next - The next function to call in the middleware chain.
- *
- * @returns {Promise<void>}
- */
-export type MiddlewareFunction = (req: DecodedExpressRequest<any, any>, res: Response, next: NextFunction) => Promise<Result<void, HttpError>>;
+export type MiddlewareFunction<
+    T extends DecodedExpressRequest<any, any> = any,
+> = (
+    req: T,
+    res: Response,
+    next: NextFunction,
+) => Promise<Result<void, HttpError>>;
 
-export async function middlewareHandler<Body extends object | null, Query extends object | null = null>(
+export async function middlewareHandler<
+    Body extends object | null,
+    Query extends object | null = null,
+>(
     req: Request,
     res: Response,
     next: NextFunction,
@@ -36,13 +41,17 @@ export async function middlewareHandler<Body extends object | null, Query extend
     return;
 }
 
-export function wrapMiddlewares<Body extends object, Query extends object>(middlewares: MiddlewareFunction[] = []): (RequestHandler | ErrorRequestHandler)[] {
+export function wrapMiddlewares<Body extends object, Query extends object>(
+    middlewares: MiddlewareFunction[] = [],
+): (RequestHandler | ErrorRequestHandler)[] {
     if (middlewares.length === 0) return [];
     const wrappedMiddlewares: (RequestHandler | ErrorRequestHandler)[] = [];
     forEach(middlewares, (middleware) => {
-        wrappedMiddlewares.push((req: Request, res: Response, next: NextFunction) => {
-            middlewareHandler<Body, Query>(req, res, next, middleware);
-        });
+        wrappedMiddlewares.push(
+            (req: Request, res: Response, next: NextFunction) => {
+                middlewareHandler<Body, Query>(req, res, next, middleware);
+            },
+        );
     });
     return wrappedMiddlewares;
 }

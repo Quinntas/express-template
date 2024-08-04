@@ -1,7 +1,10 @@
 import client, {Channel} from 'amqplib';
 import {ConsumeMessage} from 'amqplib/properties';
 import {Err, Ok} from 'ts-results';
-import {EventService, OnMessageFunction} from '../../../lib/services/eventService';
+import {
+    EventService,
+    OnMessageFunction,
+} from '../../../lib/services/eventService';
 
 export class RabbitMQClient extends EventService {
     private channel!: Channel;
@@ -21,17 +24,29 @@ export class RabbitMQClient extends EventService {
         this.connected = true;
     }
 
-    async send<T extends object>(queueName: string, msg: T, options?: client.Options.Publish) {
+    async send<T extends object>(
+        queueName: string,
+        msg: T,
+        options?: client.Options.Publish,
+    ) {
         if (!this.connected) return Err(new Error('Not connected to RabbitMQ'));
 
-        const res = this.channel.sendToQueue(queueName, Buffer.from(JSON.stringify(msg)), options);
+        const res = this.channel.sendToQueue(
+            queueName,
+            Buffer.from(JSON.stringify(msg)),
+            options,
+        );
 
         if (!res) return Err(new Error('Failed to send message'));
 
         return Ok.EMPTY;
     }
 
-    async consume(queueName: string, onMessage: OnMessageFunction, options: client.Options.Consume = {}) {
+    async consume(
+        queueName: string,
+        onMessage: OnMessageFunction,
+        options: client.Options.Consume = {},
+    ) {
         if (!this.connected) return Err(new Error('Not connected to RabbitMQ'));
 
         await this.channel.assertQueue(queueName, {

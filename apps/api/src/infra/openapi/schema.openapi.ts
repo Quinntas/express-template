@@ -5,7 +5,8 @@ import {userOpenAPiTagObject} from '../../modules/core/user/infra/openapi/user.o
 export const schemaOpenapi: OpenAPIV3.Document = {
     info: {
         title: 'Express template ',
-        description: 'This is the API documentation for the Express template project.',
+        description:
+            'This is the API documentation for the Express template project.',
         version: '1.0.0',
     },
     servers: [

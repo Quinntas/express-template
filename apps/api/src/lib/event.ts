@@ -7,13 +7,16 @@ export interface EventDTO<T> {
     data: T;
 }
 
-export type EventFunction<T> = (payload: EventDTO<T>) => Result<any, Error> | Promise<Result<any, Error>>;
+export type EventFunction<T> = (
+    payload: EventDTO<T>,
+) => Result<any, Error> | Promise<Result<any, Error>>;
 
 export type EventRouter = Record<string, EventFunction<any>>;
 
 type EventExtractKeys<T extends EventRouter> = keyof T;
 
-type EventExtractDTO<T extends EventFunction<any>> = T extends EventFunction<infer R> ? R : never;
+type EventExtractDTO<T extends EventFunction<any>> =
+    T extends EventFunction<infer R> ? R : never;
 
 interface InternalEventDTO<T> {
     data: T;
@@ -25,23 +28,35 @@ export class Event<R extends EventRouter> {
     private readonly eventRouter: EventRouter;
     private readonly eventService: EventService;
 
-    constructor(queue: string, eventRouter: EventRouter, eventService: EventService) {
+    constructor(
+        queue: string,
+        eventRouter: EventRouter,
+        eventService: EventService,
+    ) {
         this.queue = queue;
         this.eventRouter = eventRouter;
         this.eventService = eventService;
     }
 
-    dispatch<T extends EventExtractKeys<R>>(event: EventExtractKeys<R>, payload: EventExtractDTO<R[T]>) {
-        return this.eventService.send<InternalEventDTO<EventExtractDTO<R[T]>>>(this.queue, {
-            data: payload,
-            name: event as string,
-        });
+    dispatch<T extends EventExtractKeys<R>>(
+        event: EventExtractKeys<R>,
+        payload: EventExtractDTO<R[T]>,
+    ) {
+        return this.eventService.send<InternalEventDTO<EventExtractDTO<R[T]>>>(
+            this.queue,
+            {
+                data: payload,
+                name: event as string,
+            },
+        );
     }
 
     private async handler(message: ConsumeMessage | null) {
         try {
             if (!message) throw new Error('Message is null');
-            const payload = JSON.parse(message.content.toString()) as InternalEventDTO<any>;
+            const payload = JSON.parse(
+                message.content.toString(),
+            ) as InternalEventDTO<any>;
             const evtHandler = this.eventRouter[payload.name];
             if (!evtHandler) throw new Error('No handler found for event');
             await evtHandler(payload.data);
@@ -51,6 +66,8 @@ export class Event<R extends EventRouter> {
     }
 
     async consume() {
-        return await this.eventService.consume(this.queue, (msg) => this.handler(msg));
+        return await this.eventService.consume(this.queue, (msg) =>
+            this.handler(msg),
+        );
     }
 }

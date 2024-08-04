@@ -22,7 +22,9 @@ export abstract class RestService {
      * @param data - The object to convert.
      * @returns The query string representation of the object.
      */
-    public objectToQueryString<T extends Record<string, string>>(data: T): string {
+    public objectToQueryString<T extends Record<string, string>>(
+        data: T,
+    ): string {
         const searchParams = new URLSearchParams(data);
         return searchParams.toString();
     }
@@ -34,7 +36,10 @@ export abstract class RestService {
      * @param {Record<string, string>} data - The object containing query parameters.
      * @returns {string} The final URL with query parameters.
      */
-    public urlWithQueryParams<T extends Record<string, string>>(url: string, data: T): string {
+    public urlWithQueryParams<T extends Record<string, string>>(
+        url: string,
+        data: T,
+    ): string {
         const queryString = this.objectToQueryString(data);
         return `${url}?${queryString}`;
     }

@@ -13,7 +13,9 @@ export class UserMapper extends Mapper<User> {
                 updatedAt: user.updatedAt,
             });
         } catch {
-            return Err(new MapperError('could not convert domain to public domain'));
+            return Err(
+                new MapperError('could not convert domain to public domain'),
+            );
         }
     }
 

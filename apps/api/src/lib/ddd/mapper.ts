@@ -9,7 +9,9 @@ import {Domain as DomainType} from './domain';
  * raw objects to domain objects and vice versa.
  * @typeparam Domain - The domain object type that this mapper will be converting to/from.
  */
-export abstract class Mapper<Domain extends DomainType<any>> implements Mapper<Domain> {
+export abstract class Mapper<Domain extends DomainType<any>>
+    implements Mapper<Domain>
+{
     abstract toDomain(raw: object): Result<Required<Domain>, MapperError>;
 
     /**
@@ -26,7 +28,9 @@ export abstract class Mapper<Domain extends DomainType<any>> implements Mapper<D
      * @param {any[]} data - The array of raw data objects to be converted.
      * @return {Domain[]} - The array of converted Domain objects.
      */
-    toDomainList<T extends UnknownObject[]>(data: T): Result<Domain[], MapperError> {
+    toDomainList<T extends UnknownObject[]>(
+        data: T,
+    ): Result<Domain[], MapperError> {
         try {
             return Ok(
                 map(data, (raw) => {
@@ -34,7 +38,9 @@ export abstract class Mapper<Domain extends DomainType<any>> implements Mapper<D
                 }),
             );
         } catch {
-            return Err(new MapperError('could not convert domain to domain list'));
+            return Err(
+                new MapperError('could not convert domain to domain list'),
+            );
         }
     }
 
@@ -53,7 +59,11 @@ export abstract class Mapper<Domain extends DomainType<any>> implements Mapper<D
                 }),
             );
         } catch {
-            return Err(new MapperError('could not convert domain to public domain list'));
+            return Err(
+                new MapperError(
+                    'could not convert domain to public domain list',
+                ),
+            );
         }
     }
 }

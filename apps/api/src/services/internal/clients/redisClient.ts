@@ -55,7 +55,11 @@ export class RedisClient extends CacheService {
         return Ok(res);
     }
 
-    public async set(key: string, value: CacheTypes, tokenExpiryTime: number = this.defaultTokenExpiryTime) {
+    public async set(
+        key: string,
+        value: CacheTypes,
+        tokenExpiryTime: number = this.defaultTokenExpiryTime,
+    ) {
         if (!value) throw new Error('Value cannot be null or undefined');
         const reply = await this.client.set(key, value);
         if (reply === 'OK') return Err.EMPTY;

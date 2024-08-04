@@ -1,5 +1,9 @@
 import {describe} from 'node:test';
-import {DockerComposeEnvironment, StartedDockerComposeEnvironment, Wait} from 'testcontainers';
+import {
+    DockerComposeEnvironment,
+    StartedDockerComposeEnvironment,
+    Wait,
+} from 'testcontainers';
 import {close, listen} from '../../src/infra/http/server';
 
 const composeFilePath = '../../';
@@ -13,10 +17,21 @@ describe('signup', async () => {
     let environment: StartedDockerComposeEnvironment;
 
     beforeAll(async () => {
-        environment = await new DockerComposeEnvironment(composeFilePath, composeFile)
+        environment = await new DockerComposeEnvironment(
+            composeFilePath,
+            composeFile,
+        )
             .withEnvironmentFile('.env')
-            .withWaitStrategy('redis', Wait.forLogMessage('Ready to accept connections tcp'))
-            .withWaitStrategy('mysql', Wait.forLogMessage('MySQL init process done. Ready for start up.'))
+            .withWaitStrategy(
+                'redis',
+                Wait.forLogMessage('Ready to accept connections tcp'),
+            )
+            .withWaitStrategy(
+                'mysql',
+                Wait.forLogMessage(
+                    'MySQL init process done. Ready for start up.',
+                ),
+            )
             .up();
         listen();
     });

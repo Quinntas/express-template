@@ -28,10 +28,15 @@ const defaultHeaders = {
     'cache-control': 'no-cache',
     'access-control-allow-origin': '*',
     'user-agent': 'AmazBank/1.0.0',
-    'access-control-allow-headers': 'Origin, X-Requested-With, Content-Type, Accept',
+    'access-control-allow-headers':
+        'Origin, X-Requested-With, Content-Type, Accept',
 };
 
-export async function request<BodyType = any, ResponseType = any, ErrorType = any>(
+export async function request<
+    BodyType = any,
+    ResponseType = any,
+    ErrorType = any,
+>(
     fetcherDTO: RequestDTO<BodyType>,
 ): Promise<Result<RequestResponseDTO<ResponseType>, ErrorType | Error>> {
     const headers = Object.assign({}, defaultHeaders, fetcherDTO.headers);
@@ -51,7 +56,9 @@ export async function request<BodyType = any, ResponseType = any, ErrorType = an
                 break;
             case 'application/x-www-form-urlencoded':
                 const entries = Object.entries(fetcherDTO.body);
-                body = map(entries, ([key, value]) => `${key}=${value}`).join('&');
+                body = map(entries, ([key, value]) => `${key}=${value}`).join(
+                    '&',
+                );
                 break;
             default:
                 body = fetcherDTO.body;
@@ -70,7 +77,9 @@ export async function request<BodyType = any, ResponseType = any, ErrorType = an
             if (response.ok) break;
         } catch (err) {
             if (i < retryDTO.count - 1 && retryDTO.secondsDelay > 0) {
-                await new Promise((resolve) => setTimeout(resolve, retryDTO.secondsDelay));
+                await new Promise((resolve) =>
+                    setTimeout(resolve, retryDTO.secondsDelay),
+                );
             }
         }
     }

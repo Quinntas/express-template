@@ -9,8 +9,12 @@ import {openapiSchemaUsecase} from '../../modules/shared/useCases/openapiSchema/
 
 export const v1Router: Router = Router();
 
-v1Router.use((req: Request, res: Response, next: NextFunction) => middlewareHandler(req, res, next, performanceMiddleware));
-v1Router.use((req: Request, res: Response, next: NextFunction) => middlewareHandler(req, res, next, rateLimitMiddleware));
+v1Router.use((req: Request, res: Response, next: NextFunction) =>
+    middlewareHandler(req, res, next, performanceMiddleware),
+);
+v1Router.use((req: Request, res: Response, next: NextFunction) =>
+    middlewareHandler(req, res, next, rateLimitMiddleware),
+);
 
 get(v1Router, '/', healthCheckUsecase);
 get(v1Router, '/openapi', openapiSchemaUsecase);

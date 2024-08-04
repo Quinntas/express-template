@@ -27,7 +27,8 @@ let server: http.Server | null = null;
 export function listen() {
     server = app.listen(env.PORT, '0.0.0.0', async () => {
         await lazyConnections();
-        env.NODE_ENV === 'development' && log.info(`[SERVER] is running on port ${env.PORT}`);
+        env.NODE_ENV === 'development' &&
+            log.info(`[SERVER] is running on port ${env.PORT}`);
     });
 }
 

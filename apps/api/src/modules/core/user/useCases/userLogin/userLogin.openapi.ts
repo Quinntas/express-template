@@ -1,7 +1,10 @@
 import {OpenAPIV3} from 'openapi-types';
 import {constructOpenapiUseCaseSchema} from '../../../../../infra/openapi/contructors/useCaseConstructor';
 import {baseHttpErrorsOpenapi} from '../../../../shared/infra/openapi/errors/baseHttpErrors.openapi';
-import {constructUserOpenapiPath, userOpenAPiTagName} from '../../infra/openapi/user.openapi';
+import {
+    constructUserOpenapiPath,
+    userOpenAPiTagName,
+} from '../../infra/openapi/user.openapi';
 
 export const userLoginOpenapi = constructOpenapiUseCaseSchema({
     path: constructUserOpenapiPath('/login'),

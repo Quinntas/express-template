@@ -5,7 +5,9 @@ import {HttpResponse} from '../../../../../lib/web/responses';
 import {UserLoginDto, UserLoginResponseDTO} from './userLogin.dto';
 import {userLoginUsecase} from './userLogin.usecase';
 
-export async function userLoginController(req: DecodedExpressRequest<UserLoginDto>) {
+export async function userLoginController(
+    req: DecodedExpressRequest<UserLoginDto>,
+) {
     const res = await userLoginUsecase(
         {
             data: req.decoded.body,

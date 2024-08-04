@@ -13,7 +13,7 @@ const config = {
     importOrderSeparation: false,
     importOrderSortSpecifiers: true,
     proseWrap: 'preserve',
-    printWidth: 160,
+    printWidth: 80,
 };
 
 module.exports = config;

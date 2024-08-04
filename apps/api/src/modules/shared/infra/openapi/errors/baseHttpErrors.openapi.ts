@@ -2,4 +2,8 @@ import {rateLimitOpenapi} from '../../http/middlewares/rateLimit/rateLimit.opena
 import {guardErrorsOpenapi} from './guardErrors.openapi';
 import {internalServerErrorsOpenapi} from './internalServerErrors.openapi';
 
-export const baseHttpErrorsOpenapi = [...internalServerErrorsOpenapi, ...guardErrorsOpenapi, ...rateLimitOpenapi];
+export const baseHttpErrorsOpenapi = [
+    ...internalServerErrorsOpenapi,
+    ...guardErrorsOpenapi,
+    ...rateLimitOpenapi,
+];

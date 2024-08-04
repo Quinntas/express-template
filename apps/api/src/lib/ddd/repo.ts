@@ -1,10 +1,20 @@
 import {ExtractTablesWithRelations, InferInsertModel, SQL} from 'drizzle-orm';
-import {MySql2Database, MySql2PreparedQueryHKT, MySql2QueryResultHKT, MySqlRawQueryResult} from 'drizzle-orm/mysql2';
+import {
+    MySql2Database,
+    MySql2PreparedQueryHKT,
+    MySql2QueryResultHKT,
+    MySqlRawQueryResult,
+} from 'drizzle-orm/mysql2';
 import {MySqlTable, MySqlTransaction} from 'drizzle-orm/mysql-core';
 import {SelectedFields} from 'drizzle-orm/mysql-core/query-builders/select.types';
 import {Err, Ok, Result} from 'ts-results';
 import {CacheService} from '../services/cacheService';
-import {MapperError, RepoError, RepoErrorBody, RepoErrorCodes} from '../web/errors';
+import {
+    MapperError,
+    RepoError,
+    RepoErrorBody,
+    RepoErrorCodes,
+} from '../web/errors';
 import {UnknownObject} from '../web/json';
 import {Domain as DomainType} from './domain';
 import {Mapper} from './mapper';
@@ -50,7 +60,10 @@ export interface RepoConfig<Domain extends DomainType<any>> {
  * Base repository class for interacting with a database table.
  * @template Domain - The domain entity type.
  */
-export abstract class Repo<Domain extends DomainType<any>, Table extends MySqlTable> {
+export abstract class Repo<
+    Domain extends DomainType<any>,
+    Table extends MySqlTable,
+> {
     private readonly table: MySqlTable;
     private readonly readConn: MySql2Database;
     private readonly writeConn: MySql2Database;
@@ -65,7 +78,9 @@ export abstract class Repo<Domain extends DomainType<any>, Table extends MySqlTa
         this.cacheService = cfg.cacheService;
     }
 
-    async selectOne(config: SelectOptions): Promise<Result<Required<Domain>, RepoError | MapperError>> {
+    async selectOne(
+        config: SelectOptions,
+    ): Promise<Result<Required<Domain>, RepoError | MapperError>> {
         const res = await this.select(config);
         if (!res.ok) return Err(res.val);
         const mapped = this.mapper.toDomain(res.val[0]);
@@ -73,7 +88,9 @@ export abstract class Repo<Domain extends DomainType<any>, Table extends MySqlTa
         return Ok(mapped.val);
     }
 
-    async selectMany(config: SelectOptions): Promise<Result<Required<Domain[]>, RepoError | MapperError>> {
+    async selectMany(
+        config: SelectOptions,
+    ): Promise<Result<Required<Domain[]>, RepoError | MapperError>> {
         const res = await this.select(config);
         if (!res.ok) return Err(res.val);
         const mapped = this.mapper.toDomainList(res.val);
@@ -81,10 +98,17 @@ export abstract class Repo<Domain extends DomainType<any>, Table extends MySqlTa
         return Ok(mapped.val);
     }
 
-    async select(config: SelectOptions): Promise<Result<UnknownObject[], RepoError>> {
+    async select(
+        config: SelectOptions,
+    ): Promise<Result<UnknownObject[], RepoError>> {
         if (config.cachingOptions) {
-            const cacheRes = await this.cacheService.get(config.cachingOptions.key);
-            if (cacheRes.ok) return Ok<UnknownObject[]>(JSON.parse(cacheRes.val) as UnknownObject[]);
+            const cacheRes = await this.cacheService.get(
+                config.cachingOptions.key,
+            );
+            if (cacheRes.ok)
+                return Ok<UnknownObject[]>(
+                    JSON.parse(cacheRes.val) as UnknownObject[],
+                );
         }
 
         let query;
@@ -97,31 +121,71 @@ export abstract class Repo<Domain extends DomainType<any>, Table extends MySqlTa
         try {
             res = await query.execute();
         } catch (e: unknown) {
-            return Err(new RepoError('Error selecting records.', e as RepoErrorBody));
+            return Err(
+                new RepoError('Error selecting records.', e as RepoErrorBody),
+            );
         }
 
-        if (res.length === 0) return Err(new RepoError('No record was found.', undefined, RepoErrorCodes.ER_NO_RECORD));
+        if (res.length === 0)
+            return Err(
+                new RepoError(
+                    'No record was found.',
+                    undefined,
+                    RepoErrorCodes.ER_NO_RECORD,
+                ),
+            );
 
-        if (config.cachingOptions) await this.cacheService.set(config.cachingOptions.key, JSON.stringify(res), config.cachingOptions.expires);
+        if (config.cachingOptions)
+            await this.cacheService.set(
+                config.cachingOptions.key,
+                JSON.stringify(res),
+                config.cachingOptions.expires,
+            );
 
         return Ok(res);
     }
 
-    async insert(options: InsertOptions<Table>): Promise<Result<MySqlRawQueryResult, RepoError>> {
+    async insert(
+        options: InsertOptions<Table>,
+    ): Promise<Result<MySqlRawQueryResult, RepoError>> {
         try {
-            if (options.transaction) return Ok(await options.transaction.insert(this.table).values(options.values));
-            return Ok(await this.writeConn.insert(this.table).values(options.values));
+            if (options.transaction)
+                return Ok(
+                    await options.transaction
+                        .insert(this.table)
+                        .values(options.values),
+                );
+            return Ok(
+                await this.writeConn.insert(this.table).values(options.values),
+            );
         } catch (e: unknown) {
-            return Err(new RepoError('Error inserting record.', e as RepoErrorBody));
+            return Err(
+                new RepoError('Error inserting record.', e as RepoErrorBody),
+            );
         }
     }
 
-    async update(options: UpdateOptions<Domain>): Promise<Result<MySqlRawQueryResult, RepoError>> {
+    async update(
+        options: UpdateOptions<Domain>,
+    ): Promise<Result<MySqlRawQueryResult, RepoError>> {
         try {
-            if (options.transaction) return Ok(await options.transaction.update(this.table).set(options.values).where(options.where));
-            return Ok(await this.writeConn.update(this.table).set(options.values).where(options.where));
+            if (options.transaction)
+                return Ok(
+                    await options.transaction
+                        .update(this.table)
+                        .set(options.values)
+                        .where(options.where),
+                );
+            return Ok(
+                await this.writeConn
+                    .update(this.table)
+                    .set(options.values)
+                    .where(options.where),
+            );
         } catch (e: unknown) {
-            return Err(new RepoError('Error updating record.', e as RepoErrorBody));
+            return Err(
+                new RepoError('Error updating record.', e as RepoErrorBody),
+            );
         }
     }
 }

@@ -6,10 +6,19 @@ import {DecodedExpressRequest} from './decodedExpressRequest';
 import {httpErrorHandler} from './errors';
 import {Method} from './methods';
 import {MiddlewareFunction, wrapMiddlewares} from './middleware';
-import {HttpResponse, htmlResponse, jsonResponse, textResponse} from './responses';
+import {
+    HttpResponse,
+    htmlResponse,
+    jsonResponse,
+    textResponse,
+} from './responses';
 
-export function decodeRequest<Body extends object | null, Query extends object | null = null>(req: Request): DecodedExpressRequest<Body, Query> {
-    const decodedRequest: DecodedExpressRequest<Body, Query> = req as DecodedExpressRequest<Body, Query>;
+export function decodeRequest<
+    Body extends object | null,
+    Query extends object | null = null,
+>(req: Request): DecodedExpressRequest<Body, Query> {
+    const decodedRequest: DecodedExpressRequest<Body, Query> =
+        req as DecodedExpressRequest<Body, Query>;
 
     decodedRequest.decoded = {
         body: {} as Body,
@@ -28,11 +37,10 @@ export function decodeRequest<Body extends object | null, Query extends object |
     return decodedRequest;
 }
 
-export async function httpController<Body extends object | null, Query extends object | null = null>(
-    req: Request,
-    res: Response,
-    controller: ControllerFunction<Body, Query>,
-) {
+export async function httpController<
+    Body extends object | null,
+    Query extends object | null = null,
+>(req: Request, res: Response, controller: ControllerFunction<Body, Query>) {
     let result: Result<HttpResponse<any>, Error>;
 
     try {
@@ -56,17 +64,28 @@ export async function httpController<Body extends object | null, Query extends o
     }
 }
 
-export function route<Body extends object | null, Query extends object | null = null>(
+export function route<
+    Body extends object | null,
+    Query extends object | null = null,
+>(
     router: Router,
     method: Method,
     path: string,
     controller: ControllerFunction<Body, Query>,
     middlewares: MiddlewareFunction[] = [],
 ) {
-    router[method](path, wrapMiddlewares(middlewares), (req: Request, res: Response) => httpController<Body, Query>(req, res, controller));
+    router[method](
+        path,
+        wrapMiddlewares(middlewares),
+        (req: Request, res: Response) =>
+            httpController<Body, Query>(req, res, controller),
+    );
 }
 
-export function post<Body extends object | null, Query extends object | null = null>(
+export function post<
+    Body extends object | null,
+    Query extends object | null = null,
+>(
     router: Router,
     path: string,
     controller: ControllerFunction<Body, Query>,
@@ -75,7 +94,10 @@ export function post<Body extends object | null, Query extends object | null = n
     route<Body, Query>(router, 'post', path, controller, middlewares);
 }
 
-export function get<Body extends object | null, Query extends object | null = null>(
+export function get<
+    Body extends object | null,
+    Query extends object | null = null,
+>(
     router: Router,
     path: string,
     controller: ControllerFunction<Body, Query>,
@@ -84,7 +106,10 @@ export function get<Body extends object | null, Query extends object | null = nu
     route<Body, Query>(router, 'get', path, controller, middlewares);
 }
 
-export function put<Body extends object | null, Query extends object | null = null>(
+export function put<
+    Body extends object | null,
+    Query extends object | null = null,
+>(
     router: Router,
     path: string,
     controller: ControllerFunction<Body, Query>,
@@ -93,7 +118,10 @@ export function put<Body extends object | null, Query extends object | null = nu
     route<Body, Query>(router, 'put', path, controller, middlewares);
 }
 
-export function patch<Body extends object | null, Query extends object | null = null>(
+export function patch<
+    Body extends object | null,
+    Query extends object | null = null,
+>(
     router: Router,
     path: string,
     controller: ControllerFunction<Body, Query>,

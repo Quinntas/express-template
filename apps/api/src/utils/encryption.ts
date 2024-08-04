@@ -5,7 +5,8 @@ import {InternalError} from '../lib/web/errors';
 export namespace Encryption {
     export function parseEncryptedString(password: string) {
         const splitPass = password.split('$');
-        if (splitPass.length !== 3) return Err(new InternalError('Invalid encrypted password format'));
+        if (splitPass.length !== 3)
+            return Err(new InternalError('Invalid encrypted password format'));
         return Ok({
             iterations: parseInt(splitPass[1]),
             salt: splitPass[2],
@@ -14,11 +15,17 @@ export namespace Encryption {
     }
 
     export function randString(length: number, chars: string) {
-        if (!chars) return Err(new InternalError("Argument 'chars' is undefined"));
+        if (!chars)
+            return Err(new InternalError("Argument 'chars' is undefined"));
 
         const charsLength = chars.length;
         if (charsLength > 256)
-            return Err(new InternalError("Argument 'chars' should not have more than 256 characters" + ', otherwise unpredictability will be broken'));
+            return Err(
+                new InternalError(
+                    "Argument 'chars' should not have more than 256 characters" +
+                        ', otherwise unpredictability will be broken',
+                ),
+            );
 
         const bytes = randomBytes(length);
         const result = new Array(length);
@@ -47,9 +54,20 @@ export namespace Encryption {
         return createHash(algorithm).update(data).digest('hex');
     }
 
-    export function encrypt(data: string, pepper: string, iterations: number = 10000, salt?: string): string {
+    export function encrypt(
+        data: string,
+        pepper: string,
+        iterations: number = 10000,
+        salt?: string,
+    ): string {
         if (!salt) salt = randomBytes(16).toString('hex');
-        const result = pbkdf2Sync(pepper + data, salt, iterations, 64, 'sha512').toString('hex');
+        const result = pbkdf2Sync(
+            pepper + data,
+            salt,
+            iterations,
+            64,
+            'sha512',
+        ).toString('hex');
         return `sha512$${iterations}$${salt}$${result}`;
     }
 }

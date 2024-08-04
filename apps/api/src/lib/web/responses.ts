@@ -20,7 +20,11 @@ export interface HttpResponse<T> {
  * @param {T} data - The data object to be converted to JSON and sent in the response body.
  * @returns {T} - The same data object that was sent in the response body.
  */
-export function jsonResponse<T extends object>(res: Response, code: number, data: T): T {
+export function jsonResponse<T extends object>(
+    res: Response,
+    code: number,
+    data: T,
+): T {
     res.setHeader('Content-Type', 'application/json');
     res.status(code);
     res.json(data);
@@ -36,7 +40,11 @@ export function jsonResponse<T extends object>(res: Response, code: number, data
  *
  * @return {string} - The data that was sent in the response
  */
-export function textResponse(res: Response, code: number, data: string): string {
+export function textResponse(
+    res: Response,
+    code: number,
+    data: string,
+): string {
     res.setHeader('Content-Type', 'text/plain');
     res.status(code);
     res.send(data);
@@ -51,7 +59,11 @@ export function textResponse(res: Response, code: number, data: string): string 
  * @param {string} data - The HTML data to send to the client.
  * @return {string} - The HTML data that was sent to the client.
  */
-export function htmlResponse(res: Response, code: number, data: string): string {
+export function htmlResponse(
+    res: Response,
+    code: number,
+    data: string,
+): string {
     res.setHeader('Content-Type', 'text/html');
     res.status(code);
     res.send(data);
