@@ -1,0 +1,3 @@
+[submodule "packages/typescript-utils"]
+	path = packages/typescript-utils
+	url = https://github.com/Quinntas/typescript-utils

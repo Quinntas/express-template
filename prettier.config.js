@@ -8,7 +8,7 @@ const config = {
     bracketSameLine: true,
     arrowParens: 'always',
     plugins: ['@trivago/prettier-plugin-sort-imports'],
-    endOfLine: 'lf',
+    endOfLine: 'crlf',
     importOrder: ['^[./]'],
     importOrderSeparation: false,
     importOrderSortSpecifiers: true,

@@ -1,23 +1,37 @@
 version: '3'
 
 services:
+  rmq:
+    container_name: amaz-rmq
+    hostname: amaz-rmq
+    image: rabbitmq:latest
+    networks:
+      - network
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      - TZ=America/Sao_Paulo
+
   db:
-    container_name: db
-    hostname: db
-    command: --default-authentication-plugin=mysql_native_password
+    container_name: amaz-db
+    hostname: amaz-db
     image: mysql:latest
     networks:
       - network
     ports:
       - 3306:3306
-    volumes:
-      - ./mysqldata:/var/lib/mysql/
     environment:
       - MYSQL_ROOT_PASSWORD=rootpwd
       - MYSQL_PASSWORD=i#@hhr&nQnJO
       - TZ=America/Sao_Paulo
+    volumes:
+      - ./apps/api/scripts:/docker-entrypoint-initdb.d
+    command: ["--init-file", "/docker-entrypoint-initdb.d/createTables.sql"]
 
   adminer:
+    container_name: amaz-adminer
+    hostname: amaz-adminer
     image: adminer
     depends_on:
       - db
@@ -27,8 +41,8 @@ services:
       - 8080:8080
 
   redis:
-    container_name: redis
-    hostname: redis
+    container_name: amaz-redis
+    hostname: amaz-redis
     image: redis:latest
     networks:
       - network

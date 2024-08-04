@@ -1,0 +1,23 @@
+{
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "display": "Default",
+    "compilerOptions": {
+        "outDir": "./dist/src",
+        "lib": ["ES2023"],
+        "module": "node16",
+        "target": "ES2022",
+        "experimentalDecorators": true,
+        "strict": true,
+        "strictNullChecks": true,
+        "strictFunctionTypes": true,
+        "inlineSources": false,
+        "esModuleInterop": true,
+        "isolatedModules": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitReturns": true,
+        "skipLibCheck": true
+    },
+    "include": ["src/**/*.ts", "openapi.json"],
+    "exclude": ["node_modules"]
+}

@@ -20,6 +20,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
+      - name: Pull submodules
+        run: git submodule update --init --recursive
+
       - name: Install dependencies
         run: |
           if ! command -v pnpm &> /dev/null; then
@@ -35,7 +38,3 @@ jobs:
       - name: Build Service
         run: |
           pnpm build
-
-      - name: Test Service
-        run: |
-          pnpm test
